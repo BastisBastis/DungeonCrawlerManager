@@ -102,3 +102,19 @@ export const getDegreeDiff=(a,b) =>{
   return delta
 }
 
+
+export const getRandomInt = (a, b) => {
+    return Math.floor(Math.random() * (b - a)) + a;
+}
+
+export const getRandomBellInt = (a, b, bias = 1) => {
+    const u1 = Math.random();
+    const u2 = Math.random();
+
+    const z = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+    const normalized = Math.max(-3, Math.min(3, z)) / 6 + 0.5;
+
+    const biased = Math.pow(normalized, bias);
+
+    return Math.round(a + biased * (b - a));
+};

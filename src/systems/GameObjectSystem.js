@@ -29,7 +29,7 @@ export const createGameObjectSystem =(world)=>{
   const spriteQuery=defineQuery([Sprite,Position2d,Size2d,Color])
   const spriteEnterQuery=enterQuery(spriteQuery)
   
-  return world=>{
+  return (world, dt)=>{
     
     shapeEnterQuery(world).forEach(id=>{
       let object

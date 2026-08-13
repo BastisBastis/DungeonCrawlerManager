@@ -1,0 +1,42 @@
+import {
+  defineQuery
+} from "bitecs"
+
+//components
+import { BattleTarget } from "../components/BattleTarget" 
+import { MeleeAttack } from "../components/MeleeAttack" 
+import { Position2d } from "../components/Position2d" 
+import { EventCenter } from "../helpers/EventCenter" 
+
+export const createMeleeAttackSystem=(world)=>{
+  const unitQuery=defineQuery([BattleTarget, MeleeAttack])
+  
+  return (world, dt)=>{
+    
+    unitQuery(world).forEach(id=>{
+      
+      MeleeAttack.coolDown[id] += dt/100
+      if (BattleTarget.targetEntity[id] != 0 && MeleeAttack.coolDown[id] >= MeleeAttack.delay[id]) {
+        
+        MeleeAttack.coolDown[id] -= MeleeAttack.delay[id] 
+        
+        EventCenter.emit("damageRequest", {
+          source:id,
+          target: BattleTarget.targetEntity[id],
+          damageType: "melee",
+          data: {
+            atk: MeleeAttack.atk[id],
+            damage: MeleeAttack.damage[id]
+          }
+        })
+        EventCenter.emit("addLogMessage", id + " requests " + MeleeAttack.damage[id] + " dmg to " + BattleTarget.targetEntity[id])
+        
+      }
+      
+    })
+    
+    
+    
+    return world
+  }
+}

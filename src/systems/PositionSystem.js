@@ -8,7 +8,7 @@ import { Position2d } from "../components/Position2d"
 export const createPositionSystem=(world)=>{
   const posQuery=defineQuery([Position2d])
   
-  return (world)=>{
+  return (world, dt)=>{
     
     posQuery(world).forEach(id=>{
       

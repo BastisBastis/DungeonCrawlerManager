@@ -1,8 +1,8 @@
-import {
+import { 
   defineComponent,
   Types
 } from "bitecs"
 
-export const Shape=defineComponent({
+export const ClassType = defineComponent({
   type:Types.ui8
 })
