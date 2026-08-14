@@ -1,6 +1,7 @@
 import { createTargetPickingSystem } from "../systems/TargetPickingSystem"
 import { createMeleeAttackSystem } from "../systems/MeleeAttackSystem" 
 import { createTakeDamageSystem } from "../systems/TakeDamageSystem" 
+import { createDeathSystem } from "../systems/DeathSystem"
 
 export class DungeonSystemManager {
   constructor(world) {
@@ -11,7 +12,8 @@ export class DungeonSystemManager {
     this.systems=[
       
       createTargetPickingSystem(world),
-      createMeleeAttackSystem(world)
+      createMeleeAttackSystem(world),
+      createDeathSystem(world)
     ]
   }
   

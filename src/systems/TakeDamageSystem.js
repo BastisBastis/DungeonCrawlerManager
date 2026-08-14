@@ -5,6 +5,8 @@ import {
 
 //components
 import { Attackable } from "../components/Attackable"
+import { Dead } from "../components/Dead"
+
 import { EventCenter } from "../helpers/EventCenter" 
 
 const randomDamage = (min, max, attackSkill, armorClass) => {
@@ -45,10 +47,13 @@ export const createTakeDamageSystem=(world)=>{
     const target = request.target
     const damageType = request.damageType
     const data = request.data
+
+    if (hasComponent(world, Dead, target))
+      return
     
     
     if (damageType == "melee") {
-      if (hasComponent(world,Attackable, target)) {
+      if (hasComponent(world,Attackable, target) && !hasComponent(world, Dead, source)) {
         const minDamage = data.damage * 0.2
         var damageTaken = randomDamage(minDamage, data.damage, data.atk, Attackable.armorClass[target])
         
@@ -56,9 +61,7 @@ export const createTakeDamageSystem=(world)=>{
         
         EventCenter.emit("addLogMessage", target + " takes " + damageTaken + " dmg (max: " + data.damage + ") - hps: " + Attackable.currentHitpoints[target]+"/" + Attackable.maxHitpoints[target])
       }
-      
-    
-    
+        
     }
   })
   

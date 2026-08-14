@@ -1,11 +1,14 @@
 import {
-  defineQuery
+  defineQuery,
+  hasComponent
 } from "bitecs"
 
 //components
 import { BattleTarget } from "../components/BattleTarget" 
 import { MeleeAttack } from "../components/MeleeAttack" 
-import { Position2d } from "../components/Position2d" 
+import { Position2d } from "../components/Position2d"
+import { Dead } from "../components/Dead"
+
 import { EventCenter } from "../helpers/EventCenter" 
 
 //helpers
@@ -17,9 +20,11 @@ export const createMeleeAttackSystem=(world)=>{
   return (world, dt)=>{
     
     unitQuery(world).forEach(id=>{
+
+
       
       MeleeAttack.coolDown[id] += dt/100
-      if (BattleTarget.targetEntity[id] != 0 && MeleeAttack.coolDown[id] >= MeleeAttack.delay[id]) {
+      if (!hasComponent(world, Dead, id) && BattleTarget.targetEntity[id] != 0 && !hasComponent(world, Dead, BattleTarget.targetEntity[id]) && MeleeAttack.coolDown[id] >= MeleeAttack.delay[id]) {
         
         MeleeAttack.coolDown[id] -= MeleeAttack.delay[id] 
         

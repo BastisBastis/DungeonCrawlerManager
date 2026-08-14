@@ -44,6 +44,9 @@ export default class DungeonScene extends Phaser.Scene {
   }) {
     try { 
     //Background
+
+    EventCenter.on("exitDungeon", this.exitDungeon, this)
+
     this.add.rectangle(960,540,1920,1080,Palette.blue1.hex).setScrollFactor(0,0)
     
     this.world=createWorld()
@@ -59,6 +62,13 @@ export default class DungeonScene extends Phaser.Scene {
     //this.tempBattleStuff()
     
     } catch (er) {console.log(er.message,er.stack); throw er} 
+  }
+
+  exitDungeon(result) {
+    console.log("Game ended", result)
+    EventCenter.removeAllListeners()
+    this.scene.stop("ui")
+    this.scene.start("game", {result})
   }
   
   tempBattleStuff() {
@@ -77,7 +87,7 @@ export default class DungeonScene extends Phaser.Scene {
       BattleTarget.targetEntity[id] = 0
       BattleUnit.team[id] = i < numTeam1 ? 0 : 1
       
-      console.log(Utils.getRandomBellInt(50, 100, 3))
+      
       
       Attackable.maxHitpoints[id] = Utils.getRandomBellInt(50, 100, 3)
       Attackable.currentHitpoints[id] = Attackable.maxHitpoints[id]
@@ -91,8 +101,8 @@ export default class DungeonScene extends Phaser.Scene {
       
       
       
-      
-      EventCenter.emit("addLogMessage", "id: " + id + " Team: " + BattleUnit.team[id] + " HP: " + Attackable.maxHitpoints[id] + " AC: " + Attackable.armorClass[id] + " Dmg: " + MeleeAttack.damage[id] + " Delay: " + MeleeAttack.delay[id] + " ATK: " + MeleeAttack.atk[id])
+      if (GlobalStuff.verboseLog >0)
+        EventCenter.emit("addLogMessage", "id: " + id + " Team: " + BattleUnit.team[id] + " HP: " + Attackable.maxHitpoints[id] + " AC: " + Attackable.armorClass[id] + " Dmg: " + MeleeAttack.damage[id] + " Delay: " + MeleeAttack.delay[id] + " ATK: " + MeleeAttack.atk[id])
       
     }
     
@@ -105,7 +115,7 @@ export default class DungeonScene extends Phaser.Scene {
   
   update(time,dt) {
     try { 
-    this.systemManager.update(dt)
+    this.systemManager.update(dt * GlobalStuff.gameSpeedMod)
     } catch (er) {console.log(er.message,er.stack); throw er} 
   }
   
