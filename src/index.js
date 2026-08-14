@@ -3,6 +3,7 @@ import WebFontLoaderPlugin from 'phaser3-rex-plugins/plugins/webfontloader-plugi
 
 
 import Game from "./scenes/Game"
+import DungeonScene from "./scenes/DungeonScene"
 import UI from "./scenes/UI"
 import Loading from "./scenes/Loading"
 
@@ -27,6 +28,7 @@ const config = {
     scene: [
       Loading,
       Game,
+      DungeonScene,
       UI
     ],
     dom: {

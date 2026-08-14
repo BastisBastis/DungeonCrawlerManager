@@ -8,6 +8,9 @@ import { MeleeAttack } from "../components/MeleeAttack"
 import { Position2d } from "../components/Position2d" 
 import { EventCenter } from "../helpers/EventCenter" 
 
+//helpers
+import { GlobalStuff } from "../helpers/GlobalStuff"
+
 export const createMeleeAttackSystem=(world)=>{
   const unitQuery=defineQuery([BattleTarget, MeleeAttack])
   
@@ -29,6 +32,7 @@ export const createMeleeAttackSystem=(world)=>{
             damage: MeleeAttack.damage[id]
           }
         })
+        if (GlobalStuff.verboseLog >=2)
         EventCenter.emit("addLogMessage", id + " requests " + MeleeAttack.damage[id] + " dmg to " + BattleTarget.targetEntity[id])
         
       }

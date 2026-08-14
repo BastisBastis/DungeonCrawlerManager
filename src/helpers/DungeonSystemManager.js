@@ -2,7 +2,7 @@ import { createTargetPickingSystem } from "../systems/TargetPickingSystem"
 import { createMeleeAttackSystem } from "../systems/MeleeAttackSystem" 
 import { createTakeDamageSystem } from "../systems/TakeDamageSystem" 
 
-export class SystemManager {
+export class DungeonSystemManager {
   constructor(world) {
     this.world=world
     
