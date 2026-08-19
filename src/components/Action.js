@@ -4,7 +4,7 @@ import {
 } from "bitecs"
 
 export const Action = defineComponent({
-  action,:Types.i8,
+  action:Types.i8,
   target: Types.i16
 })
 

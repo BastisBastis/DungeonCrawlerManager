@@ -3,6 +3,6 @@ import {
   Types
 } from "bitecs"
 
-export const BattleTarget = defineComponent({
-  targetEntity:Types.ui16
+export const Action = defineComponent({
+  target:Types.ui16
 })

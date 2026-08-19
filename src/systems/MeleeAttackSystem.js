@@ -4,10 +4,12 @@ import {
 } from "bitecs"
 
 //components
-import { BattleTarget } from "../components/BattleTarget" 
+import { Action } from "../components/Action" 
 import { MeleeAttack } from "../components/MeleeAttack" 
 import { Position } from "../components/Position"
 import { Dead } from "../components/Dead"
+
+import { ActionType } from "../components/Action"
 
 import { EventCenter } from "../helpers/EventCenter" 
 
@@ -15,7 +17,7 @@ import { EventCenter } from "../helpers/EventCenter"
 import { GlobalStuff } from "../helpers/GlobalStuff"
 
 export const createMeleeAttackSystem=(world)=>{
-  const unitQuery=defineQuery([BattleTarget, MeleeAttack])
+  const unitQuery=defineQuery([Action, MeleeAttack])
   
   return (world, dt)=>{
     
@@ -24,13 +26,13 @@ export const createMeleeAttackSystem=(world)=>{
 
       
       MeleeAttack.coolDown[id] += dt/100
-      if (!hasComponent(world, Dead, id) && BattleTarget.targetEntity[id] != 0 && !hasComponent(world, Dead, BattleTarget.targetEntity[id]) && MeleeAttack.coolDown[id] >= MeleeAttack.delay[id]) {
+      if (Action.action[id] == ActionType.ATTACK && !hasComponent(world, Dead, id) && Action.target[id] != 0 && !hasComponent(world, Dead, Action.target[id]) && MeleeAttack.coolDown[id] >= MeleeAttack.delay[id]) {
         
         MeleeAttack.coolDown[id] -= MeleeAttack.delay[id] 
         
         EventCenter.emit("damageRequest", {
           source:id,
-          target: BattleTarget.targetEntity[id],
+          target: Action.target[id],
           damageType: "melee",
           data: {
             atk: MeleeAttack.atk[id],
@@ -38,7 +40,7 @@ export const createMeleeAttackSystem=(world)=>{
           }
         })
         if (GlobalStuff.verboseLog >=2)
-        EventCenter.emit("addLogMessage", id + " requests " + MeleeAttack.damage[id] + " dmg to " + BattleTarget.targetEntity[id])
+        EventCenter.emit("addLogMessage", id + " requests " + MeleeAttack.damage[id] + " dmg to " + Action.target[id])
         
       }
       

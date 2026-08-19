@@ -18,6 +18,7 @@ import { MeleeAttack } from "../components/MeleeAttack"
 import { Color } from "../components/Color" 
 import { Position } from "../components/Position" 
 import { CheckpointFollower } from "../components/CheckpointFollower" 
+import { Healer } from "../components/Healer" 
 
 //helpers
 import { DungeonSystemManager } from "../helpers/DungeonSystemManager"
@@ -112,6 +113,15 @@ export default class DungeonScene extends Phaser.Scene {
       addComponent(this.world, Color, id)
       addComponent(this.world, CheckpointFollower, id)
       
+
+      if (hero.healer) {
+        console.log("Has healer component")
+        addComponent(this.world, Healer, id)
+        Healer.amount[id] = hero.healer.amount
+        Healer.delay[id] = hero.healer.delay
+        Healer.coolDown[id] = 0
+      }
+      
       CheckpointFollower.index[id] = 0
       
       Action.target[id] = 0
@@ -169,7 +179,7 @@ export default class DungeonScene extends Phaser.Scene {
     
       for (let i = 0; i <  spawnPoint[2] ; i++) {
         const id = addEntity(this.world)
-        //console.log(BattleTarget, BattleUnit, Attackable, MeleeAttack)
+        //console.log(Action, BattleUnit, Attackable, MeleeAttack)
         
         addComponent(this.world, Action, id)
         addComponent(this.world, BattleUnit, id)

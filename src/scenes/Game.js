@@ -74,12 +74,21 @@ export default class Game extends Phaser.Scene {
       var damage = Utils.getRandomBellInt(8,15,3)
       var delay = Utils.getRandomBellInt(15,24, 3)
       var atk = Utils.getRandomBellInt(8,15, 3)
+      var healer
+      if (i == 1) {
+        healer = {
+          amount:100,
+          delay: 50
+        }
+      }
+      console.log(healer)
       heroData.push( {
         hitpoints: hp,
         armorClass: ac,
         damage,
         delay,
-        atk
+        atk,
+        healer
       })
     }
     

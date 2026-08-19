@@ -9,7 +9,7 @@ import Phaser from "phaser"
 //components
 import { Position } from "../components/Position"
 import { CheckpointFollower } from "../components/CheckpointFollower" 
-import { BattleTarget } from "../components/BattleTarget"
+import { Action } from "../components/Action"
 import { Dead } from "../components/Dead" 
 
 export const createMovementSystem=(world)=>{
@@ -39,11 +39,11 @@ export const createMovementSystem=(world)=>{
         }
       }
       
-      if (hasComponent(world, BattleTarget, id) && BattleTarget.targetEntity[id] != 0) {
+      if (hasComponent(world, Action, id) && Action.target[id] != 0) {
         
         const targetPos = {
-          x: Position.x[BattleTarget.targetEntity[id]],
-          y: Position.y[BattleTarget.targetEntity[id]]
+          x: Position.x[Action.target[id]],
+          y: Position.y[Action.target[id]]
         }
         
         const dist = Phaser.Math.Distance.Between(
