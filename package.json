@@ -22,7 +22,8 @@
   },
   "scripts": {
     "xbuild": "webpack --config webpack/prod.js ",
-    "start": "webpack-dev-server --config webpack/base.js --open"
+    "start": "webpack-dev-server --config webpack/base.js --open",
+    "old_node": "set NODE_OPTIONS=--openssl-legacy-provider"
   },
   "main": "src/scenes/Game.js"
 }
