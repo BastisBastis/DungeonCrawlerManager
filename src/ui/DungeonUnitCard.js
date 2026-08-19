@@ -69,6 +69,8 @@ export class DungeonUnitCard extends Window {
 
         } 
       }
+      
+    
     
     this.nameLabel = this.scene.add.text(
       centerX,

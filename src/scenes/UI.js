@@ -8,6 +8,7 @@ import { GlobalStuff } from "../helpers/GlobalStuff"
 
 //Components
 import { BattleUnit } from "../components/BattleUnit" 
+import { Attackable } from "../components/Attackable" 
 
 //Data
 import { Palette } from "../data/Palette" 
@@ -123,15 +124,27 @@ export default class UI extends Phaser.Scene {
   
   addHostileUnitCard(unitData) {
     try { 
+    
+    const name = "Enemy"
+    const hitpoints = Attackable.maxHitpoints[unitData.id]
+    
     var duc = new DungeonUnitCard(
       this,
       0,
       120,
-      unitData,
       {
-        depth: 10
+        ...unitData,
+        name,
+        hitpoints,
+      },
+      {
+        depth: 10,
+        backgroundColor: 0x881122,
+        fontColor: "#dddddd"
       }
     )
+    
+    
     
     
     this.hostileUnitCards[unitData.id] = duc

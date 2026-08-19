@@ -20,6 +20,17 @@ import * as Utils from "../helpers/Utils"
 import { Palette } from "../data/Palette" 
 
 
+const unitNames = [
+  "Bobby",
+  "Robert",
+  "Lars",
+  "Seamus",
+  "Arnold",
+  "Larry",
+  "Johnny",
+  "Ricky"
+]
+
 
 export default class Game extends Phaser.Scene {
   constructor() {
@@ -74,6 +85,8 @@ export default class Game extends Phaser.Scene {
       var damage = Utils.getRandomBellInt(8,15,3)
       var delay = Utils.getRandomBellInt(15,24, 3)
       var atk = Utils.getRandomBellInt(8,15, 3)
+      var name = unitNames[Utils.getRandomInt(0,unitNames.length)]
+      
       var healer
       if (i == 1) {
         healer = {
@@ -81,14 +94,15 @@ export default class Game extends Phaser.Scene {
           delay: 50
         }
       }
-      console.log(healer)
+      
       heroData.push( {
         hitpoints: hp,
         armorClass: ac,
         damage,
         delay,
         atk,
-        healer
+        healer,
+        name
       })
     }
     
