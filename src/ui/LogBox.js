@@ -8,7 +8,7 @@ export class LogBox extends Window {
 
   constructor(scene,x,y,config={}) {
     const {
-      fontSize=40,
+      fontSize=50,
       width=500,
       height=400,
       depth=1,

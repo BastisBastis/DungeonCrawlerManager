@@ -60,6 +60,11 @@ export const createTakeDamageSystem=(world)=>{
         Attackable.currentHitpoints[target] = Math.floor(Math.max(0, Attackable.currentHitpoints[target] - damageTaken))
         
         EventCenter.emit("addLogMessage", target + " takes " + damageTaken + " dmg (max: " + data.damage + ") - hps: " + Attackable.currentHitpoints[target]+"/" + Attackable.maxHitpoints[target])
+        EventCenter.emit("updateHitpoints", {
+          id: target,
+          currentHitpoints: Attackable.currentHitpoints[target],
+          maxHitpoints: Attackable.maxHitpoints[target]
+        })
       }
         
     }

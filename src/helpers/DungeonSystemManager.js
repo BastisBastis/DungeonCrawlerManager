@@ -1,7 +1,11 @@
-import { createTargetPickingSystem } from "../systems/TargetPickingSystem"
+import { createActionPickingSystem } from "../systems/ActionPickingSystem"
 import { createMeleeAttackSystem } from "../systems/MeleeAttackSystem" 
 import { createTakeDamageSystem } from "../systems/TakeDamageSystem" 
 import { createDeathSystem } from "../systems/DeathSystem"
+import { createGraphicsSystem } from "../systems/GraphicsSystem" 
+import { createCheckPointSystem } from "../systems/CheckpointSystem" 
+import { createMovementSystem } from "../systems/MovementSystem" 
+import { createGoalSystem } from "../systems/GoalSystem" 
 
 export class DungeonSystemManager {
   constructor(world) {
@@ -11,9 +15,13 @@ export class DungeonSystemManager {
     
     this.systems=[
       
-      createTargetPickingSystem(world),
+      createCheckPointSystem(world),
+      createActionPickingSystem(world),
       createMeleeAttackSystem(world),
-      createDeathSystem(world)
+      createMovementSystem(world),
+      createGoalSystem(world),
+      createDeathSystem(world),
+      createGraphicsSystem(world)
     ]
   }
   

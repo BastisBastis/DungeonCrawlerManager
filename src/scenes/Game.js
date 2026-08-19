@@ -13,7 +13,7 @@ import {
 
 //helpers
 
-
+import { GlobalStuff } from "../helpers/GlobalStuff"
 import * as Utils from "../helpers/Utils"
 
 //Data
@@ -37,7 +37,11 @@ export default class Game extends Phaser.Scene {
   }) {
     try { 
     //Background
-    console.log("Game Start", result)
+    
+    if (GlobalStuff.verboseConsole > 1)
+      console.log("Game Start", result)
+      
+      
     this.add.rectangle(960,540,1920,1080,Palette.blue1.hex).setScrollFactor(0,0)
     
     if (result.winner != -1) {
@@ -50,12 +54,39 @@ export default class Game extends Phaser.Scene {
   }
   
   startDungeon() {
+    
+    var heroData = this.tempHeroData()
     this.scene.start("dungeon", {
-      levelIndex:0
+      heroData
     })
   }
   
-  
+  tempHeroData() {
+    
+    var heroData = []
+    
+    var numHeroes = 2
+    
+    for (let i = 0; i < numHeroes; i++) {
+      
+      var hp = Utils.getRandomBellInt(100, 300, 3)
+      var ac = Utils.getRandomBellInt(8,15,3)
+      var damage = Utils.getRandomBellInt(8,15,3)
+      var delay = Utils.getRandomBellInt(15,24, 3)
+      var atk = Utils.getRandomBellInt(8,15, 3)
+      heroData.push( {
+        hitpoints: hp,
+        armorClass: ac,
+        damage,
+        delay,
+        atk
+      })
+    }
+    
+    return heroData
+    
+    
+  }
     
   
   

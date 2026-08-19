@@ -3,7 +3,7 @@ import {
   Types
 } from "bitecs"
 
-export const Position2d = defineComponent({
+export const Position = defineComponent({
   x:Types.f32,
   y:Types.f32
 })

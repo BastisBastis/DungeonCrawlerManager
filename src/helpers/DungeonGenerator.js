@@ -1,0 +1,134 @@
+const getGrid = (width, height)=>{
+  var map = []
+  for (let col = 0; col < width; col++) {
+    var column = []
+    
+    for (let row = 0; row < height; row++) {
+      column.push({
+        walkable: false,
+        cost: 1
+      })
+    }
+    
+    map.push(column)
+  }
+  return map
+}
+
+const levels = [
+  {
+    width:32,
+    height:32,
+    cellSize: 128,
+    playerSpawn: {
+      x: 3,
+      y: 3
+    },
+    goal: {
+      x: 12,
+      y: 20
+    },
+    spawnPoints: [ //make this an array of dictionaries instead
+      [3,11, 1], //col, row, number of enemies
+      [6,11,3],
+      [10,18,1],
+      [11,18,2]
+    ],
+    checkPoints: [
+      {
+        x:3,
+        y: 11
+      },
+      {
+        x:9,
+        y:11
+      },
+      {
+        x: 9,
+        y: 18
+      },
+      {
+        x: 12,
+        y: 20
+      }
+    ],
+    carvings:[
+      {
+        col: 3,
+        row: 3,
+        dir: "s",
+        length: 8
+      },
+      {
+        col: 3,
+        row: 11,
+        dir: "e",
+        length: 6
+      },
+      {
+        col: 5,
+        row: 10,
+        dir: "e",
+        length: 3
+      },
+      {
+        col: 5,
+        row: 12,
+        dir: "e",
+        length: 3
+      },
+      {
+        col: 9,
+        row: 11,
+        dir: "s",
+        length: 10
+      },
+      {
+        col: 10,
+        row: 17,
+        dir: "s",
+        length: 4
+      },
+      {
+        col: 11,
+        row: 17,
+        dir: "s",
+        length: 4
+      },
+      {
+        col: 12,
+        row: 17,
+        dir: "s",
+        length: 4
+      },
+    ]
+  }
+  
+]
+
+
+export const DungeonGenerator = {
+  getLevel: (index) =>{
+    if (index >= levels.length) {
+      console.log("Level index out of range")
+      return null
+    }
+    var levelData = levels[index]
+    var map = getGrid(levelData.width, levelData.height)
+    for (const carving of levelData.carvings) {
+      var deltaX = 0
+      var deltaY = 0
+      if (carving.dir == "s")
+        deltaY=1
+      else if (carving.dir == "e")
+        deltaX=1
+      for (let i = 0; i< carving.length; i++) {
+        var cell = map[carving.col + deltaX*i][carving.row + deltaY * i]
+        cell.walkable = true
+      }
+    }
+    
+    levelData.map = map
+    return levelData
+  }
+}

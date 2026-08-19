@@ -6,7 +6,7 @@ import {
 //components
 import { BattleTarget } from "../components/BattleTarget" 
 import { MeleeAttack } from "../components/MeleeAttack" 
-import { Position2d } from "../components/Position2d"
+import { Position } from "../components/Position"
 import { Dead } from "../components/Dead"
 
 import { EventCenter } from "../helpers/EventCenter" 

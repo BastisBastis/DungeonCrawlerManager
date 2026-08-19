@@ -4,5 +4,5 @@ export const GlobalStuff = {
   FontFamily:"Concert One",
   verboseLog: 0,
   verboseConsole: 0,
-  gameSpeedMod: 5
+  gameSpeedMod: 1
 }
