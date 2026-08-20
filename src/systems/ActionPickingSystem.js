@@ -30,7 +30,9 @@ export const createActionPickingSystem=(world)=>{
     unitQuery(world).forEach(id=>{
       if (hasComponent(world, Dead, id))
         return
-    
+      
+      
+      const oldTarget = Action.target[id]
       const hadTarget = Action.target[id] != 0 
       
       Action.target[id] = 0 
@@ -66,8 +68,41 @@ export const createActionPickingSystem=(world)=>{
 
         }
         
+        
         if (hasComponent(world, MeleeAttack, id)) 
           {
+          var highestThreatId = 0
+          var highestThreatValue = -1
+          if (!world.scene.threatData[id])
+            return
+          for (const [otherId, threatData] of Object.entries(world.scene.threatData[id].hostile)) {
+            var totalValue = 0
+            for (const threatValue of Object.values(threatData)) {
+              totalValue += threatValue
+            }
+            if (totalValue > highestThreatValue) {
+              highestThreatValue = totalValue
+              highestThreatId = otherId
+            }
+          }
+          if (highestThreatValue > 0) {
+            //console.log(highestThreatId, highestThreatValue)
+          }
+          if (highestThreatId > 0) {
+            if (BattleUnit.team[id] == 1 && !hadTarget) {
+              EventCenter.emit("hostileUnitEngaged", { id })
+            }
+            if (Action.target[id] != oldTarget) {
+              EventCenter.emit("targetUpdated", {
+                id,
+                target: highestThreatId
+              })
+            }
+            Action.target[id] = highestThreatId
+            Action.action[id] = ActionType.ATTACK
+            
+          }
+          /*
           if (otherId != id && BattleUnit.team[id] != BattleUnit.team[otherId] && !hasComponent(world, Dead, otherId)) {
             
             
@@ -89,6 +124,7 @@ export const createActionPickingSystem=(world)=>{
               Action.action[id] = ActionType.ATTACK
             }
           }
+            */
         }
       })
       

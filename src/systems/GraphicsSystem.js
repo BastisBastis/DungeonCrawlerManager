@@ -41,7 +41,11 @@ export const createGraphicsSystem =(world)=>{
       gameObjects[id]=object
     })
     
-    
+    if (hasComponent(world, Dead, followedUnit)) {
+      followedUnit = 0
+      console.log("new followed unit")
+    }
+      
     
     unitQuery(world).forEach(id=>{
       

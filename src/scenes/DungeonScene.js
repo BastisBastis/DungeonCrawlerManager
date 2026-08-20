@@ -55,7 +55,7 @@ export default class DungeonScene extends Phaser.Scene {
     EventCenter.on("allUnitsDead", this.allUnitsDead, this)
     EventCenter.on("goalReached", this.goalReached, this)
     
-    
+    this.threatData={}
 
     this.add.rectangle(960,540,1920,1080,0x000000).setScrollFactor(0,0)
     
