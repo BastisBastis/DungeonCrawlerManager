@@ -18,9 +18,9 @@ export const createMovementSystem=(world)=>{
   return (world, dt)=>{
     
     const checkpoints = world.scene.level.checkPoints
-    const speed = 4
+    const speed = 20
     
-    const meleeRange = 10
+    const meleeRange = world.scene.level.cellSize*0.8
     
 
     query(world).forEach(id=>{
@@ -72,8 +72,8 @@ export const createMovementSystem=(world)=>{
           movementTarget.y
         )
 
-         Position.x[id]  = Position.x[id]  + Math.cos(angle) * speed;
-         Position.y[id]  = Position.y[id]  + Math.sin(angle) * speed;
+         Position.x[id]  = Position.x[id]  + Math.cos(angle) * speed*dt/100;
+         Position.y[id]  = Position.y[id]  + Math.sin(angle) * speed*dt/100;
               }
         
       

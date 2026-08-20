@@ -53,8 +53,8 @@ export default class UI extends Phaser.Scene {
       for (const hero of heroData) {
         var duc = new DungeonUnitCard(
           this,
-          200 + 300*i,
-          120,
+          200 + 300*(i%2),
+          120 + 240*Math.floor(i/2),
           hero,
           {
             depth: 10

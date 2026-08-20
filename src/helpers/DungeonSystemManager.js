@@ -8,6 +8,7 @@ import { createMovementSystem } from "../systems/MovementSystem"
 import { createGoalSystem } from "../systems/GoalSystem" 
 import { createHealingSystem } from "../systems/HealingSystem"
 import { createReceiveHealSystem } from "../systems/ReceiveHealSystem"
+import { createThreatSystem } from "../systems/ThreatSystem" 
 
 export class DungeonSystemManager {
   constructor(world) {
@@ -16,9 +17,11 @@ export class DungeonSystemManager {
     createTakeDamageSystem(world)
     createReceiveHealSystem(world)
     
+    
     this.systems=[
       
       createCheckPointSystem(world),
+      createThreatSystem(world),
       createActionPickingSystem(world),
       createMeleeAttackSystem(world),
       createHealingSystem(world),

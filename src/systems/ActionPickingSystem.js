@@ -22,7 +22,7 @@ export const createActionPickingSystem=(world)=>{
   const unitQuery=defineQuery([Action, BattleUnit])
   const attackableBattleUnitQuery = defineQuery([BattleUnit, Attackable, Position])
   
-  const aggroRange = world.scene.level.cellSize*1.3
+  const aggroRange = world.scene.level.cellSize*2
   const healTargetFindingRange = world.scene.level.cellSize*2
   
   return (world, dt)=>{
@@ -57,7 +57,7 @@ export const createActionPickingSystem=(world)=>{
               return Attackable.currentHitpoints[a] / Attackable.maxHitpoints[a] > Attackable.currentHitpoints[b] / Attackable.maxHitpoints
             })
             if (potentialHealTargets.length > 0) {
-              console.log("Healing target found")
+              
               Action.target[id] = potentialHealTargets[0]
               Action.action[id] = ActionType.HEAL
               return
