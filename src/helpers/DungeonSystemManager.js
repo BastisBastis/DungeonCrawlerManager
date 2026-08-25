@@ -29,12 +29,21 @@ export class DungeonSystemManager {
       createGoalSystem(world),
       createDeathSystem(world),
       createGraphicsSystem(world)
+      
     ]
   }
   
   update(dt) {
+    
+    var lastTime
+    var i = 0
     this.systems.forEach(system=>{
+      lastTime = Date.now()
       system(this.world, dt)
+      const elapsed = Date.now()-lastTime
+      if (elapsed > 30)
+        console.log("dt "+ elapsed + " system: " + i)
+        i++
     })
   }
 }

@@ -30,7 +30,7 @@ export const createDeathSystem=(world)=>{
       if (Attackable.currentHitpoints[id] == 0 && !hasComponent(world, Dead, id)) {
         addComponent(world, Dead, id)
         EventCenter.emit("unitDied", id)
-        console.log("unitDied")
+        
       }
         
 

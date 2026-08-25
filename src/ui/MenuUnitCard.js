@@ -15,11 +15,14 @@ export class MenuUnitCard extends Window {
       id = 0,
       classType = "Warrior",
       hitpoints = 100,
-      target = ""
+      target = "",
+      armorClass = 10,
+      damage = 10,
+      delay = 10
     } = unitData
     const {
-      fontSize=32,
-      width=300,
+      fontSize=22,
+      width=320,
       height=240,
       depth=1,
       fontFamily=GlobalStuff.FontFamily,
@@ -40,6 +43,7 @@ export class MenuUnitCard extends Window {
     })
     
     
+    
     this.fontSize = fontSize
     this.fontFamily = fontFamily
     this.fontColor=fontColor
@@ -50,7 +54,7 @@ export class MenuUnitCard extends Window {
     this.scene = scene
     this.selected = false
     
-    this.numLabels = 5
+    this.numLabels = 7
     
     var centerX = x
     var leftX = x - width/2 +margin
@@ -71,7 +75,8 @@ export class MenuUnitCard extends Window {
         } 
       }
       
-    
+    this.labels=[]
+    var rowIndex = 0
     
     this.nameLabel = this.scene.add.text(
       centerX,
@@ -84,9 +89,11 @@ export class MenuUnitCard extends Window {
     ).setOrigin(.5,.5)
       .setDepth(this.depth)
       
+    rowIndex++
+      
     this.classLabel = this.scene.add.text(
       centerX,
-      labelY + deltaY * 1,
+      labelY + deltaY * rowIndex,
       classType,
       {
         ...fontConfig,
@@ -95,9 +102,11 @@ export class MenuUnitCard extends Window {
     ).setOrigin(.5,.5)
       .setDepth(this.depth)
       
+      rowIndex++
+      
     this.levelNameLabel = this.scene.add.text(
       leftX,
-      labelY + deltaY * 2,
+      labelY + deltaY * rowIndex,
       "Level:",
       {
         ...fontConfig,
@@ -106,9 +115,10 @@ export class MenuUnitCard extends Window {
     ).setOrigin(0,.5)
       .setDepth(this.depth)
     
+    
     this.levelValueLabel = this.scene.add.text(
       rightX,
-      labelY + deltaY * 2,
+      labelY + deltaY * rowIndex,
       level,
       {
         ...fontConfig,
@@ -116,10 +126,12 @@ export class MenuUnitCard extends Window {
       }
     ).setOrigin(1,.5)
       .setDepth(this.depth)
+    
+    rowIndex++
       
     this.hpNameLabel = this.scene.add.text(
       leftX,
-      labelY + deltaY * 3,
+      labelY + deltaY * rowIndex,
       "HP:",
       {
         ...fontConfig,
@@ -130,8 +142,8 @@ export class MenuUnitCard extends Window {
     
     this.hpValueLabel = this.scene.add.text(
       rightX,
-      labelY + deltaY * 3,
-      hitpoints+"/"+hitpoints,
+      labelY + deltaY * rowIndex,
+      hitpoints,
       {
         ...fontConfig,
         align: "right"
@@ -139,10 +151,12 @@ export class MenuUnitCard extends Window {
     ).setOrigin(1,.5)
       .setDepth(this.depth)
       
-      this.targetNameLabel = this.scene.add.text(
+      rowIndex++
+      
+    this.acNameLabel = this.scene.add.text(
       leftX,
-      labelY + deltaY * 4,
-      "Target:",
+      labelY + deltaY * rowIndex,
+      "Armor Class:",
       {
         ...fontConfig,
         align: "left"
@@ -150,10 +164,10 @@ export class MenuUnitCard extends Window {
     ).setOrigin(0,.5)
       .setDepth(this.depth)
     
-    this.targetValueLabel = this.scene.add.text(
+    this.acValueLabel = this.scene.add.text(
       rightX,
-      labelY + deltaY * 4,
-      target,
+      labelY + deltaY * rowIndex,
+      armorClass,
       {
         ...fontConfig,
         align: "right"
@@ -161,16 +175,104 @@ export class MenuUnitCard extends Window {
     ).setOrigin(1,.5)
       .setDepth(this.depth)
       
-    this.labels = [
+    rowIndex++
+      
+    this.damageDelayNameLabel = this.scene.add.text(
+      leftX,
+      labelY + deltaY * rowIndex,
+      "Attack Damage/Delay:",
+      {
+        ...fontConfig,
+        align: "left"
+      }
+    ).setOrigin(0,.5)
+      .setDepth(this.depth)
+    
+    this.damageDelayValueLabel = this.scene.add.text(
+      rightX,
+      labelY + deltaY * rowIndex,
+      damage+"/"+delay,
+      {
+        ...fontConfig,
+        align: "right"
+      }
+    ).setOrigin(1,.5)
+      .setDepth(this.depth)
+    
+    rowIndex++
+    
+    
+    if (unitData.healer ) {
+      this.HealNameLabel = this.scene.add.text(
+        leftX,
+        labelY + deltaY * rowIndex,
+        "Heal Amount/Delay:",
+        {
+          ...fontConfig,
+          align: "left"
+        }
+      ).setOrigin(0,.5)
+        .setDepth(this.depth)
+        
+      
+      
+      this.threatModValueLabel = this.scene.add.text(
+        rightX,
+        labelY + deltaY * rowIndex,
+        unitData.healer.amount+"/"+unitData.healer.delay,
+        {
+          ...fontConfig,
+          align: "right"
+        }
+      ).setOrigin(1,.5)
+        .setDepth(this.depth)
+        this.labels.push(this.threatModNameLabel)
+        this.labels.push(this.threatModValueLabel)
+       rowIndex++
+    }
+    if (unitData.threatMods.attack > 1.0) {
+      this.threatModNameLabel = this.scene.add.text(
+        leftX,
+        labelY + deltaY * rowIndex,
+        "Threat Modifier:",
+        {
+          ...fontConfig,
+          align: "left"
+        }
+      ).setOrigin(0,.5)
+        .setDepth(this.depth)
+        
+      
+      
+      this.threatModValueLabel = this.scene.add.text(
+        rightX,
+        labelY + deltaY * rowIndex,
+        unitData.threatMods.attack,
+        {
+          ...fontConfig,
+          align: "right"
+        }
+      ).setOrigin(1,.5)
+        .setDepth(this.depth)
+        this.labels.push(this.threatModNameLabel)
+        this.labels.push(this.threatModValueLabel)
+       rowIndex++
+    }
+    
+    
+      
+    this.labels.push( ...[
       this.nameLabel,
       this.classLabel,
       this.levelNameLabel,
       this.levelValueLabel,
       this.hpNameLabel,
       this.hpValueLabel,
-      this.targetNameLabel,
-      this.targetValueLabel
-    ]
+      this.acNameLabel,
+      this.acValueLabel,
+      this.damageDelayNameLabel,
+      this.damageDelayValueLabel
+    ])
 
   }
   

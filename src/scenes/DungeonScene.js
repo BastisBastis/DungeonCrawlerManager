@@ -19,6 +19,11 @@ import { Color } from "../components/Color"
 import { Position } from "../components/Position" 
 import { CheckpointFollower } from "../components/CheckpointFollower" 
 import { Healer } from "../components/Healer" 
+import { Name } from "../components/Name" 
+import { ThreatMod } from "../components/ThreatMod" 
+
+//factories
+import { UnitFactory } from "../factories/UnitFactory" 
 
 //helpers
 import { DungeonSystemManager } from "../helpers/DungeonSystemManager"
@@ -27,6 +32,7 @@ import { GlobalStuff } from "../helpers/GlobalStuff"
 import { MusicManager } from "../helpers/MusicManager" 
 import { SFXManager } from "../helpers/sfxManager"
 import { DungeonGenerator } from "../helpers/DungeonGenerator" 
+import { Store } from "../helpers/Store" 
 
 import * as Utils from "../helpers/Utils"
 
@@ -61,6 +67,7 @@ export default class DungeonScene extends Phaser.Scene {
     
     this.level = DungeonGenerator.getLevel(0)
     
+    GlobalStuff.paused = false
     
     this.world=createWorld()
     this.world.scene=this
@@ -103,40 +110,7 @@ export default class DungeonScene extends Phaser.Scene {
   setup(heroData) {
     var i = 0
     for (const hero of heroData) {
-      const id = addEntity(this.world)
-      hero.id = id
-      addComponent(this.world, Action, id)
-      addComponent(this.world, BattleUnit, id)
-      addComponent(this.world, Attackable, id)
-      addComponent(this.world, MeleeAttack, id)
-      addComponent(this.world, Position, id)
-      addComponent(this.world, Color, id)
-      addComponent(this.world, CheckpointFollower, id)
       
-
-      if (hero.healer) {
-        console.log("Has healer component")
-        addComponent(this.world, Healer, id)
-        Healer.amount[id] = hero.healer.amount
-        Healer.delay[id] = hero.healer.delay
-        Healer.coolDown[id] = 0
-      }
-      
-      CheckpointFollower.index[id] = 0
-      
-      Action.target[id] = 0
-      BattleUnit.team[id] = 0
-      
-      
-      
-      Attackable.maxHitpoints[id] = hero.hitpoints
-      Attackable.currentHitpoints[id] = Attackable.maxHitpoints[id]
-      Attackable.armorClass[id] = hero.armorClass
-      
-      MeleeAttack.damage[id] = hero.damage
-      MeleeAttack.delay[id] = hero.delay
-      MeleeAttack.coolDown[id] = 0
-      MeleeAttack.atk[id] = hero.atk
     
       var x = this.level.playerSpawn.x * this.level.cellSize
       var y = this.level.playerSpawn.y * this.level.cellSize
@@ -153,17 +127,16 @@ export default class DungeonScene extends Phaser.Scene {
           x+=this.level.cellSize/4
         }
       }
-      Position.x[id] = x
-      Position.y[id] = y
       
-      Color.hex[id] = 0x00ff00
-        
-  
+      hero.position = {x, y}
+      
+      hero.color = 0x00ff00
+      hero.team = 0
+      hero.checkpointFollower = true
       
       
-      if (GlobalStuff.verboseLog >0)
-        EventCenter.emit("addLogMessage", "id: " + id + " Team: " + BattleUnit.team[id] + " HP: " + Attackable.maxHitpoints[id] + " AC: " + Attackable.armorClass[id] + " Dmg: " + MeleeAttack.damage[id] + " Delay: " + MeleeAttack.delay[id] + " ATK: " + MeleeAttack.atk[id])
-        
+      var id = UnitFactory.getUnitEntityFromData(this.world, hero)
+      
       i++
     }
     
@@ -178,31 +151,23 @@ export default class DungeonScene extends Phaser.Scene {
     for (const spawnPoint of this.level.spawnPoints) {
     
       for (let i = 0; i <  spawnPoint[2] ; i++) {
-        const id = addEntity(this.world)
-        //console.log(Action, BattleUnit, Attackable, MeleeAttack)
+                
         
-        addComponent(this.world, Action, id)
-        addComponent(this.world, BattleUnit, id)
-        addComponent(this.world, Attackable, id)
-        addComponent(this.world, MeleeAttack, id)
-        addComponent(this.world, Color, id)
-        addComponent(this.world, Position, id)
-        
-        Action.target[id] = 0
-        BattleUnit.team[id] = 1
+        const unitData = {}
+        unitData.team = 1
         
         
         
-        Attackable.maxHitpoints[id] = Utils.getRandomBellInt(30, 50, 2)
-        Attackable.currentHitpoints[id] = Attackable.maxHitpoints[id]
-        Attackable.armorClass[id] = Utils.getRandomBellInt(2, 6,1)
+        unitData.hitpoints = Utils.getRandomBellInt(30, 50, 2)
+        unitData.armorClass = Utils.getRandomBellInt(2, 6,1)
         
-        MeleeAttack.damage[id] = Utils.getRandomBellInt(8,15,3)
-        MeleeAttack.delay[id] = Utils.getRandomBellInt(20,24, 3)
-        MeleeAttack.coolDown[id] = 0
-        MeleeAttack.atk[id] = Utils.getRandomBellInt(8,15, 3)
+        unitData.damage = Utils.getRandomBellInt(8,15,3)
+        unitData.delay = Utils.getRandomBellInt(20,24, 3)
         
-        Color.hex[id] = 0xff0000
+        unitData.atk = Utils.getRandomBellInt(8,15, 3)
+        
+        unitData.color = 0xff0000
+        
         
         var x = spawnPoint[0] * this.level.cellSize
         var y = spawnPoint[1] * this.level.cellSize
@@ -219,14 +184,12 @@ export default class DungeonScene extends Phaser.Scene {
             x+=this.level.cellSize/4
           }
         }
-        Position.x[id] = x
-        Position.y[id] = y
+        unitData.position = {x,y}
         
         
         
+        const id = UnitFactory.getUnitEntityFromData(this.world, unitData)
         
-        if (GlobalStuff.verboseLog >0)
-          EventCenter.emit("addLogMessage", "id: " + id + " Team: " + BattleUnit.team[id] + " HP: " + Attackable.maxHitpoints[id] + " AC: " + Attackable.armorClass[id] + " Dmg: " + MeleeAttack.damage[id] + " Delay: " + MeleeAttack.delay[id] + " ATK: " + MeleeAttack.atk[id])
         
       }
     }
@@ -257,7 +220,17 @@ export default class DungeonScene extends Phaser.Scene {
   
   update(time,dt) {
     try { 
-    this.systemManager.update(dt * GlobalStuff.gameSpeedMod)
+    
+    if (GlobalStuff.paused)
+      return
+      
+    if (dt > 30) {
+        //console.log("dt: " + dt)
+    }
+    
+    for (let i = 0; i < GlobalStuff.gameSpeed; i++) {
+      this.systemManager.update(dt*GlobalStuff.gameSpeedMod)
+    }
     } catch (er) {console.log(er.message,er.stack); throw er} 
   }
   

@@ -18,6 +18,7 @@ import * as Utils from "../helpers/Utils"
 
 //Data
 import { Palette } from "../data/Palette" 
+import { UnitNames } from "../data/UnitNames" 
 
 //UI
 import { DungeonUnitCard } from "../ui/DungeonUnitCard"
@@ -29,16 +30,7 @@ import { UnitClass } from "../components/ClassType"
 
 
 
-const unitNames = [
-  "Bobby",
-  "Robert",
-  "Lars",
-  "Seamus",
-  "Arnold",
-  "Larry",
-  "Johnny",
-  "Ricky"
-]
+
 
 
 export default class Game extends Phaser.Scene {
@@ -90,6 +82,13 @@ export default class Game extends Phaser.Scene {
     
     this.selectedUnits = []
     this.unitCards = []
+    
+    var nameIndices = []
+    for (let i = 0; i < UnitNames.length; i++) {
+      nameIndices.push(i)
+    }
+    
+    Utils.shuffleArray(nameIndices)
 
     for (let i = 0; i < 8; i++) {
       const classType = [
@@ -110,6 +109,16 @@ export default class Game extends Phaser.Scene {
           delayMax : 20,
           atkMin : 6,
           atkMax : 10,
+          threatMods: {
+            attackMin: 51.4,
+            attackMax: 52.0,
+            proximityMin: 1.0,
+            proximityMax: 1.0,
+            healMin: 1.0,
+            healMax: 1.0,
+            otherMin: 1.0,
+            otherMax: 1.0
+          },
           healer: false
         }
       classValues[UnitClass.CLERIC] = {
@@ -125,7 +134,17 @@ export default class Game extends Phaser.Scene {
           atkMax : 9,
           healer: true,
           healAmount: 60,
-          healDelay : 50
+          healDelay : 50,
+          threatMods: {
+            attackMin: 1.0,
+            attackMax: 1.0,
+            proximityMin: 1.0,
+            proximityMax: 1.0,
+            healMin: 1.0,
+            healMax: 1.0,
+            otherMin: 1.0,
+            otherMax: 1.0
+          },
         }
         classValues[UnitClass.ROGUE] = {
           hpMin : 70,
@@ -138,7 +157,17 @@ export default class Game extends Phaser.Scene {
           delayMax : 16,
           atkMin : 10,
           atkMax : 16,
-          healer: false
+          healer: false,
+          threatMods: {
+            attackMin: 1.0,
+            attackMax: 1.0,
+            proximityMin: 1.0,
+            proximityMax: 1.0,
+            healMin: 1.0,
+            healMax: 1.0,
+            otherMin: 1.0,
+            otherMax: 1.0
+          },
         }
       
 
@@ -147,9 +176,18 @@ export default class Game extends Phaser.Scene {
       var damage = Utils.getRandomBellInt(classValues[classType].dmgMin,classValues[classType].dmgMax,3)
       var delay = Utils.getRandomBellInt(classValues[classType].delayMin,classValues[classType].delayMax, 3)
       var atk = Utils.getRandomBellInt(classValues[classType].atkMin,classValues[classType].atkMax, 3)
-      var name = unitNames[Utils.getRandomInt(0,unitNames.length)]
+      
+      var threatMods = {
+        attack: Math.floor(Phaser.Math.FloatBetween(classValues[classType].threatMods.attackMin, classValues[classType].threatMods.attackMax)*100)/100,
+        proximity: Math.floor(Phaser.Math.FloatBetween(classValues[classType].threatMods.proximityMin, classValues[classType].threatMods.proximityMax)*100)/100,
+        heal: Math.floor(Phaser.Math.FloatBetween(classValues[classType].threatMods.healMin, classValues[classType].threatMods.healMax)*100)/100,
+        other: Math.floor(Phaser.Math.FloatBetween(classValues[classType].threatMods.otherMin, classValues[classType].threatMods.otherMax)*100)/100,
+      }
+      
+      var nameIndex = nameIndices.pop()
+     var name = UnitNames[nameIndex]
 
-      var healer
+      let healer =false
       if (classValues[classType].healer) {
         healer = {
           amount:classValues[classType].healAmount,
@@ -167,13 +205,18 @@ export default class Game extends Phaser.Scene {
           delay,
           atk,
           name,
-          classType
+          classType,
+          name,
+          nameIndex,
+          threatMods,
+          healer
         }
+       
 
       var duc = new MenuUnitCard(
         this,
         camWidth / 4 * (i % 4 + 0.5),
-        130 + Math.floor(i/4) * 260,
+        140 + Math.floor(i/4) * 280,
         unitData,
         {
           depth: 10,

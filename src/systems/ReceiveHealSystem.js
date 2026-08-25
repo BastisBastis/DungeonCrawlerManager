@@ -15,7 +15,7 @@ export const createReceiveHealSystem=(world)=>{
   EventCenter.on("healRequest", (request)=>{
     const source = request.source
     const target = request.target
-        const data = request.data
+    const data = request.data
 
     if (hasComponent(world, Dead, target))
       return
@@ -32,6 +32,7 @@ export const createReceiveHealSystem=(world)=>{
         currentHitpoints: Attackable.currentHitpoints[target],
         maxHitpoints: Attackable.maxHitpoints[target]
       })
+      
     }
         
     

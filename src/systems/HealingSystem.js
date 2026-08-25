@@ -37,7 +37,7 @@ export const createHealingSystem=(world)=>{
           }
         })
 
-        console.log("Heal!")
+        
 
         if (GlobalStuff.verboseLog >=2)
             EventCenter.emit("addLogMessage", id + " requests " + Healer.amount[id] + " heal to " + Action.target[id])

@@ -69,7 +69,7 @@ export default class Loading extends Phaser.Scene {
     
     this.fadeOut(500)
     setTimeout(()=>{
-      this.scene.start("game")
+      this.scene.start("gameMenu")
     },500)
   }
   

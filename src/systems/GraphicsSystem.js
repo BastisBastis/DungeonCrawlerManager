@@ -43,7 +43,7 @@ export const createGraphicsSystem =(world)=>{
     
     if (hasComponent(world, Dead, followedUnit)) {
       followedUnit = 0
-      console.log("new followed unit")
+      
     }
       
     

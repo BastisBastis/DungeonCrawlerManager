@@ -8,6 +8,7 @@ import { Attackable } from "../components/Attackable"
 import { Dead } from "../components/Dead"
 
 import { EventCenter } from "../helpers/EventCenter" 
+import { NameHelper } from "../helpers/NameHelper"  
 
 const randomDamage = (min, max, attackSkill, armorClass) => {
     const difference = attackSkill - armorClass
@@ -59,7 +60,19 @@ export const createTakeDamageSystem=(world)=>{
         
         Attackable.currentHitpoints[target] = Math.floor(Math.max(0, Attackable.currentHitpoints[target] - damageTaken))
         
-        EventCenter.emit("addLogMessage", target + " takes " + damageTaken + " dmg (max: " + data.damage + ") - hps: " + Attackable.currentHitpoints[target]+"/" + Attackable.maxHitpoints[target])
+        EventCenter.emit("damageTaken", {
+          damage: damageTaken,
+          target,
+          source,
+          damageType
+        })
+        
+        EventCenter.emit("addLogMessage", 
+          NameHelper.GetName(world,source) + " does " + 
+          damageTaken + " damage (max: " 
+          + data.damage + ") to " + 
+          NameHelper.GetName(world, target))
+          
         EventCenter.emit("updateHitpoints", {
           id: target,
           currentHitpoints: Attackable.currentHitpoints[target],
