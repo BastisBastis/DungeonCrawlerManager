@@ -67,7 +67,7 @@ export default class DungeonScene extends Phaser.Scene {
     
     this.level = DungeonGenerator.getLevel(0)
     
-    GlobalStuff.paused = false
+    Store.paused = false
     
     this.world=createWorld()
     this.world.scene=this
@@ -109,9 +109,10 @@ export default class DungeonScene extends Phaser.Scene {
   
   setup(heroData) {
     var i = 0
-    for (const hero of heroData) {
-      
     
+    for (const hero of heroData) {
+      console.log(hero)
+      
       var x = this.level.playerSpawn.x * this.level.cellSize
       var y = this.level.playerSpawn.y * this.level.cellSize
       
@@ -134,7 +135,7 @@ export default class DungeonScene extends Phaser.Scene {
       hero.team = 0
       hero.checkpointFollower = true
       
-      
+      console.log("hero")
       var id = UnitFactory.getUnitEntityFromData(this.world, hero)
       
       i++
@@ -187,7 +188,7 @@ export default class DungeonScene extends Phaser.Scene {
         unitData.position = {x,y}
         
         
-        
+        console.log("enemy")
         const id = UnitFactory.getUnitEntityFromData(this.world, unitData)
         
         
@@ -221,7 +222,7 @@ export default class DungeonScene extends Phaser.Scene {
   update(time,dt) {
     try { 
     
-    if (GlobalStuff.paused)
+    if (Store.paused)
       return
       
     if (dt > 30) {

@@ -16,6 +16,7 @@ import { UnitFactory } from "../factories/UnitFactory"
 import { GlobalStuff } from "../helpers/GlobalStuff"
 import * as Utils from "../helpers/Utils"
 import { Store } from "../helpers/Store" 
+import { EventCenter } from "../helpers/EventCenter" 
 
 //Data
 import { Palette } from "../data/Palette" 
@@ -51,7 +52,7 @@ export default class GameMenu extends Phaser.Scene {
     
     this.add.rectangle(960,540,1920,1080,Palette.blue1.hex).setScrollFactor(0,0)
     
-    this.messageLabel = this.add.text(300, this.cameras.main.height - 100, "", { fontSize: 100 })
+    
     
     if (result.winner != -1) {
         this.messageLabel.setText(result.winner == 0 ? "You won!" : "You died!")
@@ -60,9 +61,16 @@ export default class GameMenu extends Phaser.Scene {
     this.gameObjects = []
     this.reloadRecruitmentPool()
     this.showGameMenu()
+    this.addEventListers()
 
     
     } catch (er) {console.log(er.message,er.stack); throw er} 
+  }
+  
+  addEventListers() {
+    
+    EventCenter.on("toGameMenu", this.showGameMenu, this)
+    
   }
   
   reloadRecruitmentPool() {
@@ -71,9 +79,15 @@ export default class GameMenu extends Phaser.Scene {
       const unitData = UnitFactory.getRandomUnitData()
       Store.recruitmentPool.push(unitData)
     }
+    
   }
   
   showGameMenu() {
+    
+    this.clearGameObjects()
+    
+    this.messageLabel = this.add.text(300, this.cameras.main.height - 100, "", { fontSize: 100 })
+    this.gameObjects.push(this.messageLabel)
     
     const rows = 2
     const cols = 3
@@ -111,6 +125,7 @@ export default class GameMenu extends Phaser.Scene {
   }
   
   clearGameObjects() {
+    
     this.gameObjects.forEach(object=>{
       
       object.destroy()
@@ -122,15 +137,15 @@ export default class GameMenu extends Phaser.Scene {
   startDungeon() {
     
     
-    if (this.selectedUnits.length <1) {
+    if (Store.party.length < 0) {
       this.messageLabel.text = "Select at least one hero!"
       return
     }
     
     const heroData = []
-    for (const index of this.selectedUnits) {
-      heroData.push(this.unitCards[index].data)
-    }
+    for (const index of Store.party)
+      heroData.push(Store.units[index])
+    
     
     //var heroData = this.tempHeroData()
     this.scene.start("dungeon", {

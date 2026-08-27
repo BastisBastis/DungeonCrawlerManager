@@ -39,8 +39,9 @@ import { Level } from "../components/Level"
 export const UnitFactory = {
   
   getUnitEntityFromData : (world, unitData) => {
+    console.log(unitData)
     const id = addEntity(world)
-    unitData = id
+    unitData.id = id
     addComponent(world, Action, id)
     addComponent(world, BattleUnit, id)
     addComponent(world, Attackable, id)
@@ -77,7 +78,7 @@ export const UnitFactory = {
     MeleeAttack.coolDown[id] = 0
     MeleeAttack.atk[id] = unitData.atk
     
-    if (unitData.nameIndex) {
+    if (unitData.nameIndex !== undefined) {
       addComponent(world, Name, id)
       Name.index[id] = unitData.nameIndex
     }
@@ -110,7 +111,6 @@ export const UnitFactory = {
 
   getRandomUnitData : (level = 1) => {
     
-
     
     const classType = [
       UnitClass.WARRIOR,

@@ -45,6 +45,7 @@ export class TavernUI {
     this.scene=scene
     
     this.gameObjects = []
+    this.partyOverviewCards = []
     
     this.unitDetails = null
     this.unitDetailsPosition = {
@@ -52,7 +53,7 @@ export class TavernUI {
       y: this.scene.cameras.main.height / 2 - 200
     }
     
-    this.createPartyOverview()
+    this.reloadPartyOverview()
     this.createRecruitmentOverview()
     
     const backBtnX = this.scene.cameras.main.width - 300
@@ -71,13 +72,40 @@ export class TavernUI {
     } catch (er) {console.log(er.message,er.stack); throw er} 
   }
 
-  createPartyOverview() {
+  reloadPartyOverview() {
+    this.partyOverviewCards.forEach(card=>{
+      card.destroy()
+    })
     this.partyOverviewCards = []
     
+    var i = 0 
+    
+    
     Store.party.forEach(unitIndex=>{
+      const index = i
       const unitData = Store.units[unitIndex]
-      const card = new UnitOverview(this.scene, 0, 0, unitData)
+      const card = new UnitOverview(
+        this.scene, 0, 0, 
+        unitData,
+        
+        {
+          buttonText: "Dismiss",
+          buttonCallback: ()=>{
+            
+            if (Store.party.length <= 1) {
+              console.log("Need at least one party member")
+              return
+            }
+            
+            Store.party.splice(index, 1)
+            this.reloadPartyOverview()
+          }
+          
+        }
+      )
       this.partyOverviewCards.push(card)
+      this.gameObjects.push(card)
+      i++
     })
 
     this.layoutPartyOverviewCards()
@@ -87,8 +115,8 @@ export class TavernUI {
   layoutPartyOverviewCards() {
     const y = 200
     const numCols = 4
-    const startX = 100
-    const deltaX = 200
+    const startX = 140
+    const deltaX = 300
     let i = 0
 
     this.partyOverviewCards.forEach(card=>{
@@ -106,15 +134,32 @@ export class TavernUI {
     const startX = 140
     const deltaX = 300
     const deltaY = 240
-    let i = 0
+    var i = 0
     
     Store.recruitmentPool.forEach(unitData=>{
+      const index = i
       const card = new UnitOverview(
         this.scene, 
         startX + deltaX * (i % numCols), 
         startY + deltaY * Math.floor(i / numCols), 
         unitData,
         {
+          buttonText: "Hire",
+          buttonCallback: ()=>{
+            
+            if (Store.party.length >= 4) {
+              console.log("Party is full")
+              return
+            }
+            
+            Store.units.push(Store.recruitmentPool[index])
+            Store.party.push(Store.units.length-1)
+            unitData.unitIndex = Store.units.length-1
+            
+            this.reloadPartyOverview()
+            this.recruitmentOverviewCards.splice(index, 1)
+            card.destroy()
+          },
           onHover:()=>{
             this.unitDetails = new UnitDetails(
               this.scene,
@@ -131,7 +176,8 @@ export class TavernUI {
           }
         }
       )
-      this.partyOverviewCards.push(card)
+      this.recruitmentOverviewCards.push(card)
+      this.gameObjects.push(card)
       i++
     })
   
@@ -139,7 +185,12 @@ export class TavernUI {
 
   
   destroy() {
-    this.gameObjects.forEach(object=>object.destroy())
+    this.gameObjects.forEach(object=>{
+      if (object && object.destroy)
+        object.destroy()
+    })
+    if (this.unitDetails)
+      this.unitDetails.destroy()
     this.gameObjects=[]
   }
   

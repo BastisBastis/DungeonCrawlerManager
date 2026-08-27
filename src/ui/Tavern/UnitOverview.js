@@ -3,6 +3,7 @@ import { GlobalStuff } from "../../helpers/GlobalStuff"
 
 
 import { Window } from "../Window"
+import { Button } from "../Button" 
 
 export class UnitOverview extends Window {
 
@@ -37,6 +38,8 @@ export class UnitOverview extends Window {
       onHover=()=>false,
       onStopHover=()=>false,
       margin = 10,
+      buttonText = "",
+      buttonCallback = ()=>false
     }=config
     super(scene,x,y,{
       ...config,
@@ -86,7 +89,7 @@ export class UnitOverview extends Window {
     
     this.children.push(this.scene.add.text(
       centerX,
-      labelY,
+      labelY + deltaY * rowIndex,
       name,
       {
         ...fontConfig,
@@ -166,6 +169,21 @@ export class UnitOverview extends Window {
     .on('pointerout', () => {
       onStopHover()
     })
+    
+    this.children.push(new Button(
+      this.scene,
+      centerX,
+      y + height/2 - 40,
+      buttonText,
+      {
+        cornerRadius: 4,
+        borderThickness: 1,
+        height: 40,
+        width: width*.8,
+        onClick: buttonCallback,
+        fontSize: 28
+      }
+    ))
   }
   
   
@@ -173,8 +191,8 @@ export class UnitOverview extends Window {
   destroy() {
     
     super.destroy()
-    for (const label of this.labels)
-      label.destroy()
+    for (const child of this.children)
+      child.destroy()
   }
 
 }

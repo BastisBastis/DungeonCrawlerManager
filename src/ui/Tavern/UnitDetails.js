@@ -100,7 +100,7 @@ export class UnitDetails extends Window {
       if (rowData.length == 1) {
         this.children.push(this.scene.add.text(
           centerX,
-          labelY,
+          labelY + deltaY * rowIndex,
           rowData[0],
           {
             ...fontConfig,
@@ -139,7 +139,7 @@ export class UnitDetails extends Window {
     
   }
   
-    destroy() {
+  destroy() {
     
     super.destroy()
     for (const child of this.children)
