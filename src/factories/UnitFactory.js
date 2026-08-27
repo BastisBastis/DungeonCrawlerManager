@@ -27,6 +27,9 @@ import { CheckpointFollower } from "../components/CheckpointFollower"
 import { Healer } from "../components/Healer" 
 import { Name } from "../components/Name" 
 import { ThreatMod } from "../components/ThreatMod" 
+import { ClassType } from "../components/ClassType"
+import { UnitClass } from "../components/ClassType"
+import { Level } from "../components/Level"
 
 
 
@@ -44,7 +47,7 @@ export const UnitFactory = {
     addComponent(world, MeleeAttack, id)
     addComponent(world, Position, id)
     addComponent(world, Color, id)
-    
+    addComponent(world, Level, id)
     
     
     
@@ -85,6 +88,8 @@ export const UnitFactory = {
     Position.y[id] = unitData.position.y
     
     Color.hex[id] = unitData.color
+
+    Level.value[id] = unitData.level
     
     if (unitData.checkpointFollower) {
       addComponent(world, CheckpointFollower, id)
@@ -101,9 +106,9 @@ export const UnitFactory = {
       
     
     return id
-  }
+  },
 
-  getRandomUnitData : () => {
+  getRandomUnitData : (level = 1) => {
     
 
     
@@ -211,6 +216,8 @@ export const UnitFactory = {
       }
     }
 
+    var recruitmentCost = 10
+
     
     const unitData = {
       hitpoints : hp,
@@ -223,7 +230,9 @@ export const UnitFactory = {
       name,
       nameIndex,
       threatMods,
-      healer
+      healer,
+      level,
+      recruitmentCost
     }
     
     return unitData

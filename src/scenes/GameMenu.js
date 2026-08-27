@@ -22,7 +22,7 @@ import { Palette } from "../data/Palette"
 
 //UI
 import { Button } from "../ui/Button"
-import { TavernUI } from "../ui/Tavern" 
+import { TavernUI } from "../ui/TavernUI" 
 
 //Temp
 
@@ -89,15 +89,15 @@ export default class GameMenu extends Phaser.Scene {
       new Button(this, startX, startY, "Tavern", {
         fontSize:48,
         width: 400,
-        onClick : this.showTavern
+        onClick : ()=>this.showTavern()
         }
-      }),
+      ),
       new Button(this, startX+deltaX*2, startY+deltaY*1, "Enter Dungeon", {
         fontSize:48,
         width: 400,
-        onClick : ()=>{this.startDungeon()
+        onClick : ()=>{this.startDungeon() }
         }
-      })
+      )
     )
     
     this.addEventListeners
@@ -112,6 +112,7 @@ export default class GameMenu extends Phaser.Scene {
   
   clearGameObjects() {
     this.gameObjects.forEach(object=>{
+      
       object.destroy()
     })
     this.gameObjects = []

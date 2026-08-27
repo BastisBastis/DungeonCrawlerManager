@@ -20,7 +20,7 @@ export const NameHelper = {
   },
   resetNameList : () => {
     unitNameIndices = []
-    for (let i = i; i < UnitNames.length; i++)
+    for (let i = 0; i < UnitNames.length; i++)
       unitNameIndices.push(i)
     
     Utils.shuffleArray(unitNameIndices)
@@ -28,7 +28,7 @@ export const NameHelper = {
   getNextNameIndex : () => {
     const nameIndex = unitNameIndices.pop()
     if (unitNameIndices.length == 0)
-      resetNameList()
+      NameHelper.resetNameList()
     return nameIndex
   }
 }

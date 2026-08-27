@@ -16,7 +16,8 @@ export class Window {
     blockAlpha=0,
     blockerTweenDuration=0,
     cornerRadius=0,
-    onClick
+    onClick,
+    onHover
   }={}) {
     if (blockBackground) {
       this.bgBlocker=new BgBlocker(scene,depth,blockAlpha,undefined,blockerTweenDuration)
