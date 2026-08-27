@@ -17,7 +17,7 @@ import { UnitNames } from "../data/UnitNames"
 //Components
 
 import { Action } from "../components/Action"
-
+import { UnitIndex } from "../components/UnitIndex"
 import { BattleUnit } from "../components/BattleUnit"
 import { Attackable } from "../components/Attackable"
 import { MeleeAttack } from "../components/MeleeAttack"
@@ -103,6 +103,11 @@ export const UnitFactory = {
       ThreatMod.proximity[id] = unitData.threatMods.proximity
       ThreatMod.heal[id] = unitData.threatMods.heal
       ThreatMod.other[id] = unitData.threatMods.other
+    }
+
+    if (unitData.unitIndex !== undefined) {
+      addComponent(world, UnitIndex, id)
+      UnitIndex.index[id] = unitData.unitIndex
     }
       
     

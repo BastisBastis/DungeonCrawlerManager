@@ -8,6 +8,7 @@ import {
 import { Attackable } from "../components/Attackable"
 import { BattleUnit } from "../components/BattleUnit"
 import { Dead } from "../components/Dead"
+import { UnitIndex } from "../components/UnitIndex"
 
 
 import { EventCenter } from "../helpers/EventCenter" 
@@ -32,7 +33,7 @@ export const createDeathSystem=(world)=>{
         EventCenter.emit("unitDied", id)
         
       }
-        
+      
 
       if (!hasComponent(world, Dead, id) && hasComponent(world, BattleUnit, id)) {
         alives[BattleUnit.team[id]] += 1

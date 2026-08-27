@@ -3,7 +3,8 @@ import {
   createWorld,
   deleteWorld,
   addEntity,
-  addComponent
+  addComponent,
+  defineQuery
 } from "bitecs"
 
 //factories
@@ -21,6 +22,8 @@ import { CheckpointFollower } from "../components/CheckpointFollower"
 import { Healer } from "../components/Healer" 
 import { Name } from "../components/Name" 
 import { ThreatMod } from "../components/ThreatMod" 
+import { Dead } from "../components/Dead"
+import { UnitIndex } from "../components/UnitIndex"
 
 //factories
 import { UnitFactory } from "../factories/UnitFactory" 
@@ -101,10 +104,21 @@ export default class DungeonScene extends Phaser.Scene {
   }
 
   exitDungeon(result) {
-    console.log("Game ended", result)
+    const deadUnitQuery = defineQuery([Dead, BattleUnit, UnitIndex])
+
+    const deadUnits = []
+    deadUnitQuery(this.world).forEach(id=>{
+      
+      if (BattleUnit.team == 0) {
+        deadUnit.push[UnitIndex.index[id]]
+      }
+    })
+
+    result.deadUnits = deadUnits
+
     EventCenter.removeAllListeners()
     this.scene.stop("ui")
-    this.scene.start("game", {result})
+    this.scene.start("gameMenu", {result})
   }
   
   setup(heroData) {
@@ -135,7 +149,6 @@ export default class DungeonScene extends Phaser.Scene {
       hero.team = 0
       hero.checkpointFollower = true
       
-      console.log("hero")
       var id = UnitFactory.getUnitEntityFromData(this.world, hero)
       
       i++
@@ -188,7 +201,6 @@ export default class DungeonScene extends Phaser.Scene {
         unitData.position = {x,y}
         
         
-        console.log("enemy")
         const id = UnitFactory.getUnitEntityFromData(this.world, unitData)
         
         

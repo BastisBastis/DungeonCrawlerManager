@@ -43,26 +43,27 @@ export default class GameMenu extends Phaser.Scene {
   
   create({
     result =  {
-      winner : -1
+      winner : -1,
+      deadUnits : []
     }
   }) {
     try { 
     //Background
-    
+    console.log(result)
     
     this.add.rectangle(960,540,1920,1080,Palette.blue1.hex).setScrollFactor(0,0)
     
     
     
-    if (result.winner != -1) {
-        this.messageLabel.setText(result.winner == 0 ? "You won!" : "You died!")
-     }
+    
 
     this.gameObjects = []
     this.reloadRecruitmentPool()
     this.showGameMenu()
     this.addEventListers()
-
+    if (result.winner != -1) {
+        this.messageLabel.setText(result.winner == 0 ? "You won!" : "You died!")
+     }  
     
     } catch (er) {console.log(er.message,er.stack); throw er} 
   }
@@ -144,7 +145,7 @@ export default class GameMenu extends Phaser.Scene {
     
     const heroData = []
     for (const index of Store.party)
-      heroData.push(Store.units[index])
+      heroData.push({...Store.units[index]})
     
     
     //var heroData = this.tempHeroData()
