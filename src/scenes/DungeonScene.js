@@ -109,8 +109,8 @@ export default class DungeonScene extends Phaser.Scene {
     const deadUnits = []
     deadUnitQuery(this.world).forEach(id=>{
       
-      if (BattleUnit.team == 0) {
-        deadUnit.push[UnitIndex.index[id]]
+      if (BattleUnit.team[id] == 0) {
+        deadUnits.push[UnitIndex.index[id]]
       }
     })
 
