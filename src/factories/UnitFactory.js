@@ -1,7 +1,8 @@
 import Phaser from "phaser"
 import {
   addEntity,
-  addComponent
+  addComponent,
+  hasComponent
 } from "bitecs"
 
 //factories
@@ -39,7 +40,6 @@ import { Level } from "../components/Level"
 export const UnitFactory = {
   
   getUnitEntityFromData : (world, unitData) => {
-    console.log(unitData)
     const id = addEntity(world)
     unitData.id = id
     addComponent(world, Action, id)
@@ -49,7 +49,6 @@ export const UnitFactory = {
     addComponent(world, Position, id)
     addComponent(world, Color, id)
     addComponent(world, Level, id)
-    
     
     
     
@@ -109,6 +108,7 @@ export const UnitFactory = {
       addComponent(world, UnitIndex, id)
       UnitIndex.index[id] = unitData.unitIndex
     }
+
       
     
     return id

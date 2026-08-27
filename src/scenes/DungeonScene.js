@@ -59,7 +59,6 @@ export default class DungeonScene extends Phaser.Scene {
     try { 
     //Background
     
-    
 
     EventCenter.on("allUnitsDead", this.allUnitsDead, this)
     EventCenter.on("goalReached", this.goalReached, this)
@@ -110,9 +109,10 @@ export default class DungeonScene extends Phaser.Scene {
     deadUnitQuery(this.world).forEach(id=>{
       
       if (BattleUnit.team[id] == 0) {
-        deadUnits.push[UnitIndex.index[id]]
+        deadUnits.push(UnitIndex.index[id])
       }
     })
+
 
     result.deadUnits = deadUnits
 
@@ -125,7 +125,6 @@ export default class DungeonScene extends Phaser.Scene {
     var i = 0
     
     for (const hero of heroData) {
-      console.log(hero)
       
       var x = this.level.playerSpawn.x * this.level.cellSize
       var y = this.level.playerSpawn.y * this.level.cellSize
@@ -241,7 +240,7 @@ export default class DungeonScene extends Phaser.Scene {
         //console.log("dt: " + dt)
     }
     
-    for (let i = 0; i < GlobalStuff.gameSpeed; i++) {
+    for (let i = 0; i < Store.gameSpeed; i++) {
       this.systemManager.update(dt*GlobalStuff.gameSpeedMod)
     }
     } catch (er) {console.log(er.message,er.stack); throw er} 

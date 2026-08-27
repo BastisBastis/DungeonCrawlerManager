@@ -20,7 +20,8 @@ export class UnitDetails extends Window {
       damage = 10,
       delay = 10,
       atk = 10,
-      threatMod = undefined,
+      threatMods = undefined,
+      healer = undefined,
       recruitmentCost = 0
 
     } = unitData
@@ -62,7 +63,6 @@ export class UnitDetails extends Window {
     this.scene = scene
     this.selected = false
     this.unitData = unitData
-    this.numLabels = 3
     
     var centerX = x
     var leftX = x - width/2 +margin
@@ -95,6 +95,25 @@ export class UnitDetails extends Window {
       ["Attack Cooldown", delay],
       ["Attack Skill", atk],
     ]
+
+    if (healer) {
+      labels.push([
+          "Heal Amount",
+          healer.amount
+        ],
+        [
+          "Heal Cooldown",
+          healer.delay
+        ]
+      )
+    }
+    if (threatMods.attack != 1) {
+      labels.push([
+          "Threat Mod",
+          threatMods.attack
+        ]
+      )
+    }
 
     for (const rowData of labels) {
       if (rowData.length == 1) {
@@ -138,6 +157,8 @@ export class UnitDetails extends Window {
     
     
   }
+
+
   
   destroy() {
     

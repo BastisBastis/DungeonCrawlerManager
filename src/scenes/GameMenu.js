@@ -16,6 +16,7 @@ import { UnitFactory } from "../factories/UnitFactory"
 import { GlobalStuff } from "../helpers/GlobalStuff"
 import * as Utils from "../helpers/Utils"
 import { Store } from "../helpers/Store" 
+import { resetMenuStore } from "../helpers/Store"
 import { EventCenter } from "../helpers/EventCenter" 
 
 //Data
@@ -49,7 +50,13 @@ export default class GameMenu extends Phaser.Scene {
   }) {
     try { 
     //Background
-    console.log(result)
+    resetMenuStore()
+    
+    if (result.deadUnits.length == Store.party.length && Store.party.length > 0) {
+      console.log("All are dead!")
+    }
+
+    this.removeDeadUnits(result.deadUnits)
     
     this.add.rectangle(960,540,1920,1080,Palette.blue1.hex).setScrollFactor(0,0)
     
@@ -72,6 +79,10 @@ export default class GameMenu extends Phaser.Scene {
     
     EventCenter.on("toGameMenu", this.showGameMenu, this)
     
+  }
+
+  removeDeadUnits(deadUnits) {
+    Store.party = Store.party.filter(index=>(!deadUnits.includes(index)))
   }
   
   reloadRecruitmentPool() {

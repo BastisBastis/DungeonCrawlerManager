@@ -8,6 +8,7 @@ import {
 import { EventCenter } from "../helpers/EventCenter" 
 import { GlobalStuff } from "../helpers/GlobalStuff" 
 import { NameHelper } from "../helpers/NameHelper" 
+import { Store } from "../helpers/Store"
 
 //Components
 import { BattleUnit } from "../components/BattleUnit" 
@@ -86,7 +87,7 @@ export default class UI extends Phaser.Scene {
         fontSize:48,
         width: 400,
         onClick : ()=>{
-          GlobalStuff.paused = !GlobalStuff.paused
+          Store.paused = !Store.paused
           EventCenter.emit("logThreat")
         }
       })
@@ -106,16 +107,16 @@ export default class UI extends Phaser.Scene {
   }
   
   changeGameSpeed() {
-    if (GlobalStuff.gameSpeed== 1) {
-      GlobalStuff.gameSpeed=2
+    if (Store.gameSpeed== 1) {
+      Store.gameSpeed=2
       this.speedBtn.label.text="2x"
     }
-    else if (GlobalStuff.gameSpeed== 2) {
-      GlobalStuff.gameSpeed=4
+    else if (Store.gameSpeed== 2) {
+      Store.gameSpeed=4
       this.speedBtn.label.text="4x"
     }
     else {
-      GlobalStuff.gameSpeed=1
+      Store.gameSpeed=1
       this.speedBtn.label.text="1x"
     }
   }
@@ -129,7 +130,7 @@ export default class UI extends Phaser.Scene {
     
     if (card) {
       if (data.target == 0)
-        card.targetValueLabel.text
+        card.targetValueLabel.text = ""
       else {
         //console.log(data.target, Name.index[data.target])
         card.targetValueLabel.text = NameHelper.GetName(this.world, data.target)

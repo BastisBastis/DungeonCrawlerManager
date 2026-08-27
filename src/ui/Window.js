@@ -11,7 +11,7 @@ export class Window {
     depth=1,
     backgroundColor=0xffffff,
     borderColor=0x000000,
-    borderThickness=10,
+    borderThickness=2,
     blockBackground=false,
     blockAlpha=0,
     blockerTweenDuration=0,

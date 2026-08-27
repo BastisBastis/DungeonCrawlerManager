@@ -16,11 +16,10 @@ export class Button extends Window {
       fontColor="#000000",
       hoverFontColor=fontColor,
       downFontColor=fontColor,
-      cornerRadius=32,
+      cornerRadius=8,
       backgroundColor=0xffffff,
-      hoverBackgroundColor=0xff0000,
+      hoverBackgroundColor=0x698d6e,
       downBackgroundColor=0x00ff00,
-      
       onClick=()=>false,
       requireDown=true
     }=config

@@ -23,8 +23,10 @@ export const resetStore = ()=>{
 }
 
 export const resetMenuStore = () => {
+  console.log("Reset menu store")
   Store.menu.currentView = "main"
-  
+  Store.paused = false
+  Store.gameSpeed = 1
 }
 
 resetStore()
