@@ -22,7 +22,7 @@ const unitQuery=defineQuery([BattleUnit])
 
 export const getAlliesInRange = (world, id) => {
   
-  const allyRange = world.scene.level.cellSize*2
+  const allyRange = world.scene.level.cellSize*2.5
   const alliesInRange = []
   
   unitQuery(world).forEach((otherId)=>{
@@ -46,7 +46,7 @@ export const getAlliesInRange = (world, id) => {
 
 export const createThreatSystem=(world)=>{
   
-  const aggroRange = world.scene.level.cellSize*2
+  const aggroRange = world.scene.level.cellSize*2.1
   const aggroRangeSquared = aggroRange*aggroRange
   const proximityThreatMod = 1
   const damageRequestMod = 10

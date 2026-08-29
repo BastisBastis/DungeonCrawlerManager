@@ -102,6 +102,104 @@ const levels = [
         length: 4
       },
     ]
+  },
+  {
+    width:32,
+    height:32,
+    cellSize: 128,
+    playerSpawn: {
+      x: 3,
+      y: 3
+    },
+    goal: {
+      x: 13,
+      y: 14
+    },
+    spawnPoints: [ //make this an array of dictionaries instead
+      [5,2, 1], //col, row, number of enemies
+      [5,4, 1],
+      [6,7,2],
+      [8,7,2],
+      [6,14,1],
+      [7,15,2]
+    ],
+    checkPoints: [
+      {
+        x:7,
+        y: 3
+      },
+      {
+        x:7,
+        y:14
+      },
+      {
+        x: 13,
+        y: 14
+      },
+      
+    ],
+    carvings:[
+      {
+        col: 3,
+        row: 3,
+        dir: "e",
+        length: 4
+      },
+      {
+        col: 4,
+        row: 2,
+        dir: "s",
+        length: 3
+      },
+      {
+        col: 5,
+        row: 2,
+        dir: "s",
+        length: 3
+      },
+      {
+        col: 7,
+        row: 3,
+        dir: "s",
+        length: 11
+      },
+      {
+        col: 6,
+        row: 5,
+        dir: "s",
+        length: 3
+      },
+      {
+        col: 8,
+        row: 5,
+        dir: "s",
+        length: 3
+      },
+      {
+        col: 7,
+        row: 14,
+        dir: "e",
+        length: 7
+      },
+      {
+        col: 8,
+        row: 13,
+        dir: "s",
+        length: 1
+      },
+      {
+        col: 6,
+        row: 13,
+        dir: "s",
+        length: 3
+      },
+      {
+        col: 7,
+        row: 15,
+        dir: "e",
+        length: 2
+      },
+    ]
   }
   
 ]
@@ -109,6 +207,7 @@ const levels = [
 
 export const DungeonGenerator = {
   getLevel: (index) =>{
+    index = 1
     if (index >= levels.length) {
       console.log("Level index out of range")
       return null

@@ -103,11 +103,12 @@ export default class DungeonScene extends Phaser.Scene {
   }
 
   exitDungeon(result) {
+    console.log(this.world, result)
     const deadUnitQuery = defineQuery([Dead, BattleUnit, UnitIndex])
 
     const deadUnits = []
     deadUnitQuery(this.world).forEach(id=>{
-      
+      console.log(id, BattleUnit.team[id])
       if (BattleUnit.team[id] == 0) {
         deadUnits.push(UnitIndex.index[id])
       }
@@ -115,6 +116,7 @@ export default class DungeonScene extends Phaser.Scene {
 
 
     result.deadUnits = deadUnits
+    console.log(deadUnits)
 
     EventCenter.removeAllListeners()
     this.scene.stop("ui")
