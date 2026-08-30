@@ -1,32 +1,37 @@
 export const Store = {}
 
 export const resetStore = ()=>{
-  Store.paused = false
-  Store.gameSpeed = 1
-  
-  Store.selectedUnits = []
-  
-  Store.availableUnits = []
-  
-  Store.gold = 0
-  
-  Store.menu = {}
-  
-  Store.units = []
-  Store.recruitmentPool = []
-  Store.party = []
-  Store.deadUnits = []
-  
-  
+  resetRunStore()
+  resetDungeonStore()
   resetMenuStore()
-  
+  resetMetaStore()
+}
+
+export const resetDungeonStore = () => {
+  Store.dungeon = {
+    paused : false,
+    gameSpeed : 1
+  }
 }
 
 export const resetMenuStore = () => {
-  console.log("Reset menu store")
-  Store.menu.currentView = "main"
-  Store.paused = false
-  Store.gameSpeed = 1
+  Store.menu = {
+    currentView : "main",
+    recruitmentPool : []
+  }
+}
+
+export const resetRunStore = ()=>{
+  Store.run = {}
+  Store.run.gold = 40
+  Store.run.units = []
+  Store.run.party = []
+  Store.run.deadUnits = []
+  Store.run.levelIndex = 0
+}
+
+export const resetMetaStore = ()=>{
+  
 }
 
 resetStore()

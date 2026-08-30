@@ -3,8 +3,10 @@ import {
 } from "bitecs"
 
 import { UnitNames } from "../data/UnitNames" 
+import { Enemies } from "../data/Enemies" 
 
 import { Name } from "../components/Name" 
+import { EnemyIndex } from "../components/EnemyIndex" 
 
 import * as Utils from "../helpers/Utils" 
 
@@ -15,6 +17,8 @@ export const NameHelper = {
     //console.log(world,id)
     if (hasComponent(world, Name, id)) 
       return UnitNames[Name.index[id]]
+    else if (hasComponent(world, EnemyIndex, id)) 
+      return Enemies[EnemyIndex.index[id]].name
     else
       return "Enemy_"+id
   },

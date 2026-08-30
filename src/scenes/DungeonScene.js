@@ -35,12 +35,13 @@ import { GlobalStuff } from "../helpers/GlobalStuff"
 import { MusicManager } from "../helpers/MusicManager" 
 import { SFXManager } from "../helpers/sfxManager"
 import { DungeonGenerator } from "../helpers/DungeonGenerator" 
-import { Store } from "../helpers/Store" 
+import { Store, resetDungeonStore } from "../helpers/Store" 
 
 import * as Utils from "../helpers/Utils"
 
 //Data
 import { Palette } from "../data/Palette" 
+import { Enemies } from "../data/Enemies" 
 
 
 
@@ -63,13 +64,15 @@ export default class DungeonScene extends Phaser.Scene {
     EventCenter.on("allUnitsDead", this.allUnitsDead, this)
     EventCenter.on("goalReached", this.goalReached, this)
     
+    resetDungeonStore()
+    
     this.threatData={}
 
     this.add.rectangle(960,540,1920,1080,0x000000).setScrollFactor(0,0)
     
-    this.level = DungeonGenerator.getLevel(0)
+    this.level = DungeonGenerator.getLevel(Store.run.levelIndex)
     
-    Store.paused = false
+    
     
     this.world=createWorld()
     this.world.scene=this
@@ -103,12 +106,12 @@ export default class DungeonScene extends Phaser.Scene {
   }
 
   exitDungeon(result) {
-    console.log(this.world, result)
+    
     const deadUnitQuery = defineQuery([Dead, BattleUnit, UnitIndex])
 
     const deadUnits = []
     deadUnitQuery(this.world).forEach(id=>{
-      console.log(id, BattleUnit.team[id])
+      
       if (BattleUnit.team[id] == 0) {
         deadUnits.push(UnitIndex.index[id])
       }
@@ -116,7 +119,7 @@ export default class DungeonScene extends Phaser.Scene {
 
 
     result.deadUnits = deadUnits
-    console.log(deadUnits)
+    
 
     EventCenter.removeAllListeners()
     this.scene.stop("ui")
@@ -160,28 +163,31 @@ export default class DungeonScene extends Phaser.Scene {
   }
   
   setupEnemies() {
-    
-    var numEnemies = 4
+  
     
     for (const spawnPoint of this.level.spawnPoints) {
     
       for (let i = 0; i <  spawnPoint[2] ; i++) {
-                
+        
+        const enemyData = Enemies[spawnPoint[3]]
         
         const unitData = {}
         unitData.team = 1
         
+        unitData.level = enemyData.level
         
+        unitData.hitpoints = Utils.getRandomBellInt(enemyData.hpMin, enemyData.hpMax, 2)
+        unitData.armorClass = Utils.getRandomBellInt(enemyData.acMin, enemyData.acMax ,1)
         
-        unitData.hitpoints = Utils.getRandomBellInt(30, 50, 2)
-        unitData.armorClass = Utils.getRandomBellInt(2, 6,1)
+        unitData.damage = Utils.getRandomBellInt(enemyData.damageMin, enemyData.damageMax, 3)
+        unitData.delay = Utils.getRandomBellInt(enemyData.delayMin , enemyData.delayMax, 3)
         
-        unitData.damage = Utils.getRandomBellInt(8,15,3)
-        unitData.delay = Utils.getRandomBellInt(20,24, 3)
-        
-        unitData.atk = Utils.getRandomBellInt(8,15, 3)
+        unitData.atk = Utils.getRandomBellInt(enemyData.atkMin, enemyData.atkMax, 3)
         
         unitData.color = 0xff0000
+        
+        unitData.classType = enemyData.classType
+        unitData.enemyIndex = spawnPoint[3]
         
         
         var x = spawnPoint[0] * this.level.cellSize
@@ -235,14 +241,14 @@ export default class DungeonScene extends Phaser.Scene {
   update(time,dt) {
     try { 
     
-    if (Store.paused)
+    if (Store.dungeon.paused)
       return
       
     if (dt > 30) {
         //console.log("dt: " + dt)
     }
     
-    for (let i = 0; i < Store.gameSpeed; i++) {
+    for (let i = 0; i < Store.dungeon.gameSpeed; i++) {
       this.systemManager.update(dt*GlobalStuff.gameSpeedMod)
     }
     } catch (er) {console.log(er.message,er.stack); throw er} 

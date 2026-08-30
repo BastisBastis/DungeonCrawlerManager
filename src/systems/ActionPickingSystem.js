@@ -58,7 +58,7 @@ export const createActionPickingSystem=(world)=>{
           
 
           
-          if (BattleUnit.team[id] == BattleUnit.team[otherId] ) {
+          if (BattleUnit.team[id] == BattleUnit.team[otherId] && !hasComponent(world, Dead, otherId)) {
             const distSquared = Phaser.Math.Distance.Squared(
               Position.x[id],
               Position.y[id],

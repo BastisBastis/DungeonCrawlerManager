@@ -29,10 +29,10 @@ const levels = [
       y: 20
     },
     spawnPoints: [ //make this an array of dictionaries instead
-      [3,11, 1], //col, row, number of enemies
-      [6,11,3],
-      [10,18,1],
-      [11,18,2]
+      [3,11, 1, 0], //col, row, number of enemies, mob id
+      [6,11,3, 0],
+      [10,18,1, 1],
+      [11,18,2, 0]
     ],
     checkPoints: [
       {
@@ -116,12 +116,12 @@ const levels = [
       y: 14
     },
     spawnPoints: [ //make this an array of dictionaries instead
-      [5,2, 1], //col, row, number of enemies
-      [5,4, 1],
-      [6,7,2],
-      [8,7,2],
-      [6,14,1],
-      [7,15,2]
+      [5,2, 1, 2], //col, row, number of enemies
+      [5,4, 1, 2],
+      [6,7,2, 2],
+      [8,7,2, 2],
+      [6,14,1, 3],
+      [7,15,2, 2]
     ],
     checkPoints: [
       {
@@ -200,6 +200,110 @@ const levels = [
         length: 2
       },
     ]
+  },
+  {
+    width:32,
+    height:32,
+    cellSize: 128,
+    playerSpawn: {
+      x: 3,
+      y: 3
+    },
+    goal: {
+      x: 5,
+      y: 14
+    },
+    spawnPoints: [ //make this an array of dictionaries instead
+      [4,7, 2, 4], //col, row, number of enemies
+      [7,7, 3, 4],
+      [6,10,2, 4],
+      [1,12,2, 4],
+      [3,12,1, 4],
+    ],
+    checkPoints: [
+      {
+        x:3,
+        y: 7
+      },
+      {
+        x:6,
+        y:7
+      },
+      {
+        x: 6,
+        y: 10
+      },
+      {
+        x: 2,
+        y: 10
+      },
+      {
+        x: 2,
+        y: 14
+      },
+      {
+        x: 5,
+        y: 14
+      },
+      
+    ],
+    carvings:[
+      {
+        col: 3,
+        row: 3,
+        dir: "s",
+        length: 5
+      },
+      {
+        col: 4,
+        row: 6,
+        dir: "s",
+        length: 1
+      },
+      {
+        col: 3,
+        row: 7,
+        dir: "e",
+        length: 5
+      },
+      {
+        col: 6,
+        row: 7,
+        dir: "s",
+        length: 4
+      },
+      {
+        col: 6,
+        row: 10,
+        dir: "w",
+        length: 5
+      },
+      {
+        col: 2,
+        row: 10,
+        dir: "s",
+        length: 5
+      },
+      {
+        col: 1,
+        row: 11,
+        dir: "e",
+        length: 3
+      },
+      {
+        col: 1,
+        row: 12,
+        dir: "e",
+        length: 3
+      },
+      {
+        col: 2,
+        row: 14,
+        dir: "e",
+        length: 4
+      },
+      
+    ]
   }
   
 ]
@@ -207,7 +311,7 @@ const levels = [
 
 export const DungeonGenerator = {
   getLevel: (index) =>{
-    index = 1
+   
     if (index >= levels.length) {
       console.log("Level index out of range")
       return null
@@ -219,8 +323,12 @@ export const DungeonGenerator = {
       var deltaY = 0
       if (carving.dir == "s")
         deltaY=1
+      else if (carving.dir == "n")
+        deltaY=-1
       else if (carving.dir == "e")
         deltaX=1
+      else if (carving.dir == "w")
+        deltaX=-1
       for (let i = 0; i< carving.length; i++) {
         var cell = map[carving.col + deltaX*i][carving.row + deltaY * i]
         cell.walkable = true

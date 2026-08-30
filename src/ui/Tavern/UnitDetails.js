@@ -28,7 +28,7 @@ export class UnitDetails extends Window {
     const {
       fontSize=22,
       width=300,
-      height=600,
+      height=400,
       depth=1,
       fontFamily=GlobalStuff.FontFamily,
       fontColor="#000000",
@@ -155,7 +155,12 @@ export class UnitDetails extends Window {
       rowIndex++
     }
     
-    
+    this.bg.on('pointerover', () => {
+      onHover()
+    })
+    .on('pointerout', () => {
+      onStopHover()
+    })
   }
 
 

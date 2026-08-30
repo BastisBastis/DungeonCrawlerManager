@@ -22,7 +22,7 @@ const unitQuery=defineQuery([BattleUnit])
 
 export const getAlliesInRange = (world, id) => {
   
-  const allyRange = world.scene.level.cellSize*2.5
+  const allyRange = world.scene.level.cellSize*3
   const alliesInRange = []
   
   unitQuery(world).forEach((otherId)=>{
@@ -46,12 +46,12 @@ export const getAlliesInRange = (world, id) => {
 
 export const createThreatSystem=(world)=>{
   
-  const aggroRange = world.scene.level.cellSize*2.1
+  const aggroRange = world.scene.level.cellSize*2
   const aggroRangeSquared = aggroRange*aggroRange
   const proximityThreatMod = 1
   const damageRequestMod = 10
-  const damageTakenMod = 10
-  const healThreatMod = 1000
+  const damageTakenMod = 15
+  const healThreatMod = 20
   
   const hostileDataStructure = {
     proximity : 0,
@@ -110,6 +110,7 @@ export const createThreatSystem=(world)=>{
   const onHealRequest = (req) =>{
     unitQuery(world).forEach(id=>{
       
+    
       if (world.scene.threatData[id] && world.scene.threatData[id].hostile[req.target]) {
         
         var threatMod = 1.0
@@ -117,7 +118,7 @@ export const createThreatSystem=(world)=>{
           threatMod *= ThreatMod.heal[req.source]
         }
         
-        setupHostileThreatData(id)
+        setupHostileThreatData(id, req.source)
         world.scene.threatData[id].hostile[req.source].heal += req.data.amount * healThreatMod * threatMod
         
       }

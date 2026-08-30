@@ -7,6 +7,7 @@ import DungeonScene from "./scenes/DungeonScene"
 import UI from "./scenes/UI"
 import GameMenu from "./scenes/GameMenu"
 import Loading from "./scenes/Loading"
+import GameOver from "./scenes/GameOver"
 
 
 try { 
@@ -31,7 +32,8 @@ const config = {
       Game,
       GameMenu,
       DungeonScene,
-      UI
+      UI,
+      GameOver
     ],
     dom: {
         createContainer: true

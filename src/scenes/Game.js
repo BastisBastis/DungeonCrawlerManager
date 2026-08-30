@@ -263,6 +263,7 @@ export default class Game extends Phaser.Scene {
       heroData.push(this.unitCards[index].data)
     }
     
+    this.scene.stop()
     //var heroData = this.tempHeroData()
     this.scene.start("dungeon", {
       heroData

@@ -15,9 +15,10 @@ import { UnitFactory } from "../factories/UnitFactory"
 
 import { GlobalStuff } from "../helpers/GlobalStuff"
 import * as Utils from "../helpers/Utils"
-import { Store } from "../helpers/Store" 
-import { resetMenuStore } from "../helpers/Store"
+import { Store, resetMenuStore } from "../helpers/Store" 
+
 import { EventCenter } from "../helpers/EventCenter" 
+import { ExperienceManager } from "../helpers/ExperienceManager" 
 
 //Data
 import { Palette } from "../data/Palette" 
@@ -42,21 +43,46 @@ export default class GameMenu extends Phaser.Scene {
     
   }
   
-  create({
-    result =  {
-      winner : -1,
-      deadUnits : []
-    }
-  }) {
+  create(data) {
     try { 
     //Background
+    this.addEventListers()
+    
+    const result = data.result !== undefined
+      ? data.result
+      : {
+          winner: -1,
+          deadUnits: []
+        }
+      
     resetMenuStore()
     
-    if (result.deadUnits.length == Store.party.length && Store.party.length > 0) {
-      console.log("All are dead!")
-    }
-
+    
     this.removeDeadUnits(result.deadUnits)
+    
+    if (Store.run.party.length == 0 && result.winner != -1) {
+      
+      this.gameOver(result)
+    }
+    
+    if (result.winner == 0) {
+      Store.run.levelIndex++
+      this.onDungeonCompleted()
+      if (Store.run.levelIndex >= 3) {
+        this.gameOver(result)
+      }
+        
+    }
+   
+    for (const unitIndex of Store.run.party) {
+      const unitData = Store.run.units[unitIndex]
+      const didLevelUp = ExperienceManager.giveExperience(unitData)
+      
+      if (didLevelUp) {
+        console.log(unitData.name + " gained a level")
+      }
+    }
+    
     
     this.add.rectangle(960,540,1920,1080,Palette.blue1.hex).setScrollFactor(0,0)
     
@@ -67,7 +93,7 @@ export default class GameMenu extends Phaser.Scene {
     this.gameObjects = []
     this.reloadRecruitmentPool()
     this.showGameMenu()
-    this.addEventListers()
+    
     if (result.winner != -1) {
         this.messageLabel.setText(result.winner == 0 ? "You won!" : "You died!")
      }  
@@ -75,21 +101,38 @@ export default class GameMenu extends Phaser.Scene {
     } catch (er) {console.log(er.message,er.stack); throw er} 
   }
   
+  onDungeonCompleted() {
+    Store.run.gold += Store.run.levelIndex*30
+    
+  }
+  
   addEventListers() {
     
     EventCenter.on("toGameMenu", this.showGameMenu, this)
     
   }
+  
+  gameOver(result) {
+    EventCenter.removeAllListeners()
+    this.scene.stop("gameMenu")
+    this.scene.start("gameOver", result)
+  }
 
   removeDeadUnits(deadUnits) {
-    Store.party = Store.party.filter(index=>(!deadUnits.includes(index)))
+    Store.run.party = Store.run.party.filter(index=>(!deadUnits.includes(index)))
   }
   
   reloadRecruitmentPool() {
-    Store.recruitmentPool = []
+    Store.menu.recruitmentPool = []
+    
+    const expHits = Store.run.levelIndex
     for (let i = 0; i < 8; i++) {
       const unitData = UnitFactory.getRandomUnitData()
-      Store.recruitmentPool.push(unitData)
+      Store.menu.recruitmentPool.push(unitData)
+      for (let j = 0; j < expHits; j++) {
+        ExperienceManager.giveExperience(unitData)
+      }
+      
     }
     
   }
@@ -99,7 +142,12 @@ export default class GameMenu extends Phaser.Scene {
     this.clearGameObjects()
     
     this.messageLabel = this.add.text(300, this.cameras.main.height - 100, "", { fontSize: 100 })
-    this.gameObjects.push(this.messageLabel)
+    
+    this.goldLabel = this.add.text(
+      this.cameras.main.width-40, 40, "GOLD: " + Store.run.gold, { fontSize: 80 })
+    .setOrigin(1,0)
+    
+    this.gameObjects.push(this.messageLabel, this.goldLabel)
     
     const rows = 2
     const cols = 3
@@ -147,22 +195,25 @@ export default class GameMenu extends Phaser.Scene {
   
   
   startDungeon() {
+    try { 
+    EventCenter.removeAllListeners()
     
-    
-    if (Store.party.length < 0) {
+    if (Store.run.party.length < 0) {
       this.messageLabel.text = "Select at least one hero!"
       return
     }
     
     const heroData = []
-    for (const index of Store.party)
-      heroData.push({...Store.units[index]})
+    for (const index of Store.run.party)
+      heroData.push({...Store.run.units[index]})
     
     
     //var heroData = this.tempHeroData()
     this.scene.start("dungeon", {
       heroData
     })
+    
+    } catch (er) {console.log(er.message,er.stack); throw er} 
   }
   
   

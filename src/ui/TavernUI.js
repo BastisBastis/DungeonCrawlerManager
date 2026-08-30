@@ -69,6 +69,12 @@ export class TavernUI {
       })
     )
     
+    this.goldLabel = this.scene.add.text(
+      this.scene.cameras.main.width-40, 40, "GOLD: " + Store.run.gold, { fontSize: 80 })
+    .setOrigin(1,0)
+    
+    this.gameObjects.push(this.goldLabel)
+    
     } catch (er) {console.log(er.message,er.stack); throw er} 
   }
 
@@ -81,24 +87,39 @@ export class TavernUI {
     var i = 0 
     
     
-    Store.party.forEach(unitIndex=>{
+    Store.run.party.forEach(unitIndex=>{
       const index = i
-      const unitData = Store.units[unitIndex]
+      const unitData = Store.run.units[unitIndex]
       const card = new UnitOverview(
         this.scene, 0, 0, 
         unitData,
         
         {
+          showCost : false,
           buttonText: "Dismiss",
           buttonCallback: ()=>{
             
-            if (Store.party.length <= 1) {
+            if (Store.run.party.length <= 1) {
               console.log("Need at least one party member")
               return
             }
             
-            Store.party.splice(index, 1)
+            Store.run.party.splice(index, 1)
             this.reloadPartyOverview()
+          },
+          onHover:()=>{
+            this.unitDetails = new UnitDetails(
+              this.scene,
+              this.unitDetailsPosition.x,
+              this.unitDetailsPosition.y,
+              unitData
+            )
+          },
+          onStopHover:()=>{
+            if (this.unitDetails) {
+              this.unitDetails.destroy()
+              this.unitDetails = null
+            }
           }
           
         }
@@ -136,7 +157,7 @@ export class TavernUI {
     const deltaY = 240
     var i = 0
     
-    Store.recruitmentPool.forEach(unitData=>{
+    Store.menu.recruitmentPool.forEach(unitData=>{
       const index = i
       const card = new UnitOverview(
         this.scene, 
@@ -147,18 +168,28 @@ export class TavernUI {
           buttonText: "Hire",
           buttonCallback: ()=>{
             
-            if (Store.party.length >= 4) {
+            if (Store.run.party.length >= 4) {
               console.log("Party is full")
               return
             }
+            if (card.unitData.recruitmentCost > Store.run.gold) {
+              console.log("Not enough gold!")
+              return
+            }
             
-            Store.units.push(Store.recruitmentPool[index])
-            Store.party.push(Store.units.length-1)
-            unitData.unitIndex = Store.units.length-1
+            Store.run.gold -=card.unitData.recruitmentCost
+            
+            Store.run.units.push(card.unitData)
+            
+            Store.run.party.push(Store.run.units.length-1)
+            unitData.unitIndex = Store.run.units.length-1
             
             this.reloadPartyOverview()
             this.recruitmentOverviewCards.splice(index, 1)
+            Store.menu.recruitmentPool.splice(index,1)
             card.destroy()
+            
+            this.goldLabel.text = "GOLD: " + Store.run.gold
           },
           onHover:()=>{
             this.unitDetails = new UnitDetails(

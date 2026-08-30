@@ -28,8 +28,9 @@ export const createDeathSystem=(world)=>{
       if (hasComponent(world, BattleUnit, id) && BattleUnit.team[id] == 1)
         enemyCount++
     
-      if (Attackable.currentHitpoints[id] == 0 && !hasComponent(world, Dead, id)) {
+      if (Attackable.currentHitpoints[id] <= 0 && !hasComponent(world, Dead, id)) {
         addComponent(world, Dead, id)
+        console.log("Unit died: "+id)
         EventCenter.emit("unitDied", id)
         
       }

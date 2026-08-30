@@ -39,7 +39,8 @@ export class UnitOverview extends Window {
       onStopHover=()=>false,
       margin = 10,
       buttonText = "",
-      buttonCallback = ()=>false
+      buttonCallback = ()=>false,
+      showCost = true
     }=config
     super(scene,x,y,{
       ...config,
@@ -138,28 +139,32 @@ export class UnitOverview extends Window {
     
     rowIndex++
     
-    this.children.push(this.scene.add.text(
-      leftX,
-      labelY + deltaY * rowIndex,
-      "Cost:",
-      {
-        ...fontConfig,
-        align: "left"
-      }
-    ).setOrigin(0,.5)
-      .setDepth(this.depth))
+    if (showCost) {
     
-    
-    this.children.push(this.scene.add.text(
-      rightX,
-      labelY + deltaY * rowIndex,
-      recruitmentCost,
-      {
-        ...fontConfig,
-        align: "right"
-      }
-    ).setOrigin(1,.5)
-      .setDepth(this.depth))
+      this.children.push(this.scene.add.text(
+        leftX,
+        labelY + deltaY * rowIndex,
+        "Cost:",
+        {
+          ...fontConfig,
+          align: "left"
+        }
+      ).setOrigin(0,.5)
+        .setDepth(this.depth))
+      
+      
+      this.children.push(this.scene.add.text(
+        rightX,
+        labelY + deltaY * rowIndex,
+        recruitmentCost,
+        {
+          ...fontConfig,
+          align: "right"
+        }
+      ).setOrigin(1,.5)
+        .setDepth(this.depth))
+      
+    }
     
     rowIndex++
 

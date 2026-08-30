@@ -31,7 +31,7 @@ import { ThreatMod } from "../components/ThreatMod"
 import { ClassType } from "../components/ClassType"
 import { UnitClass } from "../components/ClassType"
 import { Level } from "../components/Level"
-
+import { EnemyIndex } from "../components/EnemyIndex" 
 
 
 
@@ -109,7 +109,10 @@ export const UnitFactory = {
       UnitIndex.index[id] = unitData.unitIndex
     }
 
-      
+    if (unitData.enemyIndex !== undefined) {
+      addComponent(world, EnemyIndex, id)
+      EnemyIndex.index[id] = unitData.enemyIndex
+    }
     
     return id
   },
@@ -136,8 +139,8 @@ export const UnitFactory = {
       atkMin : 6,
       atkMax : 10,
       threatMods: {
-        attackMin: 51.4,
-        attackMax: 52.0,
+        attackMin: 35,
+        attackMax: 45.0,
         proximityMin: 1.0,
         proximityMax: 1.0,
         healMin: 1.0,
@@ -159,8 +162,10 @@ export const UnitFactory = {
       atkMin : 5,
       atkMax : 9,
       healer: true,
-      healAmount: 60,
-      healDelay : 50,
+      healAmountMin: 30,
+      healAmounttMax: 50,
+      healDelayMin : 60,
+      healDelayMax : 80,
       threatMods: {
         attackMin: 1.0,
         attackMax: 1.0,
@@ -197,17 +202,17 @@ export const UnitFactory = {
     }
     
 
-    var hp = Utils.getRandomBellInt(classValues[classType].hpMin, classValues[classType].hpMax, 3)
-    var ac = Utils.getRandomBellInt(classValues[classType].acMin,classValues[classType].acMax,3)
-    var damage = Utils.getRandomBellInt(classValues[classType].dmgMin,classValues[classType].dmgMax,3)
-    var delay = Utils.getRandomBellInt(classValues[classType].delayMin,classValues[classType].delayMax, 3)
-    var atk = Utils.getRandomBellInt(classValues[classType].atkMin,classValues[classType].atkMax, 3)
+    var hp = Utils.getRandomBellInt(classValues[classType].hpMin, classValues[classType].hpMax, 1)
+    var ac = Utils.getRandomBellInt(classValues[classType].acMin,classValues[classType].acMax,1)
+    var damage = Utils.getRandomBellInt(classValues[classType].dmgMin,classValues[classType].dmgMax,1)
+    var delay = Utils.getRandomBellInt(classValues[classType].delayMin,classValues[classType].delayMax, 1)
+    var atk = Utils.getRandomBellInt(classValues[classType].atkMin,classValues[classType].atkMax, 1)
     
     var threatMods = {
-      attack: Math.floor(Phaser.Math.FloatBetween(classValues[classType].threatMods.attackMin, classValues[classType].threatMods.attackMax)*100)/100,
-      proximity: Math.floor(Phaser.Math.FloatBetween(classValues[classType].threatMods.proximityMin, classValues[classType].threatMods.proximityMax)*100)/100,
-      heal: Math.floor(Phaser.Math.FloatBetween(classValues[classType].threatMods.healMin, classValues[classType].threatMods.healMax)*100)/100,
-      other: Math.floor(Phaser.Math.FloatBetween(classValues[classType].threatMods.otherMin, classValues[classType].threatMods.otherMax)*100)/100,
+      attack: Math.floor(Phaser.Math.FloatBetween(classValues[classType].threatMods.attackMin, classValues[classType].threatMods.attackMax)),
+      proximity: Math.floor(Phaser.Math.FloatBetween(classValues[classType].threatMods.proximityMin, classValues[classType].threatMods.proximityMax)),
+      heal: Math.floor(Phaser.Math.FloatBetween(classValues[classType].threatMods.healMin, classValues[classType].threatMods.healMax)),
+      other: Math.floor(Phaser.Math.FloatBetween(classValues[classType].threatMods.otherMin, classValues[classType].threatMods.otherMax)),
     }
     
     var nameIndex = NameHelper.getNextNameIndex()
@@ -216,13 +221,40 @@ export const UnitFactory = {
     let healer =false
     if (classValues[classType].healer) {
       healer = {
-        amount:classValues[classType].healAmount,
-        delay: classValues[classType].healDelay
+        amount:Utils.getRandomBellInt(classValues[classType].healAmountMin,classValues[classType].healAmounttMax, 1),
+        delay: Utils.getRandomInt(classValues[classType].healDelayMin,classValues[classType].healDelayMax)
       }
     }
 
     var recruitmentCost = 10
-
+    const avgHp = (classValues[classType].hpMin+ classValues[classType].hpMax) /2
+    const avgAc = (classValues[classType].acMin+ classValues[classType].acMax) /2
+    const avgDmg = (classValues[classType].dmgMin+ classValues[classType].dmgMax) /2
+    const avgDelay = (classValues[classType].delayMin+ classValues[classType].delayMax) /2
+    const avgAtk = (classValues[classType].atkMin+ classValues[classType].atkMax) /2
+    
+    
+    
+    var costMod = 1 *
+      ( hp / avgHp ) *
+      ( ac / avgAc ) *
+      ( damage / avgDmg ) *
+      ( avgDelay / delay ) *
+      ( atk / avgAtk )
+     
+    
+      
+    if ( healer ) {
+      const avgHealAmount = (classValues[classType].healAmountMin+ classValues[classType].healAmounttMax) /2
+      const avgHealDelay = (classValues[classType].healDelayMin+ classValues[classType].healAmounttMax) /2
+      
+      costMod *= 
+        ( healer.amount / avgHealAmount ) * 
+        ( avgHealDelay / healer.delay )
+    }
+    
+    recruitmentCost = Math.floor(recruitmentCost *costMod)
+    
     
     const unitData = {
       hitpoints : hp,
@@ -237,7 +269,8 @@ export const UnitFactory = {
       threatMods,
       healer,
       level,
-      recruitmentCost
+      recruitmentCost,
+      exp : 0
     }
     
     return unitData
