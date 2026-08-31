@@ -49,7 +49,7 @@ export const createActionPickingSystem=(world)=>{
       Action.target[id] = 0 
       Action.action[id] = ActionType.IDLE
       
-      const potentialHealTargets = []
+      var potentialHealTargets = []
       
       unitQuery(world).forEach(otherId=>{
         
@@ -116,10 +116,11 @@ export const createActionPickingSystem=(world)=>{
       })
       
       potentialHealTargets.sort((a, b)=>{
-        return Attackable.currentHitpoints[a] / Attackable.maxHitpoints[a] > Attackable.currentHitpoints[b] / Attackable.maxHitpoints
+        return (Attackable.currentHitpoints[a] / Attackable.maxHitpoints[a]) - (Attackable.currentHitpoints[b] / Attackable.maxHitpoints[b])
       })
       
       if (potentialHealTargets.length > 0) {
+        console.log(Attackable.currentHitpoints[potentialHealTargets[0]] / Attackable.maxHitpoints[potentialHealTargets[0]], Attackable.currentHitpoints[potentialHealTargets[potentialHealTargets.length-1]] / Attackable.maxHitpoints[potentialHealTargets[potentialHealTargets.length-1]])
             
         Action.target[id] = potentialHealTargets[0]
         Action.action[id] = ActionType.HEAL
