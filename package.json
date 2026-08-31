@@ -2,7 +2,8 @@
   "dependencies": {
     "bitecs": "^0.3.38",
     "phaser": "^3.60.0-beta.16",
-    "phaser3-rex-plugins": "^1.1.74"
+    "phaser3-rex-plugins": "^1.1.74",
+    "three": "^0.146.0"
   },
   "devDependencies": {
     "@babel/core": "^7.18.2",

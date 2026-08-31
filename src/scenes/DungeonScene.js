@@ -8,6 +8,7 @@ import {
 } from "bitecs"
 
 //factories
+import { createDungeonScene } from "../factories/Dungeon"
 
 //tmp Components
 
@@ -68,10 +69,13 @@ export default class DungeonScene extends Phaser.Scene {
     
     this.threatData={}
 
-    this.add.rectangle(960,540,1920,1080,0x000000).setScrollFactor(0,0)
+    //this.add.rectangle(960,540,1920,1080,0x000000).setScrollFactor(0,0)
     
     this.level = DungeonGenerator.getLevel(Store.run.levelIndex)
-    
+    const {graphicsScene,camera,renderer} = createDungeonScene(this)
+    this.graphicsScene = graphicsScene
+    this.camera = camera
+    this.renderer = renderer
     
     
     this.world=createWorld()
@@ -215,9 +219,11 @@ export default class DungeonScene extends Phaser.Scene {
     }
     
   }
+
+
   
   drawMap() {
-    
+    return
     
     for (let col = 0; col < this.level.width; col++) {
       
@@ -240,7 +246,7 @@ export default class DungeonScene extends Phaser.Scene {
   
   update(time,dt) {
     try { 
-    
+    this.renderer.render(this.graphicsScene, this.camera)
     if (Store.dungeon.paused)
       return
       

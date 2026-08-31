@@ -16,7 +16,7 @@ try {
 
 const config = {
     type: Phaser.WEBGL,
-    transparent:false,
+    transparent:true,
     parent:"phaserContainer",
     fps: {
       //limit: 60

@@ -49,9 +49,9 @@ export default class UI extends Phaser.Scene {
         500, 
         this.cameras.main.height-10-200, 
         {
-          width: 1000,
-          height: 400,
-          fontSize: 32
+          width: 400,
+          height: 200,
+          fontSize: 16
         }
       )
       this.logBox.addLine("Welcome")
