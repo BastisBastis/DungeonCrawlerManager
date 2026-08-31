@@ -200,7 +200,7 @@ export default class UI extends Phaser.Scene {
       },
       {
         depth: 10,
-        backgroundColor: 0x881122,
+        backgroundColor: Palette.red1.hex,
         fontColor: "#dddddd"
       }
     )

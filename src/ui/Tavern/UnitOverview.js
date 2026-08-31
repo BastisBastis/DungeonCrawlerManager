@@ -1,5 +1,6 @@
 import Phaser from "phaser"
 import { GlobalStuff } from "../../helpers/GlobalStuff"
+import { Palette } from "../../data/Palette" 
 
 
 import { Window } from "../Window"
@@ -32,7 +33,7 @@ export class UnitOverview extends Window {
       fontFamily=GlobalStuff.FontFamily,
       fontColor="#000000",
       cornerRadius=0,
-      backgroundColor=0xffffff,
+      backgroundColor=Palette.beige2.hex,
       borderThickness=1,
       onClick=()=>false,
       onHover=()=>false,

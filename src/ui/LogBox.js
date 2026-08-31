@@ -1,6 +1,6 @@
 import Phaser from "phaser"
 import { GlobalStuff } from "../helpers/GlobalStuff"
-
+import { Palette } from "../data/Palette" 
 
 import {Window} from "./Window"
 
@@ -15,7 +15,7 @@ export class LogBox extends Window {
       fontFamily=GlobalStuff.FontFamily,
       fontColor="#000000",
       cornerRadius=0,
-      backgroundColor=0xffffff,
+      backgroundColor=Palette.beige2.hex,
       onClick=()=>false,
       margin = 10,
     }=config

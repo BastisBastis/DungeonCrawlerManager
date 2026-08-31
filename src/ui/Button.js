@@ -1,6 +1,7 @@
 import Phaser from "phaser"
 import { GlobalStuff } from "../helpers/GlobalStuff"
 import { EventCenter } from "../helpers/EventCenter" 
+import { Palette } from "../data/Palette" 
 
 import {Window} from "./Window"
 
@@ -17,9 +18,9 @@ export class Button extends Window {
       hoverFontColor=fontColor,
       downFontColor=fontColor,
       cornerRadius=8,
-      backgroundColor=0xffffff,
-      hoverBackgroundColor=0x698d6e,
-      downBackgroundColor=0x00ff00,
+      backgroundColor=Palette.beige1.hex,
+      hoverBackgroundColor=Palette.green2.hex,
+      downBackgroundColor=Palette.green3.hex,
       onClick=()=>false,
       requireDown=true
     }=config
@@ -43,6 +44,7 @@ export class Button extends Window {
     this.down=false
     this.backgroundColor=backgroundColor
     this.hoverBackgroundColor=hoverBackgroundColor
+    this.downBackgroundColor=downBackgroundColor
     this.backgroundColor=backgroundColor
     this.downFontColor=downFontColor
     this.fontColor=fontColor

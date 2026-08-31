@@ -58,7 +58,7 @@ export default class Loading extends Phaser.Scene {
     
     MusicManager.preload(this)
     SFXManager.preload(this)
-    
+    preloadGraphics(this)
 
 
   }

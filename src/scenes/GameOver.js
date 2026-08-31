@@ -31,15 +31,15 @@ export default class GameOver extends Phaser.Scene {
   create(result) {
     try { 
     //Background
-   console.log(result)
+   
       
       
-    this.add.rectangle(960,540,1920,1080,Palette.blue1.hex).setScrollFactor(0,0)
+  this.add.image(960,540,"menuBg").setScrollFactor(0,0).setDisplaySize(1920,1080)
     
     this.messageLabel = this.add.text(300, this.cameras.main.height - 100, "", { fontSize: 100 })
     
     
-    this.messageLabel.setText(result.winner == 0 ? "You beat all the dungeons!" : "All your party members died!")
+    
 
     
 

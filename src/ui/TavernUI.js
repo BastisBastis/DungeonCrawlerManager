@@ -26,6 +26,7 @@ import { UnitOverview } from "./Tavern/UnitOverview"
 import { MenuUnitCard } from "./MenuUnitCard" 
 import { Button } from "./Button"
 import { UnitDetails } from "./Tavern/UnitDetails"
+import { Popup } from "../ui/Popup" 
 
 //Temp
 import { UnitClass } from "../components/ClassType"
@@ -64,13 +65,15 @@ export class TavernUI {
         fontSize:48,
         width: 400,
         onClick : ()=>{
+          try { 
           EventCenter.emit("toGameMenu")
+          } catch (er) {console.log(er.message,er.stack); throw er} 
         }
       })
     )
     
     this.goldLabel = this.scene.add.text(
-      this.scene.cameras.main.width-40, 40, "GOLD: " + Store.run.gold, { fontSize: 80 })
+      this.scene.cameras.main.width-40, 40, "GOLD: " + Store.run.gold, { fontSize: 80, color: Palette.beige1.string })
     .setOrigin(1,0)
     
     this.gameObjects.push(this.goldLabel)
@@ -78,7 +81,7 @@ export class TavernUI {
     } catch (er) {console.log(er.message,er.stack); throw er} 
   }
 
-  reloadPartyOverview() {
+  async reloadPartyOverview() {
     this.partyOverviewCards.forEach(card=>{
       card.destroy()
     })
@@ -97,15 +100,16 @@ export class TavernUI {
         {
           showCost : false,
           buttonText: "Dismiss",
-          buttonCallback: ()=>{
-            
+          buttonCallback: async ()=>{
+            try { 
             if (Store.run.party.length <= 1) {
-              console.log("Need at least one party member")
+              var res = await Popup.prompt(this.scene,this.scene.cameras.main.width/2,this.scene.cameras.main.height/2,"You need at least one party member!", {depth:100})
               return
             }
             
             Store.run.party.splice(index, 1)
             this.reloadPartyOverview()
+            } catch (er) {console.log(er.message,er.stack); throw er} 
           },
           onHover:()=>{
             this.unitDetails = new UnitDetails(
@@ -147,7 +151,7 @@ export class TavernUI {
     })
   }
 
-  createRecruitmentOverview() {
+  async createRecruitmentOverview() {
     this.recruitmentOverviewCards = []
     const startY = this.scene.cameras.main.height - 400
     const numCols = 4
@@ -166,14 +170,14 @@ export class TavernUI {
         unitData,
         {
           buttonText: "Hire",
-          buttonCallback: ()=>{
+          buttonCallback: async ()=>{
             
             if (Store.run.party.length >= 4) {
-              console.log("Party is full")
+              var res = await Popup.prompt(this.scene,this.scene.cameras.main.width/2,this.scene.cameras.main.height/2,"Your party is already full!", {depth:100})
               return
             }
             if (card.unitData.recruitmentCost > Store.run.gold) {
-              console.log("Not enough gold!")
+              var res = await Popup.prompt(this.scene,this.scene.cameras.main.width/2,this.scene.cameras.main.height/2,"Not enough gold!", {depth:100})
               return
             }
             

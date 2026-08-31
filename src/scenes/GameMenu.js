@@ -26,6 +26,7 @@ import { Palette } from "../data/Palette"
 //UI
 import { Button } from "../ui/Button"
 import { TavernUI } from "../ui/TavernUI" 
+import { Popup } from "../ui/Popup" 
 
 //Temp
 
@@ -43,7 +44,7 @@ export default class GameMenu extends Phaser.Scene {
     
   }
   
-  create(data) {
+  async create(data) {
     try { 
     //Background
     this.addEventListers()
@@ -64,12 +65,17 @@ export default class GameMenu extends Phaser.Scene {
       
       this.gameOver(result)
     }
+    this.add.image(960,540,"menuBg").setScrollFactor(0,0).setDisplaySize(1920,1080)
     
     if (result.winner == 0) {
+      
       Store.run.levelIndex++
       this.onDungeonCompleted()
       if (Store.run.levelIndex >= 3) {
         this.gameOver(result)
+        return
+      } else {
+        var res = await Popup.prompt(this,this.cameras.main.width/2,this.cameras.main.height/2,"You beat the dungeon!", {depth:100})
       }
         
     }
@@ -79,12 +85,13 @@ export default class GameMenu extends Phaser.Scene {
       const didLevelUp = ExperienceManager.giveExperience(unitData)
       
       if (didLevelUp) {
-        console.log(unitData.name + " gained a level")
+        var res = await Popup.prompt(this,this.cameras.main.width/2,this.cameras.main.height/2,unitData.name + " gained a level!", {depth:100})
       }
     }
     
     
-    this.add.rectangle(960,540,1920,1080,Palette.blue1.hex).setScrollFactor(0,0)
+    
+    
     
     
     
@@ -94,9 +101,7 @@ export default class GameMenu extends Phaser.Scene {
     this.reloadRecruitmentPool()
     this.showGameMenu()
     
-    if (result.winner != -1) {
-        this.messageLabel.setText(result.winner == 0 ? "You won!" : "You died!")
-     }  
+    
     
     } catch (er) {console.log(er.message,er.stack); throw er} 
   }
@@ -144,29 +149,23 @@ export default class GameMenu extends Phaser.Scene {
     this.messageLabel = this.add.text(300, this.cameras.main.height - 100, "", { fontSize: 100 })
     
     this.goldLabel = this.add.text(
-      this.cameras.main.width-40, 40, "GOLD: " + Store.run.gold, { fontSize: 80 })
+      this.cameras.main.width-40, 40, "GOLD: " + Store.run.gold, { fontSize: 80, color: Palette.beige1.string})
     .setOrigin(1,0)
     
     this.gameObjects.push(this.messageLabel, this.goldLabel)
     
-    const rows = 2
-    const cols = 3
     
-    const deltaY = this.cameras.main.height/rows
-    
-    const startY = deltaY/2
-    
-    const deltaX = this.cameras.main.width/cols
-    const startX = deltaX/2
+    const dungeonX = this.cameras.main.width - 300
+    const dungeonY = this.cameras.main.height - 550
     
     this.gameObjects.push(
-      new Button(this, startX, startY, "Tavern", {
+      new Button(this, 300, 400, "Tavern", {
         fontSize:48,
         width: 400,
         onClick : ()=>this.showTavern()
         }
       ),
-      new Button(this, startX+deltaX*2, startY+deltaY*1, "Enter Dungeon", {
+      new Button(this, dungeonX, dungeonY, "Enter Dungeon", {
         fontSize:48,
         width: 400,
         onClick : ()=>{this.startDungeon() }
@@ -194,12 +193,12 @@ export default class GameMenu extends Phaser.Scene {
   }
   
   
-  startDungeon() {
+  async startDungeon() {
     try { 
     EventCenter.removeAllListeners()
     
-    if (Store.run.party.length < 0) {
-      this.messageLabel.text = "Select at least one hero!"
+    if (Store.run.party.length <= 0) {
+      var res = await Popup.prompt(this,this.cameras.main.width/2,this.cameras.main.height/2,"Recruit a party from the tavern first!", {depth:100})
       return
     }
     
