@@ -65,14 +65,14 @@ export const createMovementSystem=(world)=>{
       }
       
       if (lookTarget && hasComponent(world, Rotation, id)) {
-        const angle = Phaser.Math.Angle.Between(
+        const radians = Phaser.Math.Angle.Between(
           Position.x[id], 
           Position.y[id], 
-          movementTarget.x, 
-          movementTarget.y
+          lookTarget.x, 
+          lookTarget.y
         )
-        const radians = angle * 180/Math.PI
-        Rotation.radians[id] = radians
+        //const radians = angle * Math.PI / 180
+        Rotation.radians[id] = -radians
       }
       
       if (movementTarget) {

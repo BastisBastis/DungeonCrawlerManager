@@ -12,7 +12,7 @@ import createModel from "../factories/Model"
 //Components
 
 import { Position } from "../components/Position" 
-
+import { Rotation } from "../components/Rotation"
 import { Color } from "../components/Color" 
 
 import { BattleUnit } from "../components/BattleUnit" 
@@ -94,6 +94,7 @@ export const createGraphicsSystem =(world)=>{
           0,
           Position.y[id]
         )
+        objects3d[id].rotation.y = Rotation.radians[id] + Math.PI/2
       }
       
     })
