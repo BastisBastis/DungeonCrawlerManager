@@ -26,7 +26,9 @@ var gameObjects = {}
 var objects3d = {}
 
 export const createGraphicsSystem =(world)=>{
-  
+  objects3d = {}
+  gameObjects = {}
+  world.scene.objects3d = objects3d
   var followedUnit = 0
   
   const unitQuery=defineQuery([BattleUnit,Position,Color])
