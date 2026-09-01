@@ -1,0 +1,15 @@
+{
+  "floor1":0,
+  "wall1":1,
+  "hero1":2,
+  "pirate2":3,
+  "pirate3":4,
+  "pirate4":5,
+  "pirate5":6,
+  "target":7,
+  "tub":8,
+  "faucet":9,
+  "flag":10,
+  "sail":11,
+  "parrot":12
+}
