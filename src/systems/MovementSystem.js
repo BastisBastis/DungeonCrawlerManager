@@ -11,6 +11,7 @@ import { Position } from "../components/Position"
 import { CheckpointFollower } from "../components/CheckpointFollower" 
 import { Action } from "../components/Action"
 import { Dead } from "../components/Dead" 
+import { Rotation } from "../components/Rotation"
 
 export const createMovementSystem=(world)=>{
   const query=defineQuery([Position])
@@ -28,6 +29,7 @@ export const createMovementSystem=(world)=>{
         return
       
       var movementTarget = null
+      var lookTarget = null
       
       if (hasComponent(world, CheckpointFollower, id)) {
         if (CheckpointFollower.index[id] < checkpoints.length) {
@@ -36,6 +38,7 @@ export const createMovementSystem=(world)=>{
             x: checkpoint.x*world.scene.level.cellSize,
             y:checkpoint.y*world.scene.level.cellSize,
           }
+          lookTarget = movementTarget
         }
       }
       
@@ -45,7 +48,7 @@ export const createMovementSystem=(world)=>{
           x: Position.x[Action.target[id]],
           y: Position.y[Action.target[id]]
         }
-        
+        lookTarget = targetPos
         const dist = Phaser.Math.Distance.Between(
             Position.x[id],
             Position.y[id],
@@ -61,6 +64,16 @@ export const createMovementSystem=(world)=>{
         
       }
       
+      if (lookTarget && hasComponent(world, Rotation, id)) {
+        const angle = Phaser.Math.Angle.Between(
+          Position.x[id], 
+          Position.y[id], 
+          movementTarget.x, 
+          movementTarget.y
+        )
+        const radians = angle * 180/Math.PI
+        Rotation.radians[id] = radians
+      }
       
       if (movementTarget) {
         

@@ -32,6 +32,7 @@ import { ClassType } from "../components/ClassType"
 import { UnitClass } from "../components/ClassType"
 import { Level } from "../components/Level"
 import { EnemyIndex } from "../components/EnemyIndex" 
+import { Rotation } from "../components/Rotation"
 
 
 
@@ -49,7 +50,7 @@ export const UnitFactory = {
     addComponent(world, Position, id)
     addComponent(world, Color, id)
     addComponent(world, Level, id)
-    
+    addComponent(world, Rotation, id)
     
     
 
