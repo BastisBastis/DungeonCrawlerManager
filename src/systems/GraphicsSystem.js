@@ -5,6 +5,10 @@ import {
   hasComponent
 } from "bitecs"
 
+//Factories
+import createModel from "../factories/Model"
+
+
 //Components
 
 import { Position } from "../components/Position" 
@@ -16,7 +20,10 @@ import { Dead } from "../components/Dead"
 
 //Data
 
+import Models from "../data/Models.json"
+
 var gameObjects = {}
+var objects3d = {}
 
 export const createGraphicsSystem =(world)=>{
   
@@ -39,6 +46,22 @@ export const createGraphicsSystem =(world)=>{
       
       
       gameObjects[id]=object
+      
+      createModel({
+        graphicsScene: world.scene.graphicsScene,
+        position: {
+          x: Position.x[id], 
+          y:0, 
+          z: Position.y[id]
+        },
+        modelId:Models.hero1,
+        scale:10,
+        rotation: {x:0,y:0,z:0},
+        onLoad:(gltfScene,animations,gltf)=>{
+          world.scene.graphicsScene.add(gltfScene)
+          objects3d[id] = gltfScene
+        }
+      })
     })
     
     if (hasComponent(world, Dead, followedUnit)) {
@@ -65,7 +88,25 @@ export const createGraphicsSystem =(world)=>{
         Position.x[id],
         Position.y[id]
       )
+      if (objects3d[id]) {
+        objects3d[id].position.set(
+          Position.x[id],
+          0,
+          Position.y[id]
+        )
+      }
+      
     })
+    
+    if (followedUnit != 0) {
+      world.scene.camera.position.set(
+        Position.x[followedUnit]-200,
+        300,
+        Position.y[followedUnit]+200
+      )
+    }
+    
+    
     
     
     

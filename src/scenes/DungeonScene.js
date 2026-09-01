@@ -9,6 +9,7 @@ import {
 
 //factories
 import { createDungeonScene } from "../factories/Dungeon"
+import createModel from "../factories/Model" 
 
 //tmp Components
 
@@ -43,7 +44,7 @@ import * as Utils from "../helpers/Utils"
 //Data
 import { Palette } from "../data/Palette" 
 import { Enemies } from "../data/Enemies" 
-
+import Models from "../data/Models.json" 
 
 
 export default class DungeonScene extends Phaser.Scene {
@@ -223,8 +224,17 @@ export default class DungeonScene extends Phaser.Scene {
 
   
   drawMap() {
-    return
     
+    createModel({
+            graphicsScene: this.graphicsScene,
+            position: {x: 0, y: 0, z:0},
+            modelId:Models.floor1,
+            scale:this.level.cellSize,
+            onLoad:(gltfScene,animations,gltf)=>{
+              this.graphicsScene.add(gltfScene)
+            }
+          })
+          
     for (let col = 0; col < this.level.width; col++) {
       
       
@@ -236,10 +246,59 @@ export default class DungeonScene extends Phaser.Scene {
         var x = col*this.level.cellSize
         var y = row*this.level.cellSize
         
+        if (this.level.map[col][row].walkable) {
+          createModel({
+            graphicsScene: this.graphicsScene,
+            position: {x, y:0, z:y},
+            modelId:Models.floor1,
+            scale:128,
+            onLoad:(gltfScene,animations,gltf)=>{
+              this.graphicsScene.add(gltfScene)
+            }
+          })
+          
+          if (row > 0 && !this.level.map[col][row-1].walkable) {
+            createModel({
+              graphicsScene: this.graphicsScene,
+              position: {
+                x: col*this.level.cellSize, 
+                y:0, 
+                z: (row-.5) * this.level.cellSize
+              },
+              modelId:Models.wall1,
+              scale:128,
+              onLoad:(gltfScene,animations,gltf)=>{
+                this.graphicsScene.add(gltfScene)
+              }
+            })
+          }
+          if (!this.level.map[col+1][row].walkable) {
+            createModel({
+              graphicsScene: this.graphicsScene,
+              position: {
+                x: (col+.5)*this.level.cellSize, 
+                y:0, 
+                z: row * this.level.cellSize
+              },
+              modelId:Models.wall1,
+              scale:128,
+              rotation: {x:0,y:Math.PI/2,z:0},
+              onLoad:(gltfScene,animations,gltf)=>{
+                this.graphicsScene.add(gltfScene)
+              }
+            })
+          }
+        }
+        
+        
+        
+        
+        
+        /*
         this.add.rectangle(x, y, this.level.cellSize, this.level.cellSize, color)
           .setDepth(50)
           .setStrokeStyle(1, 0x222222);
-        
+        */
       }
     }
   }

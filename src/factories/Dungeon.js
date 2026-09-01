@@ -18,30 +18,35 @@ const updateCanvasBounds=(gameScene,renderer,camera) =>{
    
 }
 
-const addLight=(scene)=>{
-  const color = 0x999999
-  const intensity = 0.8
-  const dirLight = new THREE.DirectionalLight(color, intensity);
-  dirLight.position.set(10, 50, 20)
-  
-  
+const addLight = (scene) => {
+  const color = 0xffbbcc
+  const intensity = 1.2
+
+  const dirLight = new THREE.DirectionalLight(color, intensity)
+
+  dirLight.position.set(-100, 200, 100)
+
   dirLight.castShadow = true
-  
-  dirLight.shadow.camera.top = 50
-  dirLight.shadow.camera.bottom = -50
-  dirLight.shadow.camera.left = -50
-  dirLight.shadow.camera.right = 50
-  
-  dirLight.shadow.mapSize.width = 200
-  dirLight.shadow.mapSize.height = 200
-    
-  dirLight.shadow.camera.near = 30
-  dirLight.shadow.camera.far = 80
-  dirLight.shadow.bias = -0.01;
-  
+
+  // Shadow camera
+  dirLight.shadow.camera.top = 100
+  dirLight.shadow.camera.bottom = -100
+  dirLight.shadow.camera.left = -100
+  dirLight.shadow.camera.right = 100
+
+  dirLight.shadow.camera.near = 50
+  dirLight.shadow.camera.far = 500
+
+  // Shadow quality
+  dirLight.shadow.mapSize.width = 1024
+  dirLight.shadow.mapSize.height = 1024
+
+  dirLight.shadow.bias = -0.001
+
   dirLight.shadow.camera.updateProjectionMatrix()
-  
+
   scene.add(dirLight)
+
     
   const helper = new THREE.CameraHelper(dirLight.shadow.camera)
   //scene.add(helper)
@@ -52,12 +57,12 @@ const addLight=(scene)=>{
 
 const setupScene=()=> {
   const scene = new THREE.Scene()
-  scene.background = new THREE.Color( 0x5599cc )
+  scene.background = new THREE.Color( 0x330000 )
   
-  if (GlobalStuff.Fog) {
+  if (false || GlobalStuff.Fog) {
     const color = 0x5599cc;  // white
     const near = 70;
-    const far = 150;
+    const far = 600;
     scene.fog = new THREE.Fog(color, near, far);
   }
     
@@ -76,7 +81,7 @@ const setupCamera=(gameScene,renderer)=>{
     10000
   )
   
-  camera.position.set(0,30,30)
+  camera.position.set(-200,300,200)
   camera.lookAt(0,0,0)
   
 
@@ -110,6 +115,7 @@ const createTestScene=(graphicsScene)=>{
   const plane = new THREE.Mesh(geometry, material)
 
   plane.rotation.x = -Math.PI / 2
+  plane.position.y = -200
 
   graphicsScene.add(plane)
 }
@@ -130,7 +136,7 @@ export const createDungeonScene=(gameScene)=>{
   if (GlobalStuff.CameraStyle===3) {
     createOrbitControls(camera,renderer.domElement)
   }
-  createTestScene(scene)
+  //createTestScene(scene)
   
   return {graphicsScene:scene,renderer:renderer,camera:camera}
 }
