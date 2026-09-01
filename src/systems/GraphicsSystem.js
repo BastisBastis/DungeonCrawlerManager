@@ -21,6 +21,7 @@ import { Dead } from "../components/Dead"
 //Data
 
 import Models from "../data/Models.json"
+import { EventCenter } from "../helpers/EventCenter"
 
 var gameObjects = {}
 var objects3d = {}
@@ -60,8 +61,9 @@ export const createGraphicsSystem =(world)=>{
         scale:10,
         rotation: {x:0,y:0,z:0},
         onLoad:(gltfScene,animations,gltf)=>{
-          world.scene.graphicsScene.add(gltfScene)
-          objects3d[id] = gltfScene
+          world.scene.graphicsScene.add(gltf.scene)
+          objects3d[id] = gltf
+          EventCenter.emit("modelLoaded", {id, gltf})
         }
       })
     })
@@ -91,12 +93,12 @@ export const createGraphicsSystem =(world)=>{
         Position.y[id]
       )
       if (objects3d[id]) {
-        objects3d[id].position.set(
+        objects3d[id].scene.position.set(
           Position.x[id],
           0,
           Position.y[id]
         )
-        objects3d[id].rotation.y = Rotation.radians[id] + Math.PI/2
+        objects3d[id].scene.rotation.y = Rotation.radians[id] + Math.PI/2
       }
       
     })

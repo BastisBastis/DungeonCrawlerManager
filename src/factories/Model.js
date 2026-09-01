@@ -9,7 +9,7 @@ import { GlobalStuff } from "../helpers/GlobalStuff"
 //urls
 import Floor1URL from "../assets/models/DCMfloor1.glb"
 import Wall1URL from "../assets/models/DCMwall1.glb"
-import Hero1URL from "../assets/models/DmcHero1.glb" 
+import Hero1URL from "../assets/models/Hero1Animated.glb" 
 
 
 const urls={}
@@ -53,10 +53,6 @@ const loadModel=(
       if (modelId===Models.target)
         scale=6
       
-      if (modelId===Models.cannon)
-        scale=2
-      if (modelId===Models.flag)
-        scale=1
       
 
       gltf.scene.scale.set(scale,scale,scale)

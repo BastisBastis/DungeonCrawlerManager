@@ -12,6 +12,7 @@ import { CheckpointFollower } from "../components/CheckpointFollower"
 import { Action } from "../components/Action"
 import { Dead } from "../components/Dead" 
 import { Rotation } from "../components/Rotation"
+import { EventCenter } from "../helpers/EventCenter"
 
 export const createMovementSystem=(world)=>{
   const query=defineQuery([Position])
@@ -76,7 +77,7 @@ export const createMovementSystem=(world)=>{
       }
       
       if (movementTarget) {
-        
+        EventCenter.emit("unitIsRunning", id)
         
         const angle = Phaser.Math.Angle.Between(
           Position.x[id], 
@@ -87,7 +88,11 @@ export const createMovementSystem=(world)=>{
 
          Position.x[id]  = Position.x[id]  + Math.cos(angle) * speed*dt/100;
          Position.y[id]  = Position.y[id]  + Math.sin(angle) * speed*dt/100;
-              }
+      }
+      else {
+        
+        EventCenter.emit("unitIsIdle", id)
+      }
         
       
     })
