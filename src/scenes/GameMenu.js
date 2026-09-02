@@ -80,12 +80,14 @@ export default class GameMenu extends Phaser.Scene {
         
     }
    
+   console.log(Store.run.party.length)
     for (const unitIndex of Store.run.party) {
       const unitData = Store.run.units[unitIndex]
-      const didLevelUp = ExperienceManager.giveExperience(unitData)
+      const levelUpData = ExperienceManager.giveExperience(unitData)
       
-      if (didLevelUp) {
+      if (levelUpData) {
         var res = await Popup.prompt(this,this.cameras.main.width/2,this.cameras.main.height/2,unitData.name + " gained a level!", {depth:100})
+        console.log(levelUpData)
       }
     }
     

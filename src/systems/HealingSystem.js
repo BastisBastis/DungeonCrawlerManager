@@ -36,8 +36,13 @@ export const createHealingSystem=(world)=>{
             amount: Healer.amount[id]
           }
         })
-
         
+        EventCenter.emit("unitIsCasting", id)
+
+        EventCenter.emit("spawnParticles", {
+          id,
+          count:50
+        })
 
         if (GlobalStuff.verboseLog >=2)
             EventCenter.emit("addLogMessage", id + " requests " + Healer.amount[id] + " heal to " + Action.target[id])

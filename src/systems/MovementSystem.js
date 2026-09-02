@@ -1,5 +1,6 @@
 import {
     addComponent,
+    enterQuery,
   defineQuery,
   hasComponent
 } from "bitecs"
@@ -16,13 +17,45 @@ import { EventCenter } from "../helpers/EventCenter"
 
 export const createMovementSystem=(world)=>{
   const query=defineQuery([Position])
+  const entryQuery = enterQuery(query)
+  
+  const offsets = [
+    {
+      x: 10,
+      y: 0,
+    },
+    {
+      x: -10,
+      y: 0,
+    },
+    {
+      x: 10,
+      y: -10,
+    },
+    {
+      x: -10,
+      y: -10,
+    },
+  ]
+  
+  const unitOffsets={}
   
   return (world, dt)=>{
+    
+    
     
     const checkpoints = world.scene.level.checkPoints
     const speed = 20
     
     const meleeRange = world.scene.level.cellSize*0.8
+    
+    entryQuery(world).forEach(id=>{
+      if (hasComponent(world, CheckpointFollower, id)) {
+        console.log(id)
+        unitOffsets[id] = offsets[Object.values(unitOffsets).length % offsets.length]
+        //console.log(Object.values(unitOffsets.length) % offsets.length)
+      }
+    })
     
 
     query(world).forEach(id=>{
@@ -36,8 +69,8 @@ export const createMovementSystem=(world)=>{
         if (CheckpointFollower.index[id] < checkpoints.length) {
           var checkpoint = checkpoints[CheckpointFollower.index[id]]
           movementTarget = {
-            x: checkpoint.x*world.scene.level.cellSize,
-            y:checkpoint.y*world.scene.level.cellSize,
+            x: checkpoint.x*world.scene.level.cellSize + unitOffsets[id].x,
+            y:checkpoint.y*world.scene.level.cellSize + unitOffsets[id].y,
           }
           lookTarget = movementTarget
         }

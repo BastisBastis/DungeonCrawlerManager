@@ -95,7 +95,7 @@ export const createGraphicsSystem =(world)=>{
       if (objects3d[id]) {
         objects3d[id].scene.position.set(
           Position.x[id],
-          0,
+            -48,
           Position.y[id]
         )
         objects3d[id].scene.rotation.y = Rotation.radians[id] + Math.PI/2

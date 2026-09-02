@@ -7,7 +7,7 @@ import { GlobalStuff } from "../helpers/GlobalStuff"
 
 
 //urls
-import Floor1URL from "../assets/models/DCMfloor1.glb"
+import Floor1URL from "../assets/models/DCMfloor2.glb"
 import Wall1URL from "../assets/models/DCMwall1.glb"
 import Hero1URL from "../assets/models/Hero1Animated.glb" 
 

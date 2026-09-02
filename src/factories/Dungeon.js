@@ -20,7 +20,7 @@ const updateCanvasBounds=(gameScene,renderer,camera) =>{
 
 const addLight = (scene) => {
   const color = 0xffbbcc
-  const intensity = 1.2
+  const intensity = 4
 
   const dirLight = new THREE.DirectionalLight(color, intensity)
 

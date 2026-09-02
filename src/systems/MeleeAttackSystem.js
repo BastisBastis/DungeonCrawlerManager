@@ -39,6 +39,7 @@ export const createMeleeAttackSystem=(world)=>{
             damage: MeleeAttack.damage[id]
           }
         })
+        
         if (GlobalStuff.verboseLog >=2)
         EventCenter.emit("addLogMessage", id + " requests " + MeleeAttack.damage[id] + " dmg to " + Action.target[id])
         
