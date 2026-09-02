@@ -96,8 +96,10 @@ export const createAnimationSystem =(world)=>{
       const object = world.scene.objects3d[id]
       const currentAnimationKey = animationKeys[AnimationState.current[id]]
       const requestedAnimationKey = animationKeys[AnimationState.requested[id]]
-      object.scene.actions[currentAnimationKey].stop()
-      object.scene.actions[requestedAnimationKey].reset().play()
+      
+      object.scene.actions[currentAnimationKey].fadeOut(.2)
+      object.scene.actions[requestedAnimationKey].reset().fadeIn(.2).play()
+      
       AnimationState.current[id] = AnimationState.requested[id]
       
     })
@@ -112,8 +114,8 @@ export const createAnimationSystem =(world)=>{
     if (animationId != AnimationState.current[id] && object) {
       
       if (animationRules[AnimationState.current[id]].interruptable || animationRules[animationId].forceInterrupt) {
-        object.scene.actions[currentAnimationKey].stop()
-        object.scene.actions[requestedAnimationKey].reset().play()
+        object.scene.actions[currentAnimationKey].fadeOut(.2)
+        object.scene.actions[requestedAnimationKey].reset().fadeIn(.2).play()
         AnimationState.current[id] = animationId
         
       }

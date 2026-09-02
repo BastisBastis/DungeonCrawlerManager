@@ -45,13 +45,13 @@ export const createMovementSystem=(world)=>{
     
     
     const checkpoints = world.scene.level.checkPoints
-    const speed = 20
-    
-    const meleeRange = world.scene.level.cellSize*0.8
+    const speed = 14
+    const separationRadius = world.scene.level.cellSize*0.2
+    const meleeRange = world.scene.level.cellSize*0.4
     
     entryQuery(world).forEach(id=>{
       if (hasComponent(world, CheckpointFollower, id)) {
-        console.log(id)
+        
         unitOffsets[id] = offsets[Object.values(unitOffsets).length % offsets.length]
         //console.log(Object.values(unitOffsets.length) % offsets.length)
       }
@@ -64,6 +64,27 @@ export const createMovementSystem=(world)=>{
       
       var movementTarget = null
       var lookTarget = null
+
+      let separationX = 0
+      let separationY = 0
+
+      query(world).forEach(otherId=>{
+        if (otherId === id) 
+          return
+
+        const dx = Position.x[id] - Position.x[otherId]
+        const dy = Position.y[id] - Position.y[otherId]
+
+        const distanceSq = dx * dx + dy * dy
+
+        if (distanceSq < separationRadius * separationRadius && distanceSq > 0) {
+            const distance = Math.sqrt(distanceSq)
+
+            separationX += dx / distance
+            separationY += dy / distance
+        }
+        //if (separationX != 0) console.log(separationX, separationY)
+      })
       
       if (hasComponent(world, CheckpointFollower, id)) {
         if (CheckpointFollower.index[id] < checkpoints.length) {
@@ -82,14 +103,17 @@ export const createMovementSystem=(world)=>{
           x: Position.x[Action.target[id]],
           y: Position.y[Action.target[id]]
         }
+
+        
+
         lookTarget = targetPos
-        const dist = Phaser.Math.Distance.Between(
+        const distSquared = Phaser.Math.Distance.Squared(
             Position.x[id],
             Position.y[id],
             targetPos.x,
             targetPos.y
           )
-        if (dist < meleeRange) {
+        if (distSquared < meleeRange*meleeRange) {
           movementTarget = null
         } else {
           movementTarget = targetPos
@@ -119,14 +143,29 @@ export const createMovementSystem=(world)=>{
           movementTarget.y
         )
 
-         Position.x[id]  = Position.x[id]  + Math.cos(angle) * speed*dt/100;
-         Position.y[id]  = Position.y[id]  + Math.sin(angle) * speed*dt/100;
+         const distSquared = Phaser.Math.Distance.Squared(
+            Position.x[id],
+            Position.y[id],
+            movementTarget.x,
+            movementTarget.y
+          )
+        if (distSquared < Math.pow(speed*dt/100,2)) {
+          Position.x[id] = movementTarget.x
+          Position.y[id] = movementTarget.y
+        } else {
+          Position.x[id]  = Position.x[id]  + Math.cos(angle) * speed*dt/100;
+          Position.y[id]  = Position.y[id]  + Math.sin(angle) * speed*dt/100;
+        }
+
+
       }
       else {
         
         EventCenter.emit("unitIsIdle", id)
       }
-        
+      Position.x[id]+=separationX*.3
+      Position.y[id]+=separationY*.3
+
       
     })
 

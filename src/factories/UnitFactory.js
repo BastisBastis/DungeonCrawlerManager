@@ -51,7 +51,7 @@ export const UnitFactory = {
     addComponent(world, Color, id)
     addComponent(world, Level, id)
     addComponent(world, Rotation, id)
-    
+    addComponent(world, ClassType, id)
     
 
     if (unitData.healer) {
@@ -91,6 +91,8 @@ export const UnitFactory = {
     Color.hex[id] = unitData.color
 
     Level.value[id] = unitData.level
+
+    ClassType.type[id] = unitData.classIndex
     
     if (unitData.checkpointFollower) {
       addComponent(world, CheckpointFollower, id)
@@ -118,14 +120,15 @@ export const UnitFactory = {
     return id
   },
 
-  getRandomUnitData : (level = 1) => {
+  getRandomUnitData : (level = 1, classIndex = -1) => {
     
-    
+    if (classIndex == -1)
+      classIndex = Utils.getRandomInt(0,3)
     const classType = [
       UnitClass.WARRIOR,
       UnitClass.CLERIC,
       UnitClass.ROGUE
-    ][Utils.getRandomInt(0,3)]
+    ][classIndex]
     
     const classValues = {}
     classValues[UnitClass.WARRIOR] = {
@@ -265,6 +268,7 @@ export const UnitFactory = {
       atk,
       name,
       classType,
+      classIndex,
       name,
       nameIndex,
       threatMods,
