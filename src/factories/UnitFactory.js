@@ -121,6 +121,7 @@ export const UnitFactory = {
   getRandomUnitData : (level = 1) => {
     
     
+    
     const classType = [
       UnitClass.WARRIOR,
       UnitClass.CLERIC,

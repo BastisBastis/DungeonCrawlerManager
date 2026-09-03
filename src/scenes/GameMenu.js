@@ -80,7 +80,7 @@ export default class GameMenu extends Phaser.Scene {
         
     }
    
-   console.log(Store.run.party.length)
+   
     for (const unitIndex of Store.run.party) {
       const unitData = Store.run.units[unitIndex]
       const levelUpData = ExperienceManager.giveExperience(unitData)
@@ -132,9 +132,27 @@ export default class GameMenu extends Phaser.Scene {
   reloadRecruitmentPool() {
     Store.menu.recruitmentPool = []
     
+    const classCount = {}
+    const maxPerClass = 3
+    
     const expHits = Store.run.levelIndex
     for (let i = 0; i < 8; i++) {
-      const unitData = UnitFactory.getRandomUnitData()
+      var foundUnit = false
+      
+      var unitData
+      
+      while (!foundUnit) {
+        unitData = UnitFactory.getRandomUnitData()
+        if (!classCount[unitData.classType]) {
+          classCount[unitData.classType]= 1
+          foundUnit = true
+        }
+        else if (classCount[unitData.classType]<maxPerClass){
+          classCount[unitData.classType]++
+          foundUnit=true
+        }
+      }
+      
       Store.menu.recruitmentPool.push(unitData)
       for (let j = 0; j < expHits; j++) {
         ExperienceManager.giveExperience(unitData)
