@@ -122,8 +122,10 @@ export const UnitFactory = {
 
   getRandomUnitData : (level = 1, classIndex = -1) => {
     
+<
     if (classIndex == -1)
       classIndex = Utils.getRandomInt(0,3)
+    
     const classType = [
       UnitClass.WARRIOR,
       UnitClass.CLERIC,
