@@ -45,6 +45,7 @@ import * as Utils from "../helpers/Utils"
 import { Palette } from "../data/Palette" 
 import { Enemies } from "../data/Enemies" 
 import Models from "../data/Models.json" 
+import { ClassIdFromName } from "../components/ClassType"
 
 
 export default class DungeonScene extends Phaser.Scene {
@@ -192,6 +193,7 @@ export default class DungeonScene extends Phaser.Scene {
         unitData.color = 0xff0000
         
         unitData.classType = enemyData.classType
+        unitData.classIndex = ClassIdFromName[enemyData.classType]
         unitData.enemyIndex = spawnPoint[3]
         
         

@@ -9,7 +9,7 @@ import { GlobalStuff } from "../helpers/GlobalStuff"
 //urls
 import Floor1URL from "../assets/models/DCMfloor2.glb"
 import Wall1URL from "../assets/models/DCMwall1.glb"
-import Hero1URL from "../assets/models/Hero1Animated.glb" 
+import Hero1URL from "../assets/models/Hero1.2.glb" 
 
 
 const urls={}
@@ -29,7 +29,9 @@ const loadModel=(
   url,
   onLoad = (()=> false),
   modelId,
-  scale = 1 )=> {
+  scale = 1,
+  materialColors
+)=> {
   
   const loader = new GLTFLoader();
   
@@ -100,7 +102,18 @@ const loadModel=(
         }
       })
       
-      //fixes(gltf,modelId)
+      if (materialColors){
+      gltf.scene.traverse(child=>{
+        if (child.isMesh) {
+          for (const [key, color] of Object.entries(materialColors)) {
+            if (key == child.material.name) {
+              child.material.color.set(color)
+            }
+          }
+
+        }
+      })
+    }
       
       /* Animation api
         this.mixer=new THREE.AnimationMixer(gltf.scene)
@@ -126,69 +139,9 @@ const loadModel=(
 
 
 const fixes=(gltf,modelId)=>{
-  if ([
-      Models.pirate1,
-      Models.pirate2,
-      Models.pirate3,
-      Models.pirate4,
-      Models.pirate5
-    ].includes(modelId)) {
-    let animNames={}
-    gltf.animations.forEach((animation,i)=>{
-      
-      animation.name=animation.name.split(" ")[0]
-      animation.name=animation.name.split("_")[0]
-      animation.name=animation.name.split("Monkey")[0]
-      if (animation.name.includes("Pose"))
-        animation.name="Pose"
-      
-      if (animNames[animation.name]!==undefined)
-        animation.name+=""+"_2"
-      animNames[animation.name]=i
-    })
-    //console.log(animNames)
-    if (gltf.scene.position.x>0){
-      gltf.scene.traverse(child=>{
-        if (child.isMesh) {
-          
-          if (child.material.color.getHex()==277266) {
-            //child.material=new THREE.MeshNormalMaterial()
-            child.material.color.set(0x6b2643)
-          } 
-        }
-      })
-    }
+  
     
-  } else if (modelId==Models.flag) {
-      if (gltf.scene.position.x>0){
-      gltf.scene.traverse(child=>{
-        if (child.isMesh) {
-          
-          if (child.material.color.getHex()==277266) {
-            //child.material=new THREE.MeshNormalMaterial()
-            child.material.color.set(0x6b2643)
-          } 
-        }
-      })
-    }
-  } else if (modelId==Models.boat) {
-    gltf.scene.children.forEach(c=>{
-      //c.position.y+=36.3
-      c.position.y-=1
-      
-      
-    })
-    gltf.scene.traverse(child=>{
-      if (child.isMesh&&child.name!=="Ship")
-        child.position.y+=7
-    })
-  } else if (modelId==Models.target) {
-    gltf.scene.children.forEach(c=>{
-      c.position.y-=0.6
-      c.rotation.y=Math.PI/2
-      
-    })
-  }
+    
 }
 
 
@@ -199,7 +152,8 @@ const createModel=({
   modelId,
   rotation,
   onLoad,
-  scale=1
+  scale=1,
+  materialColors
 }) =>{
   
   
@@ -211,7 +165,8 @@ const createModel=({
       onLoad(model,animations,gltf)
     },
     modelId,
-    scale
+    scale,
+    materialColors
   )
 }
 

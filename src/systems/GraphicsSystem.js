@@ -14,12 +14,12 @@ import createModel from "../factories/Model"
 import { Position } from "../components/Position" 
 import { Rotation } from "../components/Rotation"
 import { Color } from "../components/Color" 
-
+import { ClassType, UnitClass, ClassIds } from "../components/ClassType"
 import { BattleUnit } from "../components/BattleUnit" 
 import { Dead } from "../components/Dead" 
 
 //Data
-
+import { ClassColors } from "../data/ClassColors"
 import Models from "../data/Models.json"
 import { EventCenter } from "../helpers/EventCenter"
 
@@ -49,7 +49,7 @@ export const createGraphicsSystem =(world)=>{
       
       
       gameObjects[id]=object
-      
+      console.log(ClassType.type[id], ClassIds[ClassType.type[id]],ClassColors[ClassIds[ClassType.type[id]]])
       createModel({
         graphicsScene: world.scene.graphicsScene,
         position: {
@@ -60,6 +60,7 @@ export const createGraphicsSystem =(world)=>{
         modelId:Models.hero1,
         scale:10,
         rotation: {x:0,y:0,z:0},
+        materialColors:ClassColors[ClassIds[ClassType.type[id]]],
         onLoad:(gltfScene,animations,gltf)=>{
           world.scene.graphicsScene.add(gltf.scene)
           objects3d[id] = gltf
@@ -95,7 +96,7 @@ export const createGraphicsSystem =(world)=>{
       if (objects3d[id]) {
         objects3d[id].scene.position.set(
           Position.x[id],
-            -48,
+            -64,
           Position.y[id]
         )
         objects3d[id].scene.rotation.y = Rotation.radians[id] + Math.PI/2
