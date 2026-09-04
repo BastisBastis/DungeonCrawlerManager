@@ -47,7 +47,7 @@ export const ExperienceManager = {
       result.damage = 1.2*gainMods.damage
       
       if (unitData.classType == UnitClass.WARRIOR) {
-        unitData.threatMods.attack = Math.round(unitData.threatMods.attack*1.1 * gainMods.threatMod)
+        unitData.threatMods.attack = Math.round(unitData.threatMods.attack*1.1 * gainMods.threatMod*10)/10
         result.threatMod = 1.1*gainMods.threatMod
       }
       

@@ -19,6 +19,23 @@ import { GlobalStuff } from "../helpers/GlobalStuff"
 
 
 export const createMeleeAttackSystem=(world)=>{
+  
+  const performAttack = (source, target, atk, damage) => {
+    
+    if (hasComponent(world, Dead, source) || hasComponent(world, Dead, target))
+      return
+    
+    EventCenter.emit("damageRequest", {
+      source:source,
+      target: target,
+      damageType: "melee",
+      data: {
+        atk: atk,
+        damage: damage
+      }
+    })
+  }
+  
   const unitQuery=defineQuery([Action, MeleeAttack])
   const attackRange = world.scene.level.cellSize
   return (world, dt)=>{
@@ -27,7 +44,10 @@ export const createMeleeAttackSystem=(world)=>{
 
 
       
-      MeleeAttack.coolDown[id] += dt/100
+    MeleeAttack.coolDown[id] = Math.min(MeleeAttack.coolDown[id] + dt/100, MeleeAttack.delay[id])
+      
+      
+      
       if (Action.action[id] == ActionType.ATTACK && !hasComponent(world, Dead, id) && Action.target[id] != 0 && !hasComponent(world, Dead, Action.target[id]) && MeleeAttack.coolDown[id] >= MeleeAttack.delay[id]) {
         
         const targetPos = {
@@ -46,16 +66,18 @@ export const createMeleeAttackSystem=(world)=>{
           return
 
         MeleeAttack.coolDown[id] -= MeleeAttack.delay[id] 
+        console.log(MeleeAttack.buildUpTime)
         
-        EventCenter.emit("damageRequest", {
-          source:id,
-          target: Action.target[id],
-          damageType: "melee",
-          data: {
-            atk: MeleeAttack.atk[id],
-            damage: MeleeAttack.damage[id]
-          }
-        })
+        EventCenter.emit("meleeAttack", id)
+        
+        setTimeout(()=>{
+          performAttack(
+            id, 
+            Action.target[id],
+            MeleeAttack.atk[id],
+            MeleeAttack.damage[id]
+          )
+        }, MeleeAttack.buildUpTime[id])
         
         if (GlobalStuff.verboseLog >=2)
         EventCenter.emit("addLogMessage", id + " requests " + MeleeAttack.damage[id] + " dmg to " + Action.target[id])

@@ -7,5 +7,6 @@ export const MeleeAttack = defineComponent({
   damage:Types.ui8,
   delay: Types.ui8,
   coolDown: Types.f32,
-  atk: Types.ui8
+  atk: Types.ui8,
+  buildUpTime: Types.ui16,
 })

@@ -143,7 +143,9 @@ export const createAnimationSystem =(world)=>{
   EventCenter.on("unitIsIdle", (id)=>{
     requestAnimation(id, AnimationType.IDLE)
   })
-  EventCenter.on("damageRequest", onDamageRequest)
+  EventCenter.on("meleeAttack", (id)=>{
+    requestAnimation(id, AnimationType.ATTACK)
+  })
   EventCenter.on("unitIsCasting", (id)=>{
     requestAnimation(id, AnimationType.SPELL)
   })

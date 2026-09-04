@@ -16,7 +16,8 @@ Enemies[0] = {
   delayMax : 25,
   atkMin : 8,
   atkMax : 15,
-  modelIndex : 3
+  modelIndex : 3,
+  attackBuildUp : 400
 }
 
 Enemies[1] = {
@@ -33,7 +34,8 @@ Enemies[1] = {
   delayMax : 28,
   atkMin : 8,
   atkMax : 15,
-  modelIndex : 3
+  modelIndex : 3,
+  attackBuildUp : 400
 }
 
 Enemies[2] = {
@@ -50,7 +52,8 @@ Enemies[2] = {
   delayMax : 28,
   atkMin : 8,
   atkMax : 15,
-  modelIndex : 4
+  modelIndex : 4,
+  attackBuildUp : 400
 }
 
 Enemies[3] = {
@@ -67,7 +70,8 @@ Enemies[3] = {
   delayMax : 28,
   atkMin : 8,
   atkMax : 15,
-  modelIndex : 5
+  modelIndex : 5,
+  attackBuildUp : 400
 }
 
 Enemies[4] = {
@@ -84,6 +88,7 @@ Enemies[4] = {
   delayMax : 28,
   atkMin : 8,
   atkMax : 15,
-  modelIndex : 3
+  modelIndex : 3,
+  attackBuildUp : 400
 }
 

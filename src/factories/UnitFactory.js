@@ -57,6 +57,8 @@ export const UnitFactory = {
     addComponent(world, ClassType, id)
     addComponent(world, Model, id)
     
+    console.log(unitData.attackBuildUp)
+    
 
     if (unitData.healer) {
       
@@ -81,6 +83,7 @@ export const UnitFactory = {
     MeleeAttack.delay[id] = unitData.delay
     MeleeAttack.coolDown[id] = 0
     MeleeAttack.atk[id] = unitData.atk
+    MeleeAttack.buildUpTime = unitData.attackBuildUp
     
     if (unitData.nameIndex !== undefined) {
       addComponent(world, Name, id)
@@ -151,10 +154,10 @@ export const UnitFactory = {
       atkMin : 6,
       atkMax : 10,
       threatMods: {
-        attackMin: 35,
-        attackMax: 45.0,
-        proximityMin: 1.0,
-        proximityMax: 1.0,
+        attackMin: 2,
+        attackMax: 4,
+        proximityMin: 2.1,
+        proximityMax: 2.1,
         healMin: 1.0,
         healMax: 1.0,
         otherMin: 1.0,
@@ -221,10 +224,10 @@ export const UnitFactory = {
     var atk = Utils.getRandomBellInt(classValues[classType].atkMin,classValues[classType].atkMax, 1)
     
     var threatMods = {
-      attack: Math.floor(Phaser.Math.FloatBetween(classValues[classType].threatMods.attackMin, classValues[classType].threatMods.attackMax)),
-      proximity: Math.floor(Phaser.Math.FloatBetween(classValues[classType].threatMods.proximityMin, classValues[classType].threatMods.proximityMax)),
-      heal: Math.floor(Phaser.Math.FloatBetween(classValues[classType].threatMods.healMin, classValues[classType].threatMods.healMax)),
-      other: Math.floor(Phaser.Math.FloatBetween(classValues[classType].threatMods.otherMin, classValues[classType].threatMods.otherMax)),
+      attack: Math.floor(Phaser.Math.FloatBetween(classValues[classType].threatMods.attackMin, classValues[classType].threatMods.attackMax)*10)/10,
+      proximity: Math.floor(Phaser.Math.FloatBetween(classValues[classType].threatMods.proximityMin, classValues[classType].threatMods.proximityMax)*10)/10,
+      heal: Math.floor(Phaser.Math.FloatBetween(classValues[classType].threatMods.healMin, classValues[classType].threatMods.healMax)*10)/10,
+      other: Math.floor(Phaser.Math.FloatBetween(classValues[classType].threatMods.otherMin, classValues[classType].threatMods.otherMax)*10)/10,
     }
     
     var nameIndex = NameHelper.getNextNameIndex()
@@ -265,6 +268,8 @@ export const UnitFactory = {
         ( avgHealDelay / healer.delay )
     }
     
+    const attackBuildUp = 1200
+    
     recruitmentCost = Math.floor(recruitmentCost *costMod)
     
     
@@ -283,7 +288,8 @@ export const UnitFactory = {
       healer,
       level,
       recruitmentCost,
-      exp : 0
+      exp : 0,
+      attackBuildUp
     }
     
     return unitData

@@ -48,10 +48,10 @@ export const createThreatSystem=(world)=>{
   
   const aggroRange = world.scene.level.cellSize*2
   const aggroRangeSquared = aggroRange*aggroRange
-  const proximityThreatMod = 1
+  const proximityThreatMod = .1
   const damageRequestMod = 10
   const damageTakenMod = 15
-  const healThreatMod = 20
+  const healThreatMod = 1.7
   
   const hostileDataStructure = {
     proximity : 0,
