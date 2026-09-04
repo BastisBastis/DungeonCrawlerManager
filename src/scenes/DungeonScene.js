@@ -9,23 +9,16 @@ import {
 
 //factories
 import { createDungeonScene } from "../factories/Dungeon"
-import createModel from "../factories/Model" 
+import createModel from "../factories/ModelFactory" 
 
 //tmp Components
 
 import { Action } from "../components/Action"
 
 import { BattleUnit } from "../components/BattleUnit"
-import { Attackable } from "../components/Attackable"
-import { MeleeAttack } from "../components/MeleeAttack"
-import { Color } from "../components/Color" 
-import { Position } from "../components/Position" 
-import { CheckpointFollower } from "../components/CheckpointFollower" 
-import { Healer } from "../components/Healer" 
-import { Name } from "../components/Name" 
-import { ThreatMod } from "../components/ThreatMod" 
 import { Dead } from "../components/Dead"
 import { UnitIndex } from "../components/UnitIndex"
+import { UnitClass } from "../components/ClassType"
 
 //factories
 import { UnitFactory } from "../factories/UnitFactory" 
@@ -45,7 +38,7 @@ import * as Utils from "../helpers/Utils"
 import { Palette } from "../data/Palette" 
 import { Enemies } from "../data/Enemies" 
 import Models from "../data/Models.json" 
-import { ClassIdFromName } from "../components/ClassType"
+import { ClassIdFromName, ClassType } from "../components/ClassType"
 
 
 export default class DungeonScene extends Phaser.Scene {
@@ -158,6 +151,8 @@ export default class DungeonScene extends Phaser.Scene {
       hero.color = 0x00ff00
       hero.team = 0
       hero.checkpointFollower = true
+
+      hero.modelIndex = Models.hero1
       
       var id = UnitFactory.getUnitEntityFromData(this.world, hero)
       
@@ -195,6 +190,7 @@ export default class DungeonScene extends Phaser.Scene {
         unitData.classType = enemyData.classType
         unitData.classIndex = ClassIdFromName[enemyData.classType]
         unitData.enemyIndex = spawnPoint[3]
+        unitData.modelIndex = enemyData.modelIndex
         
         
         var x = spawnPoint[0] * this.level.cellSize

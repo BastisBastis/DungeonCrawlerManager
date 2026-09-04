@@ -6,7 +6,7 @@ import {
 } from "bitecs"
 
 //Factories
-import createModel from "../factories/Model"
+import createModel from "../factories/ModelFactory"
 
 
 //Components
@@ -17,6 +17,7 @@ import { Color } from "../components/Color"
 import { ClassType, UnitClass, ClassIds } from "../components/ClassType"
 import { BattleUnit } from "../components/BattleUnit" 
 import { Dead } from "../components/Dead" 
+import { Model } from "../components/Model"
 
 //Data
 import { ClassColors } from "../data/ClassColors"
@@ -32,7 +33,7 @@ export const createGraphicsSystem =(world)=>{
   world.scene.objects3d = objects3d
   var followedUnit = 0
   
-  const unitQuery=defineQuery([BattleUnit,Position,Color])
+  const unitQuery=defineQuery([BattleUnit,Position,Color, Model])
   const unitEnterQuery=enterQuery(unitQuery)
   
   
@@ -49,7 +50,9 @@ export const createGraphicsSystem =(world)=>{
       
       
       gameObjects[id]=object
-      console.log(ClassType.type[id], ClassIds[ClassType.type[id]],ClassColors[ClassIds[ClassType.type[id]]])
+      
+      
+
       createModel({
         graphicsScene: world.scene.graphicsScene,
         position: {
@@ -57,7 +60,7 @@ export const createGraphicsSystem =(world)=>{
           y:0, 
           z: Position.y[id]
         },
-        modelId:Models.hero1,
+        modelId:Model.index[id],
         scale:10,
         rotation: {x:0,y:0,z:0},
         materialColors:ClassColors[ClassIds[ClassType.type[id]]],
@@ -65,6 +68,7 @@ export const createGraphicsSystem =(world)=>{
           world.scene.graphicsScene.add(gltf.scene)
           objects3d[id] = gltf
           EventCenter.emit("modelLoaded", {id, gltf})
+          console.log("Loaded model ", Model.index[id])
         }
       })
     })

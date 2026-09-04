@@ -14,6 +14,7 @@ import * as Utils from "../helpers/Utils"
 
 //Data
 import { UnitNames } from "../data/UnitNames" 
+import Models from "../data/Models.json"
 
 //Components
 
@@ -33,6 +34,8 @@ import { UnitClass } from "../components/ClassType"
 import { Level } from "../components/Level"
 import { EnemyIndex } from "../components/EnemyIndex" 
 import { Rotation } from "../components/Rotation"
+import { Model } from "../components/Model"
+
 
 
 
@@ -52,6 +55,7 @@ export const UnitFactory = {
     addComponent(world, Level, id)
     addComponent(world, Rotation, id)
     addComponent(world, ClassType, id)
+    addComponent(world, Model, id)
     
 
     if (unitData.healer) {
@@ -93,6 +97,8 @@ export const UnitFactory = {
     Level.value[id] = unitData.level
 
     ClassType.type[id] = unitData.classIndex
+
+    Model.index[id] = unitData.modelIndex
     
     if (unitData.checkpointFollower) {
       addComponent(world, CheckpointFollower, id)

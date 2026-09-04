@@ -72,6 +72,7 @@ export const createAnimationSystem =(world)=>{
       gltf.scene.actions[clip.name] = mixer.clipAction(clip)
       
     })
+
     
     gltf.scene.actions.Idle.setLoop(THREE.LoopRepeat)
     gltf.scene.actions.Walking.setLoop(THREE.LoopRepeat)
@@ -114,6 +115,7 @@ export const createAnimationSystem =(world)=>{
     if (animationId != AnimationState.current[id] && object) {
       
       if (animationRules[AnimationState.current[id]].interruptable || animationRules[animationId].forceInterrupt) {
+
         object.scene.actions[currentAnimationKey].fadeOut(.2)
         object.scene.actions[requestedAnimationKey].reset().fadeIn(.2).play()
         AnimationState.current[id] = animationId
