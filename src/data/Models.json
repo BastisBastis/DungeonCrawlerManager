@@ -5,11 +5,11 @@
   "goblin1":3,
   "skeleton1":4,
   "zombie1":5,
-  "pirate5":6,
-  "target":7,
-  "tub":8,
-  "faucet":9,
-  "flag":10,
+  "lizardman1":6,
+  "ghost1":7,
+  "warrior":8,
+  "rogue":9,
+  "cleric":10,
   "sail":11,
   "parrot":12
 }

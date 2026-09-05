@@ -63,12 +63,12 @@ export const createGraphicsSystem =(world)=>{
         modelId:Model.index[id],
         scale:10,
         rotation: {x:0,y:0,z:0},
-        materialColors:ClassColors[ClassIds[ClassType.type[id]]],
+        //materialColors:ClassColors[ClassIds[ClassType.type[id]]],
         onLoad:(gltfScene,animations,gltf)=>{
           world.scene.graphicsScene.add(gltf.scene)
           objects3d[id] = gltf
           EventCenter.emit("modelLoaded", {id, gltf})
-          console.log("Loaded model ", Model.index[id])
+          //console.log("Loaded model ", Model.index[id])
         }
       })
     })

@@ -13,6 +13,11 @@ import Hero1URL from "../assets/models/Hero1.2.glb"
 import Goblin1URL from "../assets/models/Goblin1.2.glb"
 import Skeleton1URL from "../assets/models/Skeleton1.2.glb"
 import Zombie1URL from "../assets/models/Zombie1.4.glb" 
+import Lizard1URL from "../assets/models/Lizardman1.glb" 
+import Ghost1URL from "../assets/models/Ghost1.glb"
+import WarriorURL from "../assets/models/Warrior.glb"
+import RogueURL from "../assets/models/Rogue1.1.glb"
+import ClericURL from "../assets/models/Cleric.glb"
 
 
 const urls={}
@@ -23,8 +28,11 @@ urls[Models.hero1] = Hero1URL
 urls[Models.goblin1] = Goblin1URL
 urls[Models.skeleton1] = Skeleton1URL
 urls[Models.zombie1] = Zombie1URL
-
-
+urls[Models.lizardman1] = Lizard1URL
+urls[Models.ghost1] = Ghost1URL
+urls[Models.warrior] = WarriorURL
+urls[Models.rogue] = RogueURL
+urls[Models.cleric] = ClericURL
 
 const materials={}
 const geometries={}
@@ -47,7 +55,6 @@ const loadModel=(
     ( gltf ) =>{
       try { 
       
-      console.log("attempting to load ", modelId)
 
       let bbox = new THREE.Box3().setFromObject(gltf.scene);
                 
@@ -133,7 +140,7 @@ const loadModel=(
     },
     // called while loading is progressing
     ( xhr ) => {
-      console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+      //console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
     },
     // called when loading has errors
     ( error )=> {

@@ -57,7 +57,6 @@ export const UnitFactory = {
     addComponent(world, ClassType, id)
     addComponent(world, Model, id)
     
-    console.log(unitData.attackBuildUp)
     
 
     if (unitData.healer) {
@@ -83,7 +82,7 @@ export const UnitFactory = {
     MeleeAttack.delay[id] = unitData.delay
     MeleeAttack.coolDown[id] = 0
     MeleeAttack.atk[id] = unitData.atk
-    MeleeAttack.buildUpTime = unitData.attackBuildUp
+    MeleeAttack.buildUpTime[id] = unitData.attackBuildUp
     
     if (unitData.nameIndex !== undefined) {
       addComponent(world, Name, id)
@@ -163,7 +162,8 @@ export const UnitFactory = {
         otherMin: 1.0,
         otherMax: 1.0
       },
-      healer: false
+      healer: false,
+      modelIndex:Models.warrior
     }
   classValues[UnitClass.CLERIC] = {
       hpMin : 40,
@@ -191,6 +191,7 @@ export const UnitFactory = {
         otherMin: 1.0,
         otherMax: 1.0
       },
+      modelIndex:Models.cleric
     }
     classValues[UnitClass.ROGUE] = {
       hpMin : 70,
@@ -214,6 +215,7 @@ export const UnitFactory = {
         otherMin: 1.0,
         otherMax: 1.0
       },
+      modelIndex:Models.rogue
     }
     
 
@@ -268,9 +270,12 @@ export const UnitFactory = {
         ( avgHealDelay / healer.delay )
     }
     
-    const attackBuildUp = 1200
+    const attackBuildUp = 600
     
     recruitmentCost = Math.floor(recruitmentCost *costMod)
+
+    //hp = 900
+    //damage = 100
     
     
     const unitData = {
@@ -289,7 +294,8 @@ export const UnitFactory = {
       level,
       recruitmentCost,
       exp : 0,
-      attackBuildUp
+      attackBuildUp,
+      modelIndex:classValues[classType].modelIndex
     }
     
     return unitData

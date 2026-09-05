@@ -27,6 +27,7 @@ import { Palette } from "../data/Palette"
 import { Button } from "../ui/Button"
 import { TavernUI } from "../ui/TavernUI" 
 import { Popup } from "../ui/Popup" 
+import { DungeonGenerator } from "../helpers/DungeonGenerator"
 
 //Temp
 
@@ -71,7 +72,7 @@ export default class GameMenu extends Phaser.Scene {
       
       Store.run.levelIndex++
       this.onDungeonCompleted()
-      if (Store.run.levelIndex >= 3) {
+      if (Store.run.levelIndex >= DungeonGenerator.getNumLevels()) {
         this.gameOver(result)
         return
       } else {

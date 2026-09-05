@@ -152,7 +152,8 @@ export default class DungeonScene extends Phaser.Scene {
       hero.team = 0
       hero.checkpointFollower = true
 
-      hero.modelIndex = Models.hero1
+      console.log(heroData)
+
       
       var id = UnitFactory.getUnitEntityFromData(this.world, hero)
       

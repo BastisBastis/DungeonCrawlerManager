@@ -17,7 +17,7 @@ Enemies[0] = {
   atkMin : 8,
   atkMax : 15,
   modelIndex : 3,
-  attackBuildUp : 400
+  attackBuildUp : 500
 }
 
 Enemies[1] = {
@@ -53,7 +53,7 @@ Enemies[2] = {
   atkMin : 8,
   atkMax : 15,
   modelIndex : 4,
-  attackBuildUp : 400
+  attackBuildUp : 550
 }
 
 Enemies[3] = {
@@ -64,14 +64,14 @@ Enemies[3] = {
   hpMax : 120,
   acMin : 10,
   acMax : 14,
-  damageMin : 13,
-  damageMax : 19,
-  delayMin : 25,
-  delayMax : 28,
+  damageMin : 22,
+  damageMax : 30,
+  delayMin : 40,
+  delayMax : 50,
   atkMin : 8,
   atkMax : 15,
   modelIndex : 5,
-  attackBuildUp : 400
+  attackBuildUp : 900
 }
 
 Enemies[4] = {
@@ -88,7 +88,24 @@ Enemies[4] = {
   delayMax : 28,
   atkMin : 8,
   atkMax : 15,
-  modelIndex : 3,
-  attackBuildUp : 400
+  modelIndex : 6,
+  attackBuildUp : 500
 }
 
+Enemies[5] = {
+  name : "a Ghost",
+  classType : UnitClass.WARRIOR,
+  level: 4,
+  hpMin : 100,
+  hpMax : 140,
+  acMin : 12,
+  acMax : 16,
+  damageMin : 20,
+  damageMax : 30,
+  delayMin : 25,
+  delayMax : 35,
+  atkMin : 12,
+  atkMax : 20,
+  modelIndex : 7,
+  attackBuildUp : 500
+}

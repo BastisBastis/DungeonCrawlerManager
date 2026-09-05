@@ -220,8 +220,8 @@ export default class UI extends Phaser.Scene {
     
     for (const card of Object.values(this.hostileUnitCards)) {
       
-      card.x = this.cameras.main.width - card.width/2 - card.width*i
-      
+      card.x = this.cameras.main.width - card.width/2 - card.width*(i % 4)
+      card.y = 120 + Math.floor(i/4)*240
       card.layout()
       i++
     }

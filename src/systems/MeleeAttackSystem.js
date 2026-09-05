@@ -66,7 +66,6 @@ export const createMeleeAttackSystem=(world)=>{
           return
 
         MeleeAttack.coolDown[id] -= MeleeAttack.delay[id] 
-        console.log(MeleeAttack.buildUpTime)
         
         EventCenter.emit("meleeAttack", id)
         

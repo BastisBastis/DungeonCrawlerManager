@@ -120,7 +120,6 @@ export const createActionPickingSystem=(world)=>{
       })
       
       if (potentialHealTargets.length > 0) {
-        console.log(Attackable.currentHitpoints[potentialHealTargets[0]] / Attackable.maxHitpoints[potentialHealTargets[0]], Attackable.currentHitpoints[potentialHealTargets[potentialHealTargets.length-1]] / Attackable.maxHitpoints[potentialHealTargets[potentialHealTargets.length-1]])
             
         Action.target[id] = potentialHealTargets[0]
         Action.action[id] = ActionType.HEAL
