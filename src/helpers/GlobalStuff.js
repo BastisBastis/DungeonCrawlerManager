@@ -5,4 +5,5 @@ export const GlobalStuff = {
   verboseLog: 0,
   verboseConsole: 0,
   gameSpeedMod: 1,
+  ToonShader: false
 }

@@ -116,17 +116,19 @@ const loadModel=(
       })
       
       if (materialColors){
-      gltf.scene.traverse(child=>{
-        if (child.isMesh) {
-          for (const [key, color] of Object.entries(materialColors)) {
-            if (key == child.material.name) {
-              child.material.color.set(color)
+        
+        gltf.scene.traverse(child=>{
+          if (child.isMesh) {
+            for (const [key, color] of Object.entries(materialColors)) {
+              console.log(child.material.name)
+              if (key.toLowerCase() == child.material.name.toLowerCase()) {
+                child.material.color.set(color)
+              }
             }
+  
           }
-
-        }
-      })
-    }
+        })
+      }
       
       /* Animation api
         this.mixer=new THREE.AnimationMixer(gltf.scene)

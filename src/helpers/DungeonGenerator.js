@@ -22,7 +22,7 @@ const levels = [
     cellSize: 128,
     playerSpawn: {
       x: 3,
-      y: 3
+      y: 5
     },
     goal: {
       x: 12,
@@ -30,9 +30,10 @@ const levels = [
     },
     spawnPoints: [ //make this an array of dictionaries instead
       [3,11, 1, 0], //col, row, number of enemies, mob id
-      [6,11,3, 0],
+      [6,10,1, 6],
+      [6,11,2, 0],
       [10,18,1, 1],
-      [11,18,2, 0]
+      [11,18,2, 6]
     ],
     checkPoints: [
       {
@@ -55,9 +56,9 @@ const levels = [
     carvings:[
       {
         col: 3,
-        row: 3,
+        row: 5,
         dir: "s",
-        length: 8
+        length: 6
       },
       {
         col: 3,
@@ -439,7 +440,220 @@ const levels = [
       },
       
     ]
-  }
+  },
+  
+  {
+    width:32,
+    height:32,
+    cellSize: 128,
+    playerSpawn: {
+      x: 3,
+      y: 29
+    },
+    goal: {
+      x: 5,
+      y: 20
+    },
+    spawnPoints: [ //make this an array of dictionaries instead
+      [3,25, 2, 5], //col, row, number of enemies
+      [4,25, 1, 5],
+      [8,25, 3, 5],
+      [8,26, 2, 5],
+      [9,22, 4, 5],
+      [5,22, 1, 7],
+    ],
+    checkPoints: [
+      {
+        x:3,
+        y: 25
+      },
+      {
+        x:9,
+        y:24
+      },
+      {
+        x: 9,
+        y: 22
+      },
+      {
+        x: 5,
+        y: 22
+      },
+      {
+        x: 5,
+        y: 20
+      },
+      
+      
+    ],
+    carvings:[
+      {
+        col: 3,
+        row: 29,
+        dir: "n",
+        length: 5
+      },
+      {
+        col: 4,
+        row: 29,
+        dir: "n",
+        length: 5
+      },
+      {
+        col: 3,
+        row: 25,
+        dir: "e",
+        length: 7
+      },
+      {
+        col: 3,
+        row: 26,
+        dir: "e",
+        length: 6
+      },
+       {
+        col: 8,
+        row: 25,
+        dir: "n",
+        length: 4
+      },
+      {
+        col: 9,
+        row: 24,
+        dir: "n",
+        length: 3
+      },
+      {
+        col: 9,
+        row: 21,
+        dir: "w",
+        length: 5
+      },
+      {
+        col: 9,
+        row: 22,
+        dir: "w",
+        length: 5
+      },
+      {
+        col: 5,
+        row: 22,
+        dir: "n",
+        length: 3
+      },
+      {
+        col: 6,
+        row: 22,
+        dir: "n",
+        length: 3
+      },
+      
+      
+    ]
+  },
+  
+  {
+    width:32,
+    height:32,
+    cellSize: 128,
+    playerSpawn: {
+      x: 3,
+      y: 2
+    },
+    goal: {
+      x: 4,
+      y: 14
+    },
+    spawnPoints: [ //make this an array of dictionaries instead
+      [7,2, 2, 8], //col, row, number of enemies
+      [7,3, 1, 9],
+      [7,5, 3, 8],
+      [8,5, 1, 8],
+      [7,9, 2, 9],
+      [4,9, 4, 8],
+      [4,12, 1, 10],
+    ],
+    checkPoints: [
+      {
+        x:7,
+        y: 2
+      },
+      {
+        x:8,
+        y:9
+      },
+      {
+        x: 4,
+        y: 9
+      },
+      {
+        x: 4,
+        y: 14
+      },
+      
+      
+      
+    ],
+    carvings:[
+      {
+        col: 3,
+        row: 3,
+        dir: "e",
+        length: 5
+      },
+      {
+        col: 3,
+        row: 2,
+        dir: "e",
+        length: 5
+      },
+      {
+        col: 7,
+        row: 2,
+        dir: "s",
+        length: 8
+      },
+      {
+        col: 8,
+        row: 3,
+        dir: "s",
+        length: 7
+      },
+      {
+        col: 7,
+        row: 9,
+        dir: "w",
+        length: 4
+      },
+       {
+        col: 7,
+        row: 8,
+        dir: "w",
+        length: 4
+      },
+      {
+        col: 4,
+        row: 9,
+        dir: "s",
+        length: 6
+      },
+      {
+        col: 3,
+        row: 10,
+        dir: "s",
+        length: 3
+      },
+      {
+        col: 5,
+        row: 10,
+        dir: "s",
+        length: 3
+      },
+      
+      
+      
+    ]
+  },
   
 ]
 
@@ -451,6 +665,7 @@ export const DungeonGenerator = {
   },
   getLevel: (index) =>{
    
+    //index = 5
     if (index >= levels.length) {
       console.log("Level index out of range")
       return null

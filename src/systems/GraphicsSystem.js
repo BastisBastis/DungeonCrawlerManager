@@ -18,11 +18,13 @@ import { ClassType, UnitClass, ClassIds } from "../components/ClassType"
 import { BattleUnit } from "../components/BattleUnit" 
 import { Dead } from "../components/Dead" 
 import { Model } from "../components/Model"
+import { EnemyIndex } from "../components/EnemyIndex" 
 
 //Data
 import { ClassColors } from "../data/ClassColors"
 import Models from "../data/Models.json"
 import { EventCenter } from "../helpers/EventCenter"
+import { Enemies } from "../data/Enemies" 
 
 var gameObjects = {}
 var objects3d = {}
@@ -51,7 +53,9 @@ export const createGraphicsSystem =(world)=>{
       
       gameObjects[id]=object
       
-      
+      var materialColors = {}
+      if (hasComponent(world, EnemyIndex, id))
+        materialColors=Enemies[EnemyIndex.index[id]].materialColors
 
       createModel({
         graphicsScene: world.scene.graphicsScene,
@@ -63,7 +67,7 @@ export const createGraphicsSystem =(world)=>{
         modelId:Model.index[id],
         scale:10,
         rotation: {x:0,y:0,z:0},
-        //materialColors:ClassColors[ClassIds[ClassType.type[id]]],
+        materialColors,
         onLoad:(gltfScene,animations,gltf)=>{
           world.scene.graphicsScene.add(gltf.scene)
           objects3d[id] = gltf
