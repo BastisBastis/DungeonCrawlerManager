@@ -80,7 +80,7 @@ export const StatsManager = {
 
     getAllLogs : () => {
         return statLogs
-    }
+    },
     
     getDungeonSummary : (index) =>{
       if (index === undefined) 

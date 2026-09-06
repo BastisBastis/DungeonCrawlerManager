@@ -20,7 +20,7 @@ const updateCanvasBounds=(gameScene,renderer,camera) =>{
 
 const addLight = (scene) => {
   const color = 0xffbbcc
-  const intensity = 2
+  const intensity = .7
 
   const dirLight = new THREE.DirectionalLight(color, intensity)
 
@@ -28,15 +28,13 @@ const addLight = (scene) => {
 
   dirLight.castShadow = true
 
-  // Shadow camera
-  dirLight.shadow.camera.top = 100
-  dirLight.shadow.camera.bottom = -100
-  dirLight.shadow.camera.left = -100
-  dirLight.shadow.camera.right = 100
+ dirLight.shadow.camera.top = 300
+  dirLight.shadow.camera.bottom = -300
+  dirLight.shadow.camera.left = -500
+  dirLight.shadow.camera.right = 500
 
-  dirLight.shadow.camera.near = 50
-  dirLight.shadow.camera.far = 500
-
+    dirLight.shadow.camera.near = 1
+  dirLight.shadow.camera.far = 1000
   // Shadow quality
   dirLight.shadow.mapSize.width = 1024
   dirLight.shadow.mapSize.height = 1024
@@ -46,12 +44,13 @@ const addLight = (scene) => {
   dirLight.shadow.camera.updateProjectionMatrix()
 
   scene.add(dirLight)
+  scene.dirLight = dirLight
 
     
   const helper = new THREE.CameraHelper(dirLight.shadow.camera)
   //scene.add(helper)
     
-  const ambLight = new THREE.AmbientLight( 0x555555 )
+  const ambLight = new THREE.AmbientLight( 0x333333 )
   scene.add( ambLight )
 }
 
@@ -91,7 +90,7 @@ const setupCamera=(gameScene,renderer)=>{
 const setupRenderer=()=>{
   const canvas = document.querySelector("#c")
   const renderer = new THREE.WebGLRenderer({canvas:canvas,logarithmicDepthBuffer:true})
-  renderer.outputEncoding = THREE.SRGBColorSpace
+  renderer.outputEncoding = THREE.sRGBEncoding
   renderer.setPixelRatio(window.devicePixelRatio)
   renderer.shadowMap.enabled = true;
   

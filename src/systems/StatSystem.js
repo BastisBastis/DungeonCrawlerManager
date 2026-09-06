@@ -115,11 +115,11 @@ export const getDungeonSummary = (index) =>{
         if (fighter.unitIndex === undefined)
           enemyCount++
       })
-      //console.log("1",currentFighters)
+      //console.log("death of " + entry.id,currentFighters)
       if (enemyCount == 0) {
         //0console.log(currentFighters)
         currentFight = []
-        currentFighters = []
+        //currentFighters = []
         fights.push(currentFight)
       }
     } else {
@@ -136,12 +136,16 @@ export const getDungeonSummary = (index) =>{
       })
       
       if (newTarget) {
+        if (entry.target > 3)
+          //console.log ("adding id: " + entry.target, entry.targetName)
         currentFighters.push({
           id:entry.target,
           unitIndex: entry.targetUnitIndex
         })
       }
       if (newSource) {
+        if (entry.source > 3)
+          //console.log ("adding id: " + entry.source, entry.sourceName)
         currentFighters.push({
           id: entry.source,
           unitIndex: entry.sourceUnitIndex
@@ -177,8 +181,20 @@ export const getDungeonSummary = (index) =>{
     }
     //console.log(fights)
     if (fight.length > 0) {
-      
-      fightSummary.duration = fight[fight.length -1].time - fight[0].time
+      var startIndex = -1
+      var foundStart = false
+      var i = 0
+      while (!foundStart && i < fight.length -1) {
+        
+        if (fight[i].event != "death" && fight[i].event != "heal") {
+          foundStart = true
+          startIndex = i
+        }
+        i++
+      }
+      if (!foundStart)
+        continue
+      fightSummary.duration = fight[fight.length -1].time - fight[startIndex].time
       fightSummaries.push(fightSummary)
     }
     

@@ -1,20 +1,20 @@
 import Phaser from "phaser"
 import {GlobalStuff} from "../helpers/GlobalStuff"
 import {EventCenter} from "../helpers/EventCenter"
-
+import { Window } from "./Window"
 
 import { Button } from "./Button"
 
 
 import { Palette } from "../data/Palette" 
 
-export class DungeonSummaryPopup extends Popup {
+export class DungeonSummaryPopup extends Window {
   
   constructor(
     scene,
     x=scene.cameras.main.centerX,
     y=scene.cameras.main.centerY,
-    unitData,
+    summary,
     config={}
   ) {
     
@@ -38,7 +38,7 @@ export class DungeonSummaryPopup extends Popup {
       backgroundColor = Palette.beige2.hex
     }=config
     
-    
+
    
     super(scene,x,y,{
       ...config,
@@ -51,14 +51,21 @@ export class DungeonSummaryPopup extends Popup {
       blockAlpha:0.2,
       borderColor
     })
+    console.log(summary)
+    this.summary = summary
     
     const top=y-height/2
     const left=x-width/2
     
+    const btnConfig={
+      fontSize:buttonFontSize,
+      width:100,
+      height:80,
+      depth:depth,
+    }
     
-    
-    this.confirm=new Button(scene,
-      confirmX,top+height*0.7,confirmString,{
+    this.children.push(new Button(scene,
+      x,top+height*0.9,confirmString,{
         ...btnConfig,
         
         onClick:()=>{
@@ -66,18 +73,80 @@ export class DungeonSummaryPopup extends Popup {
           onConfirm()
         }
       }
-    )
+    ))
+    
+    this.setupFightTabButtons()
+
+
+  }
+
+  setupFightTabButtons() {
+    const buttonStrings = ["TOTAL"]
+    for (let i = 0; i < this.summary.fightSummaries.length; i++) 
+      buttonStrings.push("FIGHT " + (i+1))
+
+    const deltaX = this.width/buttonStrings.length
+    const y = this.y-this.height/2 + 50
+
+    const selectedColor = "#00FF00"
+    const deselectedColor = "#ff0000"
+    const btnConfig={
+      fontSize:40,
+      width:200,
+      height:80,
+      depth:this.depth+1,
+      fontColor: deselectedColor,
+      backgroundColor: Palette.beige2.hex,
+      borderThickness: 0
+    }
+    
+
+    this.fightTabButtons = []
+
+
+    buttonStrings.forEach((string, i) => {
+      console.log("Making button")
+      const button = new Button(
+        this.scene,
+        this.x - this.width/2 + (i+.5) * deltaX,
+        y,
+        string,
+        {
+          ...btnConfig,
+          onClick:()=> {
+            this.setFightIndex(i)
+            this.fightTabButtons.forEach(btn=>{
+              btn.label.setColor(deselectedColor)
+              btn.fontColor = deselectedColor
+            })
+            button.label.setColor(selectedColor)
+            button.fontColor = selectedColor
+          }
+        }
+      )
       
+      this.fightTabButtons.push(button)
+      this.children.push(button)
+      if (i == 0) {
+        button.label.setColor(selectedColor)
+        button.fontColor = selectedColor
+      }
+
+    })
+
+  }
+
+  setFightIndex(index) {
+    console.log("setFightIndex " + index)
   }
   
-  static prompt(scene,x,y,string,config={}) {
+  static prompt(scene,x,y,summary,config={}) {
     return new Promise((resolve,reject)=>{
       try { 
-      const c=new Popup(scene,x,y,string,{
+      console.log(x, y, summary, config)
+      const c=new DungeonSummaryPopup(scene,x,y,summary,{
         ...config,
-        onCancel:()=>{
-          resolve(0)
-        },
+
         onConfirm:()=>{
           resolve(1)
         }
@@ -88,30 +157,7 @@ export class DungeonSummaryPopup extends Popup {
   
   destroy() {
     super.destroy()
-    this.label.destroy()
-    this.cancel.destroy()
-    this.confirm.destroy()
-    
-    return
-    this.scene.tweens.add({
-      targets:[this,this.label,this.cancel,this.confirm],
-      y:"+=1080",
-      duration:300,
-      ease:Phaser.Math.Easing.Cubic.In,
-      onComplete:()=>{
-        super.destroy()
-        this.label.destroy()
-        this.cancel.destroy()
-        this.confirm.destroy()
-      }
-    })
-    this.scene.tweens.add({
-      targets:this.bgBlocker,
-      alpha:0,
-      duration:300
-    })
-    
-    
+    this.children.forEach(child=>child.destroy())
   }
   
 }

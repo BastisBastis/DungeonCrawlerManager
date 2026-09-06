@@ -28,7 +28,8 @@ import { Button } from "../ui/Button"
 import { TavernUI } from "../ui/TavernUI" 
 import { Popup } from "../ui/Popup" 
 import { DungeonGenerator } from "../helpers/DungeonGenerator"
-
+import { DungeonSummaryPopup } from "../ui/DungeonSummaryPopup"
+import { getDungeonSummary } from "../systems/StatSystem"
 //Temp
 
 
@@ -76,7 +77,7 @@ export default class GameMenu extends Phaser.Scene {
         this.gameOver(result)
         return
       } else {
-        var res = await Popup.prompt(this,this.cameras.main.width/2,this.cameras.main.height/2,"You beat the dungeon!", {depth:100})
+        await DungeonSummaryPopup.prompt(this,this.cameras.main.width/2,this.cameras.main.height/2,getDungeonSummary(), {depth:100})
       }
         
     }
