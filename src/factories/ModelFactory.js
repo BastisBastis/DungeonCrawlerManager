@@ -120,7 +120,7 @@ const loadModel=(
         gltf.scene.traverse(child=>{
           if (child.isMesh) {
             for (const [key, color] of Object.entries(materialColors)) {
-              console.log(child.material.name)
+              //console.log(child.material.name)
               if (key.toLowerCase() == child.material.name.toLowerCase()) {
                 child.material.color.set(color)
               }

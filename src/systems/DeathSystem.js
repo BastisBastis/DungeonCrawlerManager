@@ -22,6 +22,15 @@ export const createDeathSystem=(world)=>{
 
     var unitCount = 0
     var enemyCount = 0
+    
+    EventCenter.on("updateHitpoints", data=>{
+      if (data.currentHitpoints <= 0&& !hasComponent(world, Dead, data.id)) {
+        addComponent(world, Dead, data.id)
+        
+        EventCenter.emit("unitDied", data.id)
+        
+      }
+    })
 
     unitQuery(world).forEach(id=>{
       unitCount++

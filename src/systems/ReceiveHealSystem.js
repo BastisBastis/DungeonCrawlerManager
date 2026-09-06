@@ -33,6 +33,12 @@ export const createReceiveHealSystem=(world)=>{
         maxHitpoints: Attackable.maxHitpoints[target]
       })
       
+      EventCenter.emit("unitWasHealed", {
+        target,
+        source,
+        amount: data.amount
+      })
+      
     }
         
     

@@ -31,7 +31,8 @@ import { MusicManager } from "../helpers/MusicManager"
 import { SFXManager } from "../helpers/sfxManager"
 import { DungeonGenerator } from "../helpers/DungeonGenerator" 
 import { Store, resetDungeonStore } from "../helpers/Store" 
-import { StatsManager } from "../helpers/StatsManager"
+
+import { getAllDungeonLogs , getDungeonSummary} from "../systems/StatSystem" 
 
 import * as Utils from "../helpers/Utils"
 
@@ -80,7 +81,7 @@ export default class DungeonScene extends Phaser.Scene {
     this.world.scene=this
     addEntity(this.world) //reserve id 0
     this.setup(heroData)
-    StatsManager.setupForDungeon(this.world)
+    
     
     this.systemManager=new DungeonSystemManager(this.world)
     this.scene.launch("ui", {heroData, world: this.world})
@@ -119,7 +120,7 @@ export default class DungeonScene extends Phaser.Scene {
       }
     })
 
-    console.log(StatsManager.getAllLogs())
+    console.log(getDungeonSummary().fightSummaries)
 
     result.deadUnits = deadUnits
     
@@ -156,7 +157,7 @@ export default class DungeonScene extends Phaser.Scene {
       hero.team = 0
       hero.checkpointFollower = true
 
-      console.log(heroData)
+      //console.log(heroData)
 
       
       var id = UnitFactory.getUnitEntityFromData(this.world, hero)

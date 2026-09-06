@@ -11,6 +11,7 @@ import { createReceiveHealSystem } from "../systems/ReceiveHealSystem"
 import { createThreatSystem } from "../systems/ThreatSystem" 
 import { createAnimationSystem } from "../systems/AnimationSystem"
 import { createParticleSystem } from "../systems/ParticleSystem"
+import { createStatSystem } from "../systems/StatSystem" 
 
 export class DungeonSystemManager {
   constructor(world) {
@@ -32,8 +33,8 @@ export class DungeonSystemManager {
       createDeathSystem(world),
       createParticleSystem(world),
       createGraphicsSystem(world),
-      createAnimationSystem(world)
-      
+      createAnimationSystem(world),
+      createStatSystem(world)
     ]
   }
   

@@ -22,7 +22,26 @@ export const StatsManager = {
             log: []
         })
         EventCenter.on("damageTaken", StatsManager.onDamageTaken)
+        EventCenter.on("unitWasHealed", StatsManager.onHeal)
+        EventCenter.on("unitDied", StatsManager.onUnitDied)
     },
+    
+    onUnitDied : (id) =>{
+      statLogs[statLogs.length-1].log.push({
+          event: "death",
+          time: Date.now(),
+          id
+      })
+    },
+    
+    onHeal : (data) =>{
+      statLogs[statLogs.length-1].log.push({
+        event: "heal",
+        time: Date.now(),
+        ...data
+      })
+    },
+    
 
     onDamageTaken : (data) => {
         const source = data.source
@@ -44,6 +63,7 @@ export const StatsManager = {
             targetUnitIndex = UnitIndex.index[target]
 
         dungeonLog.log.push({
+            event: "damageTaken",
             time: Date.now(),
             source,
             target,
@@ -60,6 +80,20 @@ export const StatsManager = {
 
     getAllLogs : () => {
         return statLogs
+    }
+    
+    getDungeonSummary : (index) =>{
+      if (index === undefined) 
+        index = statLogs.length-1
+        
+      const dungeonLog = statLogs[index]
+      
+      const gapThreshold = 1000
+      
+      const fights = []
+      
+      
+      
     }
 
 }
