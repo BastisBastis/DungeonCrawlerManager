@@ -12,6 +12,7 @@ import { createThreatSystem } from "../systems/ThreatSystem"
 import { createAnimationSystem } from "../systems/AnimationSystem"
 import { createParticleSystem } from "../systems/ParticleSystem"
 import { createStatSystem } from "../systems/StatSystem" 
+import { createTimedEventSystem } from "../systems/TimedEventSystem"
 
 export class DungeonSystemManager {
   constructor(world) {
@@ -23,6 +24,7 @@ export class DungeonSystemManager {
     
     this.systems=[
       
+      createTimedEventSystem(world),
       createCheckPointSystem(world),
       createThreatSystem(world),
       createActionPickingSystem(world),

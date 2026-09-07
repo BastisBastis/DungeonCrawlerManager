@@ -4,6 +4,6 @@ export const GlobalStuff = {
   FontFamily:"Google Sans Flex",
   verboseLog: 0,
   verboseConsole: 0,
-  gameSpeedMod: 2,
+  gameSpeedMod: 1,
   ToonShader: false
 }

@@ -72,7 +72,18 @@ export const createMeleeAttackSystem=(world)=>{
         const target = Action.target[id]
         
         
-        setTimeout(()=>{
+        EventCenter.emit("addTimedEvent", {
+          time: MeleeAttack.buildUpTime[id],
+          callback: ()=>{
+            performAttack(
+              id, 
+              target,
+              MeleeAttack.atk[id],
+              MeleeAttack.damage[id]
+            )
+          }
+        })
+        /*setTimeout(()=>{
           performAttack(
             id, 
             target,
@@ -80,7 +91,7 @@ export const createMeleeAttackSystem=(world)=>{
             MeleeAttack.damage[id]
           )
         }, MeleeAttack.buildUpTime[id])
-        
+        */
         if (GlobalStuff.verboseLog >=2)
         EventCenter.emit("addLogMessage", id + " requests " + MeleeAttack.damage[id] + " dmg to " + Action.target[id])
         
