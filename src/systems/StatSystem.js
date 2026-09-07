@@ -198,6 +198,8 @@ export const getDungeonSummary = (index) =>{
       fightSummaries.push(fightSummary)
     }
     
+    
+   /* 
     const addUnitIfNeeded = (entry) => {
       if (entry.sourceUnitIndex !== undefined) {
         if (!heroes[entry.sourceUnitIndex]) {
@@ -233,6 +235,42 @@ export const getDungeonSummary = (index) =>{
         }
       }
     }
+    */
+    
+    const addUnitIfNeeded = (entry) => {
+
+  const addHero = (index, name) => {
+    if (!heroes[index]) {
+      heroes[index] = {
+        ...unitPattern,
+        name
+      }
+    }
+  }
+
+  const addEnemy = (index, name) => {
+    if (!enemies[index]) {
+      enemies[index] = {
+        ...unitPattern,
+        name
+      }
+    }
+  }
+
+  // Source
+  if (entry.sourceUnitIndex !== undefined) {
+    addHero(entry.sourceUnitIndex, entry.sourceName)
+  } else {
+    addEnemy(entry.source, entry.sourceName)
+  }
+
+  // Target
+  if (entry.targetUnitIndex !== undefined) {
+    addHero(entry.targetUnitIndex, entry.targetName)
+  } else {
+    addEnemy(entry.target, entry.targetName)
+  }
+}
     
     for (const entry of fight) {
       //console.log(entry)
@@ -249,8 +287,23 @@ export const getDungeonSummary = (index) =>{
           heroes[entry.sourceUnitIndex].damageDealt += entry.damage
         }
         
+      }
+      
+     
+      if (entry.event == "heal") {
+        //console.log("damage taken")
+        addUnitIfNeeded(entry)
+        //console.log(heroes, entry)
         
+        if (entry.targetUnitIndex!== undefined) 
+          heroes[entry.targetUnitIndex].healReceived+= entry.amount
+        else
+          enemies[entry.target].healReceived+= entry.amount
         
+        if (entry.sourceUnitIndex!== undefined) 
+          heroes[entry.sourceUnitIndex].healDealt+= entry.amount
+        else
+          enemies[entry.target].healDealt+= entry.amount
       }
       
       

@@ -29,6 +29,8 @@ export const createHealingSystem=(world)=>{
         
         Healer.coolDown[id] -= Healer.delay[id] 
         
+        //console.log("heal target: " + Action.target[id])
+        
         EventCenter.emit("healRequest", {
           source:id,
           target: Action.target[id],

@@ -120,7 +120,7 @@ export default class DungeonScene extends Phaser.Scene {
       }
     })
 
-    console.log(getDungeonSummary().fightSummaries)
+    //console.log(getDungeonSummary().fightSummaries)
 
     result.deadUnits = deadUnits
     

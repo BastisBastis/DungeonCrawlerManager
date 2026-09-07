@@ -18,6 +18,10 @@ import { EventCenter } from "../helpers/EventCenter"
 import { Attackable } from "../components/Attackable"
 import { MeleeAttack } from "../components/MeleeAttack"
 
+//Helpers
+
+
+
 export const createActionPickingSystem=(world)=>{
   const unitQuery=defineQuery([Action, BattleUnit])
   const attackableBattleUnitQuery = defineQuery([BattleUnit, Attackable, Position])
@@ -31,6 +35,7 @@ export const createActionPickingSystem=(world)=>{
       if (hasComponent(world, Dead, id))
         return
       
+      var hasHealTarget = false
       
       const oldTarget = Action.target[id]
       const hadTarget = Action.target[id] != 0 
@@ -72,7 +77,7 @@ export const createActionPickingSystem=(world)=>{
           
 
         
-          return
+          if (potentialHealTargets.length > 0) return
 
         }
         

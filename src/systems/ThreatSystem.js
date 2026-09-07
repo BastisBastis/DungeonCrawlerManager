@@ -60,6 +60,13 @@ export const createThreatSystem=(world)=>{
     other : 0
   }
   
+  const checkFriendlyThreat = (a, b, event) => {
+    if (BattleUnit.team[a] === BattleUnit.team[b]) {
+      //console.log("FRIENDLY THREAT - " + event)
+      return true
+    }
+    return false
+  }
   
   
   const setupThreatData =(id) => {
@@ -118,7 +125,9 @@ export const createThreatSystem=(world)=>{
           threatMod *= ThreatMod.heal[req.source]
         }
         
-        setupHostileThreatData(id, req.source)
+        
+        if (setupHostileThreatData(id, req.source))
+          
         world.scene.threatData[id].hostile[req.source].heal += req.data.amount * healThreatMod * threatMod
         
       }
@@ -153,7 +162,7 @@ export const createThreatSystem=(world)=>{
 
         if (hasComponent(world, Dead, otherId)) {
           if (world.scene.threatData[id].allies.includes(otherId))
-            world.scene.threatData[id].allies = world.scene.threatData[id].allies.filter(value=>(value=!otherId))
+            world.scene.threatData[id].allies = world.scene.threatData[id].allies.filter(value=>(value!=otherId))
           else if (world.scene.threatData[id].hostile[otherId]) {
             delete world.scene.threatData[id].hostile[otherId]
             

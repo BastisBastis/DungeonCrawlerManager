@@ -39,7 +39,7 @@ export class Window {
     scene.add.existing(this.bg)
     this.width = width
     this.height = height
-    
+    this.depth = depth
     this._x=x
     this._y=y
     

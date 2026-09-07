@@ -69,10 +69,13 @@ export const createMeleeAttackSystem=(world)=>{
         
         EventCenter.emit("meleeAttack", id)
         
+        const target = Action.target[id]
+        
+        
         setTimeout(()=>{
           performAttack(
             id, 
-            Action.target[id],
+            target,
             MeleeAttack.atk[id],
             MeleeAttack.damage[id]
           )
