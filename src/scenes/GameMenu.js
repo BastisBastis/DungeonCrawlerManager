@@ -30,6 +30,7 @@ import { Popup } from "../ui/Popup"
 import { DungeonGenerator } from "../helpers/DungeonGenerator"
 import { DungeonSummaryPopup } from "../ui/DungeonSummaryPopup"
 import { getDungeonSummary } from "../systems/StatSystem"
+import { StatsMenu } from "../ui/Stats/StatsMenu" 
 //Temp
 
 
@@ -89,7 +90,7 @@ export default class GameMenu extends Phaser.Scene {
       
       if (levelUpData) {
         var res = await Popup.prompt(this,this.cameras.main.width/2,this.cameras.main.height/2,unitData.name + " gained a level!", {depth:100})
-        console.log(levelUpData)
+        //console.log(levelUpData)
       }
     }
     
@@ -129,6 +130,7 @@ export default class GameMenu extends Phaser.Scene {
 
   removeDeadUnits(deadUnits) {
     Store.run.party = Store.run.party.filter(index=>(!deadUnits.includes(index)))
+    Store.run.deadUnits.push(...deadUnits)
   }
   
   reloadRecruitmentPool() {
@@ -171,33 +173,61 @@ export default class GameMenu extends Phaser.Scene {
     this.messageLabel = this.add.text(300, this.cameras.main.height - 100, "", { fontSize: 100 })
     
     this.goldLabel = this.add.text(
-      this.cameras.main.width-40, 40, "GOLD: " + Store.run.gold, { fontSize: 80, color: Palette.beige1.string})
+      this.cameras.main.width-40, 40, "GOLD: " + Store.run.gold, { 
+      fontSize: 80, 
+      color: Palette.beige1.string,
+      fontFamily: GlobalStuff.FontFamily
+    })
     .setOrigin(1,0)
     
     this.gameObjects.push(this.messageLabel, this.goldLabel)
     
     
     const dungeonX = this.cameras.main.width - 300
-    const dungeonY = this.cameras.main.height - 550
+    const dungeonY = this.cameras.main.height - 500
+    
+    const statsPos = {
+      x: this.cameras.main.width - 670,
+      y: 340
+    }
+    
+    const btnConfig = {
+      width: 320,
+      height: 80,
+      fontSize: 40
+    }
+    
     
     this.gameObjects.push(
       new Button(this, 300, 400, "Tavern", {
-        fontSize:48,
-        width: 400,
+        ...btnConfig,
         onClick : ()=>this.showTavern()
         }
       ),
       new Button(this, dungeonX, dungeonY, "Enter Dungeon", {
-        fontSize:48,
-        width: 400,
+        ...btnConfig,
         onClick : ()=>{this.startDungeon() }
         }
       )
+      
     )
+    const statsButton = new Button(this, statsPos.x, statsPos.y, "Statistics", {
+        ...btnConfig,
+        onClick : ()=>{this.showStats() }
+        }
+      ).setVisible(Store.run.levelIndex>0)
+    this.gameObjects.push(statsButton)
     
     this.addEventListeners
     
     
+  }
+  
+  showStats() {
+    try { 
+    this.clearGameObjects()
+    this.gameObjects.push(new StatsMenu(this))
+    } catch (er) {console.log(er.message,er.stack); throw er} 
   }
 
   showTavern() {
@@ -205,7 +235,7 @@ export default class GameMenu extends Phaser.Scene {
     this.gameObjects.push(new TavernUI(this))
   }
   
-  clearGameObjects() {
+   clearGameObjects() {
     
     this.gameObjects.forEach(object=>{
       

@@ -21,7 +21,7 @@ export class DungeonSummaryPopup extends Window {
     
     const {
       width=1200,
-      height=1000,
+      height=900,
       depth=1,
       fontFamily=GlobalStuff.FontFamily,
       fontColor="#000000",
@@ -36,7 +36,9 @@ export class DungeonSummaryPopup extends Window {
       buttonFontSize=32,
       labelFontSize=40,
       blockBackground=true,
-      backgroundColor = Palette.beige2.hex
+      backgroundColor = Palette.beige2.hex,
+      showAsWindow = true,
+      hideFightButtons = false
     }=config
     
 
@@ -47,7 +49,7 @@ export class DungeonSummaryPopup extends Window {
       height,
       depth,
       backgroundColor,
-      blockBackground:blockBackground,
+      blockBackground:showAsWindow,
       blockerTweenDuration:300,
       blockAlpha:0.2,
       borderColor
@@ -65,7 +67,9 @@ export class DungeonSummaryPopup extends Window {
       depth:depth,
     }
     
-    this.children.push(new Button(scene,
+    if (showAsWindow) {
+     
+     const closeBtn = new Button(scene,
       x,top+height*0.9,confirmString,{
         ...btnConfig,
         
@@ -74,13 +78,24 @@ export class DungeonSummaryPopup extends Window {
           onConfirm()
         }
       }
-    ))
+    )
+     this.children.push(closeBtn)
+    }
+    
+    
+    
+    
     
     this.selectedFightIndex = -1
     this.fightItems = []
-    this.setupFightTabButtons()
+    if (!hideFightButtons)
+     this.setupFightTabButtons()
+     
     this.setFightIndex(0)
 
+    if (!showAsWindow) {
+      this.bg.setVisible(false)
+    }
   }
   
  
@@ -93,14 +108,14 @@ export class DungeonSummaryPopup extends Window {
       buttonStrings.push("FIGHT " + (i+1))
 
     const deltaX = this.width/buttonStrings.length
-    const y = this.y-this.height/2 + 50
+    const y = this.y-this.height/2 + 30
 
     const selectedColor = Palette.blue1.string
     const deselectedColor = Palette.grey5.string
     const btnConfig={
-      fontSize:40,
+      fontSize:36,
       width:200,
-      height:80,
+      height:48,
       depth:this.depth+2,
       fontColor: deselectedColor,
       backgroundColor: Palette.beige2.hex,
@@ -141,6 +156,7 @@ export class DungeonSummaryPopup extends Window {
         button.label.setColor(selectedColor)
         button.fontColor = selectedColor
       }
+      
 
     })
 
@@ -163,7 +179,7 @@ export class DungeonSummaryPopup extends Window {
     
       for (const fightSummary of this.summary.fightSummaries) {
         summary.duration += fightSummary.duration
-        console.log("duration "+summary.duration)
+        
     
         for (const [id, hero] of Object.entries(fightSummary.heroes)) {
          
@@ -179,6 +195,7 @@ export class DungeonSummaryPopup extends Window {
             }
           }
         } 
+       
     
         for (const [id, enemy] of Object.entries(fightSummary.enemies)) {
           if (summary.enemies[id]) {
@@ -205,22 +222,24 @@ export class DungeonSummaryPopup extends Window {
     this.fightItems = []
     
     const heroX = this.x-this.width/2 + 20
-    const heroValueX = heroX + 200
+    const heroValueX = heroX + 220
     var startY = this.y-this.height/2 +100
     var heroY = startY
     var enemyY = startY
     const detailSize = 18
     
-    const enemyX = this.x+this.width/2 - 250
-    const enemyValueX = enemyX+200
+    const enemyX = this.x+this.width/2 - 270
+    const enemyValueX = enemyX+220
     
     
-    const deltaY = 22
+    const deltaY = 20
     
     
     
     
     for (const hero of Object.values(summary.heroes)) {
+     
+     
      const heroContent = [
      [hero.name],
      ["Damage dealt:", hero.damageDealt],
@@ -229,6 +248,9 @@ export class DungeonSummaryPopup extends Window {
      ["Healing dealt:", hero.healDealt],
      ["Healing received:", hero.healReceived],
     ]
+    
+    if (Store.run.units.length > 0)
+     heroContent[0].push(Store.run.units[hero.unitIndex].classType)   
      //console.log(hero)
      for (const [i, labelStrings] of Object.entries(heroContent)) {
       
@@ -257,7 +279,7 @@ export class DungeonSummaryPopup extends Window {
      }
      
      
-      heroY += deltaY
+      heroY += deltaY/2
     }
     
     if (index == 0) {
