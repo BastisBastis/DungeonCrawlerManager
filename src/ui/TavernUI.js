@@ -57,13 +57,18 @@ export class TavernUI {
     this.reloadPartyOverview()
     this.createRecruitmentOverview()
     
+    const btnConfig = {
+      width: 320,
+      height: 80,
+      fontSize: 40
+    }
+    
     const backBtnX = this.scene.cameras.main.width - 300
     const backBtnY = this.scene.cameras.main.height - 150
 
     this.gameObjects.push(
       new Button(this.scene, backBtnX, backBtnY, "Back", {
-        fontSize:48,
-        width: 400,
+        ...btnConfig,
         onClick : ()=>{
           try { 
           EventCenter.emit("toGameMenu")
@@ -73,7 +78,11 @@ export class TavernUI {
     )
     
     this.goldLabel = this.scene.add.text(
-      this.scene.cameras.main.width-40, 40, "GOLD: " + Store.run.gold, { fontSize: 80, color: Palette.beige1.string })
+      this.scene.cameras.main.width-40, 40, "GOLD: " + Store.run.gold, { 
+      fontSize: 80, 
+      color: Palette.beige1.string ,
+      fontFamily: GlobalStuff.FontFamily
+    })
     .setOrigin(1,0)
     
     this.gameObjects.push(this.goldLabel)
