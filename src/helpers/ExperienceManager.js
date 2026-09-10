@@ -34,6 +34,8 @@ export const ExperienceManager = {
       ]) {
         gainMods[key] = Math.random()*.2+.9
       }
+
+      gainMods.healCooldown = Math.random() * .1 + .9
       
       unitData.exp -= expPerLevel[unitData.level]
       unitData.level++
@@ -53,8 +55,9 @@ export const ExperienceManager = {
       }
       
       if (unitData.healer) {
-        unitData.healer.amount = Math.round(unitData.healer.amount * 1.2 * gainMods.healAmount)
-        result.healAmount = 1.2*gainMods.healAmount
+        //unitData.healer.amount = Math.round(unitData.healer.amount * 1.2 * gainMods.healAmount)
+        //result.healAmount = 1.2*gainMods.healAmount
+        unitData.healer.delay = Math.round(unitData.healer.delay * gainMods.healCooldown)
       }
 
       if (unitData.mana) {
