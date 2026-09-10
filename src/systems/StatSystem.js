@@ -227,61 +227,7 @@ export const getDungeonSummary = (index) =>{
     
    
     
-    const addUnitIfNeeded = (entry) => {
-
-  const addHero = (index, name) => {
-    if (!heroes[index]) {
-      heroes[index] = {
-        ...unitPattern,
-        name,
-        unitIndex : index
-      }
-    }
-  }
-
-  const addEnemy = (index, name) => {
-    if (!enemies[index]) {
-      enemies[index] = {
-        ...unitPattern,
-        name
-      }
-   /*
-    const addUnitIfNeeded = (entry) => {
-      if (entry.sourceUnitIndex !== undefined) {
-        if (!heroes[entry.sourceUnitIndex]) {
-          //console.log("addig hero source", entry)
-          heroes[entry.sourceUnitIndex] = {
-            ...unitPattern,
-            name: entry.sourceName
-          }
-          //.log(heroes)
-        }
-      } else {
-        if (!enemies[entry.source]) {
-          enemies[entry.source] = {
-            ...unitPattern,
-            name: entry.sourceName
-          }
-        }
-      }
     
-      if (entry.targetUnitIndex !== undefined) {
-        if (!heroes[entry.targetUnitIndex]) {
-          heroes[entry.targetUnitIndex] = {
-            ...unitPattern,
-            name: entry.targetName
-          }
-        }
-      } else {
-        if (!enemies[entry.target]) {
-          enemies[entry.target] = {
-            ...unitPattern,
-            name: entry.targetName
-          }
-        }
-      }
-    }
-    */
     const addUnitIfNeeded = (entry) => {
       const sourceIsHero = entry.sourceUnitIndex !== undefined
       const targetIsHero = entry.targetUnitIndex !== undefined
@@ -290,7 +236,8 @@ export const getDungeonSummary = (index) =>{
       if (sourceIsHero && !heroes[entry.sourceUnitIndex])
         heroes[entry.sourceUnitIndex] = {
           ...unitPattern,
-          name: entry.sourceName
+          name: entry.sourceName,
+          unitIndex: entry.sourceUnitIndex
         }
       if (!sourceIsHero && !enemies[entry.source])
         enemies[entry.source] = {
@@ -300,7 +247,8 @@ export const getDungeonSummary = (index) =>{
       if (targetIsHero && !heroes[entry.targetUnitIndex])
         heroes[entry.targetUnitIndex] = {
           ...unitPattern,
-          name: entry.targetName
+          name: entry.targetName,
+          unitIndex: entry.targetUnitIndex
         }
       if (!targetIsHero && !enemies[entry.target])
         enemies[entry.target] = {
@@ -309,21 +257,7 @@ export const getDungeonSummary = (index) =>{
         }
     }
     
-/*
-  // Source
-  if (entry.sourceUnitIndex !== undefined) {
-    addHero(entry.sourceUnitIndex, entry.sourceName)
-  } else {
-    addEnemy(entry.source, entry.sourceName)
-  }
 
-  // Target
-  if (entry.targetUnitIndex !== undefined) {
-    addHero(entry.targetUnitIndex, entry.targetName)
-  } else {
-    addEnemy(entry.target, entry.targetName)
-  }
-}*/
     
     for (const entry of fight) {
       //console.log(entry)

@@ -167,7 +167,7 @@ export default class GameMenu extends Phaser.Scene {
   }
   
   showGameMenu() {
-    
+    try { 
     this.clearGameObjects()
     
     this.messageLabel = this.add.text(300, this.cameras.main.height - 100, "", { fontSize: 100 })
@@ -218,9 +218,9 @@ export default class GameMenu extends Phaser.Scene {
       ).setVisible(Store.run.levelIndex>0)
     this.gameObjects.push(statsButton)
     
-    this.addEventListeners
+    //this.addEventListeners
     
-    
+    } catch (er) {console.log(er.message,er.stack); throw er} 
   }
   
   showStats() {
@@ -247,12 +247,13 @@ export default class GameMenu extends Phaser.Scene {
   
   async startDungeon() {
     try { 
-    EventCenter.removeAllListeners()
     
+
     if (Store.run.party.length <= 0) {
       var res = await Popup.prompt(this,this.cameras.main.width/2,this.cameras.main.height/2,"Recruit a party from the tavern first!", {depth:100})
       return
     }
+    EventCenter.removeAllListeners()
     
     const heroData = []
     for (const index of Store.run.party)
