@@ -35,6 +35,7 @@ import { Level } from "../components/Level"
 import { EnemyIndex } from "../components/EnemyIndex" 
 import { Rotation } from "../components/Rotation"
 import { Model } from "../components/Model"
+import { Mana } from "../components/Mana"
 
 
 
@@ -57,6 +58,8 @@ export const UnitFactory = {
     addComponent(world, ClassType, id)
     addComponent(world, Model, id)
     
+   
+    
     
 
     if (unitData.healer) {
@@ -67,6 +70,11 @@ export const UnitFactory = {
       Healer.coolDown[id] = 0
     }
     
+     if (unitData.mana) {
+      addComponent(world, Mana, id),
+      Mana.maxMana[id] = unitData.mana
+      Mana.currentMana[id] = unitData.mana
+     }
     
     
     Action.target[id] = 0
@@ -181,6 +189,8 @@ export const UnitFactory = {
       healAmounttMax: 50,
       healDelayMin : 60,
       healDelayMax : 80,
+      manaMax : 25,
+      manaMin : 15,
       threatMods: {
         attackMin: 1.0,
         attackMax: 1.0,
@@ -243,12 +253,19 @@ export const UnitFactory = {
       }
     }
 
+    let mana
+    if (classValues[classType].manaMax) {
+      mana = Utils.getRandomBellInt(classValues[classType].manaMin,classValues[classType].manaMax, 1)
+    }
+
     var recruitmentCost = 10
     const avgHp = (classValues[classType].hpMin+ classValues[classType].hpMax) /2
     const avgAc = (classValues[classType].acMin+ classValues[classType].acMax) /2
     const avgDmg = (classValues[classType].dmgMin+ classValues[classType].dmgMax) /2
     const avgDelay = (classValues[classType].delayMin+ classValues[classType].delayMax) /2
     const avgAtk = (classValues[classType].atkMin+ classValues[classType].atkMax) /2
+    
+    
     
     
     
@@ -259,7 +276,10 @@ export const UnitFactory = {
       ( avgDelay / delay ) *
       ( atk / avgAtk )
      
-    
+    if (mana) {
+      const avgMana = (classValues[classType].manaMin + classValues[classType].manaMax) /2
+      costMod *= (mana / avgMana)
+    }
       
     if ( healer ) {
       const avgHealAmount = (classValues[classType].healAmountMin+ classValues[classType].healAmounttMax) /2
@@ -291,6 +311,7 @@ export const UnitFactory = {
       nameIndex,
       threatMods,
       healer,
+      mana,
       level,
       recruitmentCost,
       exp : 0,

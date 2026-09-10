@@ -29,32 +29,38 @@ export const ExperienceManager = {
         "atk",
         "damage",
         "threatMod",
-        "healAmount"
+        "healAmount",
+        "mana"
       ]) {
         gainMods[key] = Math.random()*.2+.9
       }
       
       unitData.exp -= expPerLevel[unitData.level]
       unitData.level++
-      unitData.hitpoints = Math.floor(unitData.hitpoints * 1.2*gainMods.hitpoints)
+      unitData.hitpoints = Math.round(unitData.hitpoints * 1.2*gainMods.hitpoints)
       result.hitpoints = 1.2*gainMods.hitpoints
-      unitData.armorClass = Math.floor(unitData.armorClass * 1.2 * gainMods.armorClass)
+      unitData.armorClass = Math.round(unitData.armorClass * 1.2 * gainMods.armorClass)
       result.armorClass = 1.2*gainMods.armorClass
-      unitData.atk = Math.floor(unitData.atk * 1.2 * gainMods.atk)
+      unitData.atk = Math.round(unitData.atk * 1.2 * gainMods.atk)
       result.atk = 1.2*gainMods.atk
       
-      unitData.damage = Math.floor(unitData.damage * 1.2 * gainMods.damage)
+      unitData.damage = Math.round(unitData.damage * 1.2 * gainMods.damage)
       result.damage = 1.2*gainMods.damage
       
       if (unitData.classType == UnitClass.WARRIOR) {
-        unitData.threatMods.attack = Math.round(unitData.threatMods.attack*1.1 * gainMods.threatMod*10)/10
+        unitData.threatMods.attack = Math.round(unitData.threatMods.attack*1.15 * gainMods.threatMod*10)/10
         result.threatMod = 1.1*gainMods.threatMod
       }
       
       if (unitData.healer) {
-        unitData.healer.amount = Math.floor(unitData.healer.amount * 1.2 * gainMods.healAmount)
+        unitData.healer.amount = Math.round(unitData.healer.amount * 1.2 * gainMods.healAmount)
         result.healAmount = 1.2*gainMods.healAmount
       }
+
+      if (unitData.mana) {
+        unitData.mana = Math.round(unitData.mana * 1.2 * gainMods.mana)
+      }
+
       unitData.recruitmentCost = Math.round(unitData.recruitmentCost * 1.4)
       
       return result

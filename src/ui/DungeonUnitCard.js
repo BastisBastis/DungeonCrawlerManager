@@ -16,10 +16,11 @@ export class DungeonUnitCard extends Window {
       id = 0,
       classType = "Warrior",
       hitpoints = 100,
-      target = ""
+      target = "",
+      mana
     } = unitData
     const {
-      fontSize=32,
+      fontSize=24,
       width=300,
       height=240,
       depth=1,
@@ -50,7 +51,7 @@ export class DungeonUnitCard extends Window {
     this.margin=margin
     this.scene = scene
     
-    this.numLabels = 5
+    this.numLabels = 6
     
     var centerX = x
     var leftX = x - width/2 +margin
@@ -138,10 +139,34 @@ export class DungeonUnitCard extends Window {
       }
     ).setOrigin(1,.5)
       .setDepth(this.depth)
+    
+    if (mana) {
+      this.manaNameLabel = this.scene.add.text(
+        leftX,
+        labelY + deltaY * 4,
+        "Mana:",
+        {
+          ...fontConfig,
+          align: "left"
+        }
+      ).setOrigin(0,.5)
+        .setDepth(this.depth)
       
-      this.targetNameLabel = this.scene.add.text(
+      this.manaValueLabel = this.scene.add.text(
+        rightX,
+        labelY + deltaY * 4,
+        mana+"/"+mana,
+        {
+          ...fontConfig,
+          align: "right"
+        }
+      ).setOrigin(1,.5)
+        .setDepth(this.depth)
+    }
+      
+    this.targetNameLabel = this.scene.add.text(
       leftX,
-      labelY + deltaY * 4,
+      labelY + deltaY * 5,
       "Target:",
       {
         ...fontConfig,
@@ -152,7 +177,7 @@ export class DungeonUnitCard extends Window {
     
     this.targetValueLabel = this.scene.add.text(
       rightX,
-      labelY + deltaY * 4,
+      labelY + deltaY * 5,
       target,
       {
         ...fontConfig,

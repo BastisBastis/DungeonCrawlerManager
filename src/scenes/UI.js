@@ -154,6 +154,15 @@ export default class UI extends Phaser.Scene {
     }
     this.layoutHostileCards()
   }
+
+  updateMana(data){
+    var card = {
+      ...this.dungeonUnitCards,
+      ...this.hostileUnitCards
+    }[data.id]
+
+    card.manaValueLabel.text = data.currentMana+"/"+data.maxMana
+  }
   
   updateDungeonUnitCardHitpoints(data) {
     
@@ -233,6 +242,7 @@ export default class UI extends Phaser.Scene {
     EventCenter.on("addLogMessage", this.addLogMessage, this)
     EventCenter.on("updateHitpoints", this.updateDungeonUnitCardHitpoints, this)
     EventCenter.on("targetUpdated", this.updateUnitTarget, this)
+    EventCenter.on("manaUpdated", this.updateMana, this)
     
   }
   

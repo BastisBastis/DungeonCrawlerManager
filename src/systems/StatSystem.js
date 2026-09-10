@@ -231,8 +231,7 @@ export const getDungeonSummary = (index) =>{
     const addUnitIfNeeded = (entry) => {
       const sourceIsHero = entry.sourceUnitIndex !== undefined
       const targetIsHero = entry.targetUnitIndex !== undefined
-      if (entry.event == "heal")
-          console.log(entry)
+      
       if (sourceIsHero && !heroes[entry.sourceUnitIndex])
         heroes[entry.sourceUnitIndex] = {
           ...unitPattern,
@@ -334,7 +333,7 @@ export const resetStatSystem = ()=>{
 export const getTotalDungeonStatSummary = () =>{
   
   //const numDungeons = getAllDungeonLogs().length
-  const numDungeons = 1
+  const numDungeons = statLogs.length
   
   
   const unitData = {

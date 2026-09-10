@@ -23,7 +23,8 @@ export class UnitDetails extends Window {
       atk = 10,
       threatMods = undefined,
       healer = undefined,
-      recruitmentCost = 0
+      recruitmentCost = 0,
+      mana
 
     } = unitData
     const {
@@ -92,10 +93,21 @@ export class UnitDetails extends Window {
       ["Level", level],
       ["Hitpoints", hitpoints],
       ["Armor Class", armorClass],
+      
+    ]
+
+    
+
+    labels.push(
       ["Attack Damage", damage],
       ["Attack Cooldown", delay],
-      ["Attack Skill", atk],
-    ]
+      ["Attack Skill", atk]
+    )
+    if (mana) {
+      labels.push(
+        ["Mana", mana]
+      )
+    }
 
     if (healer) {
       labels.push([

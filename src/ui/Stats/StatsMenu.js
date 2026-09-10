@@ -377,6 +377,13 @@ export class StatsMenu extends Window {
     ["Attack Cooldown:", unit.delay],
     ["Attack Skill:", unit.atk]
    ]
+
+   if (unit.mana) {
+      strings.push(
+        ["Mana", unit.mana]
+      )
+    }
+
    if (unit.healer) {
     strings.push(
      ["Heal Amount:", unit.healer.amount],
@@ -453,7 +460,7 @@ export class StatsMenu extends Window {
       
     const areaWidth = this.width*.75
 
-    const deltaX = this.width/buttonStrings.length
+    const deltaX = areaWidth/buttonStrings.length
     const y = this.y-this.height/2 + 140
 
     const selectedColor = Palette.blue1.string
@@ -489,7 +496,7 @@ export class StatsMenu extends Window {
       //console.log("Making button")
       const button = new Button(
         this.scene,
-        this.x - this.width/2 + (i+.5) * deltaX,
+        this.x - areaWidth/2 + (i+.5) * deltaX,
         y,
         string,
         {
@@ -520,7 +527,7 @@ export class StatsMenu extends Window {
     })
     
     
-    this.showDungeonSummary()
+    this.showDungeonSummary(0)
   }
 
   showDungeonSummary(index) {

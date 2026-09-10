@@ -7,6 +7,7 @@ import {
 import { Action } from "../components/Action" 
 import { Healer } from "../components/Healer" 
 import { Dead } from "../components/Dead"
+import { Mana } from "../components/Mana"
 
 import { ActionType } from "../components/Action"
 
@@ -28,6 +29,16 @@ export const createHealingSystem=(world)=>{
       if (Action.action[id] == ActionType.HEAL && !hasComponent(world, Dead, id) && Action.target[id] != 0 && !hasComponent(world, Dead, Action.target[id]) && Healer.coolDown[id] >= Healer.delay[id]) {
         
         Healer.coolDown[id] -= Healer.delay[id] 
+
+        if (hasComponent(world, Mana, id)) {
+         
+          Mana.currentMana[id] = Math.max(0, Mana.currentMana[id] - Math.floor(Healer.amount[id]/10))
+          EventCenter.emit("manaUpdated", {
+            id,
+            currentMana: Mana.currentMana[id],
+            maxMana: Mana.maxMana[id]
+          })
+        }
         
         //console.log("heal target: " + Action.target[id])
         

@@ -665,7 +665,7 @@ export const DungeonGenerator = {
   },
   getLevel: (index) =>{
    
-    //index = 5
+
     if (index >= levels.length) {
       console.log("Level index out of range")
       return null

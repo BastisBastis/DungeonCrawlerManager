@@ -10,6 +10,7 @@ import { BattleUnit } from "../components/BattleUnit"
 import { Position } from "../components/Position" 
 import { Dead } from "../components/Dead"
 import { Healer } from "../components/Healer"
+import { Mana } from "../components/Mana"
 
 
 import { ActionType } from "../components/Action" 
@@ -59,26 +60,29 @@ export const createActionPickingSystem=(world)=>{
       unitQuery(world).forEach(otherId=>{
         
         
-        if (hasComponent(world, Healer, id) && Healer.coolDown[id] >= Healer.delay[id]) {
+        if (hasComponent(world, Healer, id) && Healer.coolDown[id] >= Healer.delay[id] && hasComponent(world, Mana, id)) {
           
+          const requiredMana = Math.floor(Healer.amount[id] / 10)
+          if (Mana.currentMana[id] >= requiredMana) {
 
-          
-          if (BattleUnit.team[id] == BattleUnit.team[otherId] && !hasComponent(world, Dead, otherId)) {
-            const distSquared = Phaser.Math.Distance.Squared(
-              Position.x[id],
-              Position.y[id],
-              Position.x[otherId],
-              Position.y[otherId]
-            )
-            if (distSquared <= healTargetFindingRange*healTargetFindingRange && Attackable.currentHitpoints[otherId] < Attackable.maxHitpoints[otherId]) {
-              potentialHealTargets.push(otherId)
+         
+            
+            if (BattleUnit.team[id] == BattleUnit.team[otherId] && !hasComponent(world, Dead, otherId)) {
+              const distSquared = Phaser.Math.Distance.Squared(
+                Position.x[id],
+                Position.y[id],
+                Position.x[otherId],
+                Position.y[otherId]
+              )
+              if (distSquared <= healTargetFindingRange*healTargetFindingRange && Attackable.currentHitpoints[otherId] <= Attackable.maxHitpoints[otherId] - Healer.amount[id]) {
+                potentialHealTargets.push(otherId)
+              }
             }
-          }
+            
+
           
-
-        
-          if (potentialHealTargets.length > 0) return
-
+            if (potentialHealTargets.length > 0) return
+          }
         }
         
         
