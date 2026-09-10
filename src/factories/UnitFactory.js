@@ -148,8 +148,8 @@ export const UnitFactory = {
       acMax : 20,
       dmgMin : 6,
       dmgMax : 10,
-      delayMin : 15,
-      delayMax : 20,
+      delayMin : 20,
+      delayMax : 25,
       atkMin : 6,
       atkMax : 10,
       threatMods: {

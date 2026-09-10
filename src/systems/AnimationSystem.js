@@ -29,31 +29,36 @@ animationRules[AnimationType.IDLE]={
     interruptable : true,
     loop: true,
     forceInterrupt : false,
-    goToNext : true
+    goToNext : true,
+    interruptItself : false
     }
 animationRules[AnimationType.WALK]={
     interruptable : true,
     loop: true,
     forceInterrupt : false,
-    goToNext : true
+    goToNext : true,
+    interruptItself : false
     }
 animationRules[AnimationType.ATTACK]= {
     interruptable : false,
     loop: false,
     forceInterrupt : false,
-    goToNext : true
+    goToNext : true,
+    interruptItself : true
     }
 animationRules[AnimationType.SPELL]= {
     interruptable : false,
     loop: false,
     forceInterrupt : false,
-    goToNext : true
+    goToNext : true,
+    interruptItself : true
     }
 animationRules[AnimationType.DIE]= {
     interruptable : false,
     loop: false,
     forceInterrupt : true,
-    goToNext : false
+    goToNext : false,
+    interruptItself : false
     }
 
 
@@ -70,14 +75,19 @@ export const createAnimationSystem =(world)=>{
 
     gltf.animations.forEach(clip => {
       gltf.scene.actions[clip.name] = mixer.clipAction(clip)
+      if (clip.name === "Attack")
+        gltf.scene.actions["Attack2"] = mixer.clipAction(clip.clone())
       
     })
 
+    
     
     gltf.scene.actions.Idle.setLoop(THREE.LoopRepeat)
     gltf.scene.actions.Walking.setLoop(THREE.LoopRepeat)
     gltf.scene.actions.Attack.setLoop(THREE.LoopOnce, 1)
     gltf.scene.actions.Attack.clampWhenFinished = true
+    gltf.scene.actions.Attack2.setLoop(THREE.LoopOnce, 1)
+    gltf.scene.actions.Attack2.clampWhenFinished = true
     gltf.scene.actions.Spell.setLoop(THREE.LoopOnce, 1)
     gltf.scene.actions.Spell.clampWhenFinished = true
     gltf.scene.actions.Dying.setLoop(THREE.LoopOnce, 1)
@@ -98,8 +108,14 @@ export const createAnimationSystem =(world)=>{
       const currentAnimationKey = animationKeys[AnimationState.current[id]]
       const requestedAnimationKey = animationKeys[AnimationState.requested[id]]
       
-      object.scene.actions[currentAnimationKey].fadeOut(.2)
+      const clipName = event.action.getClip().name    
+      if (clipName === "Attack" && requestedAnimationKey != "Attack") {
+        event.action.fadeOut(.2)
+      }
+
+
       object.scene.actions[requestedAnimationKey].reset().fadeIn(.2).play()
+      object.scene.actions[currentAnimationKey].fadeOut(.2)
       
       AnimationState.current[id] = AnimationState.requested[id]
       
@@ -112,18 +128,39 @@ export const createAnimationSystem =(world)=>{
     const requestedAnimationKey = animationKeys[animationId]
     const currentAnimationKey = animationKeys[AnimationState.current[id]]
     
-    if (animationId != AnimationState.current[id] && object) {
+    
+      
+
+    if ((animationId != AnimationState.current[id]) && object) {
       
       if (animationRules[AnimationState.current[id]].interruptable || animationRules[animationId].forceInterrupt) {
+        
+        
 
-        object.scene.actions[currentAnimationKey].fadeOut(.2)
+        
         object.scene.actions[requestedAnimationKey].reset().fadeIn(.2).play()
+        object.scene.actions[currentAnimationKey].fadeOut(.2)
         AnimationState.current[id] = animationId
         
       }
     }
+    else if (animationId === AnimationState.current[id] && animationRules[animationId].interruptItself) {
+      
+      const attack = object.scene.actions["Attack"]
+      const attack2 = object.scene.actions["Attack2"]
+
+      const currentAction = attack.isRunning() ? attack : attack2
+      const nextAction = attack.isRunning() ? attack2 : attack
+
+
       
 
+      nextAction
+        .reset()
+        .fadeIn(.2)
+        .play()
+      currentAction.fadeOut(.2)
+    }
     
   }
   

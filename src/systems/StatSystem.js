@@ -32,9 +32,25 @@ export const createStatSystem = world =>{
   }
   
   const onHeal = (data) =>{
+    var sourceUnitIndex
+    var sourceName = NameHelper.GetName(world, data.source)
+    var targetUnitIndex
+    var targetName = NameHelper.GetName(world, data.target)
+
+    var sourceUnitIndex
+    if (hasComponent(world, UnitIndex, data.source))
+        sourceUnitIndex = UnitIndex.index[data.source]
+
+    var targetUnitIndex
+    if (hasComponent(world, UnitIndex, data.target))
+        targetUnitIndex = UnitIndex.index[data.target]
     statLogs[statLogs.length-1].log.push({
       event: "heal",
       time: timer,
+      sourceUnitIndex,
+      targetUnitIndex,
+      sourceName,
+      targetName,
       ...data
     })
   }
@@ -229,9 +245,71 @@ export const getDungeonSummary = (index) =>{
         ...unitPattern,
         name
       }
+   /*
+    const addUnitIfNeeded = (entry) => {
+      if (entry.sourceUnitIndex !== undefined) {
+        if (!heroes[entry.sourceUnitIndex]) {
+          //console.log("addig hero source", entry)
+          heroes[entry.sourceUnitIndex] = {
+            ...unitPattern,
+            name: entry.sourceName
+          }
+          //.log(heroes)
+        }
+      } else {
+        if (!enemies[entry.source]) {
+          enemies[entry.source] = {
+            ...unitPattern,
+            name: entry.sourceName
+          }
+        }
+      }
+    
+      if (entry.targetUnitIndex !== undefined) {
+        if (!heroes[entry.targetUnitIndex]) {
+          heroes[entry.targetUnitIndex] = {
+            ...unitPattern,
+            name: entry.targetName
+          }
+        }
+      } else {
+        if (!enemies[entry.target]) {
+          enemies[entry.target] = {
+            ...unitPattern,
+            name: entry.targetName
+          }
+        }
+      }
     }
-  }
-
+    */
+    const addUnitIfNeeded = (entry) => {
+      const sourceIsHero = entry.sourceUnitIndex !== undefined
+      const targetIsHero = entry.targetUnitIndex !== undefined
+      if (entry.event == "heal")
+          console.log(entry)
+      if (sourceIsHero && !heroes[entry.sourceUnitIndex])
+        heroes[entry.sourceUnitIndex] = {
+          ...unitPattern,
+          name: entry.sourceName
+        }
+      if (!sourceIsHero && !enemies[entry.source])
+        enemies[entry.source] = {
+          ...unitPattern,
+          name: entry.sourceName
+        }
+      if (targetIsHero && !heroes[entry.targetUnitIndex])
+        heroes[entry.targetUnitIndex] = {
+          ...unitPattern,
+          name: entry.targetName
+        }
+      if (!targetIsHero && !enemies[entry.target])
+        enemies[entry.target] = {
+          ...unitPattern,
+          name: entry.targetName
+        }
+    }
+    
+/*
   // Source
   if (entry.sourceUnitIndex !== undefined) {
     addHero(entry.sourceUnitIndex, entry.sourceName)
@@ -245,7 +323,7 @@ export const getDungeonSummary = (index) =>{
   } else {
     addEnemy(entry.target, entry.targetName)
   }
-}
+}*/
     
     for (const entry of fight) {
       //console.log(entry)
