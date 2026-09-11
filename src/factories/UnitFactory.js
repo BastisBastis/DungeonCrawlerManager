@@ -303,7 +303,7 @@ export const UnitFactory = {
     
     recruitmentCost = Math.floor(recruitmentCost *costMod)
     
-    const traits = [0]
+    const traits = []
 
     //hp = 900
     //damage = 150

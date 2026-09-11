@@ -127,7 +127,7 @@ export default class DungeonScene extends Phaser.Scene {
   }
 
   exitDungeon(result) {
-    
+    EventCenter.emit("willExitDungeon", this.world)
     const deadUnitQuery = defineQuery([Dead, BattleUnit, UnitIndex])
 
     const deadUnits = []

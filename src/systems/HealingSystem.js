@@ -18,7 +18,8 @@ import { EventCenter } from "../helpers/EventCenter"
 import { GlobalStuff } from "../helpers/GlobalStuff"
 
 //Data
-import { TraitList } from "../data/Traits" 
+import { TraitList, CheckTraitCondition } from "../data/Traits" 
+import { Attackable } from "../components/Attackable"
 
 export const createHealingSystem=(world)=>{
   const unitQuery=defineQuery([Action, Healer])
@@ -29,7 +30,7 @@ export const createHealingSystem=(world)=>{
 
 
       
-      Healer.coolDown[id] += dt/100
+      Healer.coolDown[id] = Math.min(Healer.coolDown[id] + dt/100, Healer.delay[id])
       if (Action.action[id] == ActionType.HEAL && !hasComponent(world, Dead, id) && Action.target[id] != 0 && !hasComponent(world, Dead, Action.target[id]) && Healer.coolDown[id] >= Healer.delay[id]) {
         
         Healer.coolDown[id] -= Healer.delay[id] 
@@ -48,24 +49,24 @@ export const createHealingSystem=(world)=>{
           })
         }
         
-        //console.log("heal target: " + Action.target[id])
         
-        var amount = Healer.amount
+        var amount = Healer.amount[id]
         
         if (hasComponent(world, Traits, id)) {
           
           for (let i = 0; i < Traits.count[id]; i++) {
-            const trait = Traits.traits[id][i]
+            const traitIndex = Traits.traits[id][i]
+            const trait = TraitList[traitIndex]
             if (trait.effect.type == "healModifier") {
               
-              var shouldApplyMod = true
-              if (trait.effect.condition) {
-                if (trait.effect.condition == "healthBelowPercent") {
-                  
-                  
-                  
-                  
-                }
+              
+              if (trait.effect.condition && CheckTraitCondition({
+                world, 
+                target: Action.target[id],
+                trait
+              })) {
+                amount *= trait.effect.mod
+                console.log("CRITICAL HEAL FROM TRAIT!")
               }
               
               
@@ -80,7 +81,7 @@ export const createHealingSystem=(world)=>{
           source:id,
           target: Action.target[id],
           data: {
-            amount: Healer.amount[id]
+            amount
           }
         })
         
@@ -92,7 +93,7 @@ export const createHealingSystem=(world)=>{
         })
 
         if (GlobalStuff.verboseLog >=2)
-            EventCenter.emit("addLogMessage", id + " requests " + Healer.amount[id] + " heal to " + Action.target[id])
+            EventCenter.emit("addLogMessage", id + " requests " + amount + " heal to " + Action.target[id])
         
       }
       

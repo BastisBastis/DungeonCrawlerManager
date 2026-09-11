@@ -407,14 +407,16 @@ export class StatsMenu extends Window {
    
    if (unitStats) {
     const lastDungeonSummary = getDungeonSummary()
-    //console.log("unitsTotal: ",lastDungeonSummary.unitsTotal)
+    if (lastDungeonSummary.unitsTotal[unit.unitIndex])
+      strings.push(
+        [
+          "Last dungeon DPS:", Math.round((lastDungeonSummary.unitsTotal[unit.unitIndex].damageDealt / lastDungeonSummary.unitsTotal[unit.unitIndex].duration)*10000)/10
+        ]
+      )
     strings.push(
-     [
-      "Last dungeon DPS:", Math.round((lastDungeonSummary.unitsTotal[unit.unitIndex].damageDealt / lastDungeonSummary.unitsTotal[unit.unitIndex].duration)*10000)/10
-     ],
-     [
-      "Average DPS:", Math.round((unitStats.damageDealt/unitStats.duration)*10000)/10
-     ]
+      [
+        "Average DPS:", Math.round((unitStats.damageDealt/unitStats.duration)*10000)/10
+      ]
     )
    }
    
@@ -489,7 +491,6 @@ export class StatsMenu extends Window {
   showTraitInfo(traitIndex) {
    try { 
    this.closeTraitInfo()
-   //console.log("show")
    this.traitDetails = new TraitDetails(
     this.scene,
     this.x + this.width/2 - 220,
@@ -504,7 +505,6 @@ export class StatsMenu extends Window {
   closeTraitInfo() {
    try { 
    if (this.traitDetails) {
-    console.log("destroy")
     this.traitDetails.destroy()
     this.traitDetails = null
    }
