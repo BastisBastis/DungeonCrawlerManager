@@ -10,11 +10,15 @@ import { Dead } from "../components/Dead"
 import { Mana } from "../components/Mana"
 
 import { ActionType } from "../components/Action"
+import { Traits } from "../components/Traits"
 
 import { EventCenter } from "../helpers/EventCenter" 
 
 //helpers
 import { GlobalStuff } from "../helpers/GlobalStuff"
+
+//Data
+import { TraitList } from "../data/Traits" 
 
 export const createHealingSystem=(world)=>{
   const unitQuery=defineQuery([Action, Healer])
@@ -31,8 +35,12 @@ export const createHealingSystem=(world)=>{
         Healer.coolDown[id] -= Healer.delay[id] 
 
         if (hasComponent(world, Mana, id)) {
+          
+          
          
           Mana.currentMana[id] = Math.max(0, Mana.currentMana[id] - Math.floor(Healer.amount[id]/10))
+          
+          
           EventCenter.emit("manaUpdated", {
             id,
             currentMana: Mana.currentMana[id],
@@ -41,6 +49,32 @@ export const createHealingSystem=(world)=>{
         }
         
         //console.log("heal target: " + Action.target[id])
+        
+        var amount = Healer.amount
+        
+        if (hasComponent(world, Traits, id)) {
+          
+          for (let i = 0; i < Traits.count[id]; i++) {
+            const trait = Traits.traits[id][i]
+            if (trait.effect.type == "healModifier") {
+              
+              var shouldApplyMod = true
+              if (trait.effect.condition) {
+                if (trait.effect.condition == "healthBelowPercent") {
+                  
+                  
+                  
+                  
+                }
+              }
+              
+              
+            }
+          }
+          
+        }
+        
+        
         
         EventCenter.emit("healRequest", {
           source:id,

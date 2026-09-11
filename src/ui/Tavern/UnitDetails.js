@@ -1,7 +1,7 @@
 import Phaser from "phaser"
 import { GlobalStuff } from "../../helpers/GlobalStuff"
 import { Palette } from "../../data/Palette" 
-
+import { TraitList } from "../../data/Traits" 
 
 import { Window } from "../Window"
 
@@ -24,13 +24,14 @@ export class UnitDetails extends Window {
       threatMods = undefined,
       healer = undefined,
       recruitmentCost = 0,
-      mana
+      mana,
+      traits
 
     } = unitData
     const {
       fontSize=22,
       width=300,
-      height=400,
+      height=600,
       depth=1,
       fontFamily=GlobalStuff.FontFamily,
       fontColor="#000000",
@@ -126,6 +127,16 @@ export class UnitDetails extends Window {
           threatMods.attack
         ]
       )
+    }
+    
+    if (traits.length > 0) {
+      labels.push([""])
+      labels.push(["TRAITS:"])
+      for (const traitIndex of traits) {
+        labels.push([
+          TraitList[traitIndex].name
+        ])
+      }
     }
 
     for (const rowData of labels) {

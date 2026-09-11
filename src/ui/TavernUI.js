@@ -51,7 +51,7 @@ export class TavernUI {
     this.unitDetails = null
     this.unitDetailsPosition = {
       x: this.scene.cameras.main.width - 300,
-      y: this.scene.cameras.main.height / 2 - 200
+      y: this.scene.cameras.main.height / 2 - 0
     }
     
     this.reloadPartyOverview()

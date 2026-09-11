@@ -37,7 +37,7 @@ import { Rotation } from "../components/Rotation"
 import { Model } from "../components/Model"
 import { Mana } from "../components/Mana"
 
-
+import { Traits } from "../components/Traits" 
 
 
 
@@ -57,7 +57,7 @@ export const UnitFactory = {
     addComponent(world, Rotation, id)
     addComponent(world, ClassType, id)
     addComponent(world, Model, id)
-    
+    addComponent(world, Traits, id)
    
     
     
@@ -131,6 +131,15 @@ export const UnitFactory = {
     if (unitData.enemyIndex !== undefined) {
       addComponent(world, EnemyIndex, id)
       EnemyIndex.index[id] = unitData.enemyIndex
+    }
+    
+    Traits.count[id] = 0
+    
+    if (unitData.traits) {
+      Traits.count[id] = unitData.traits.length
+      for (let i in unitData.traits) {
+        Traits.traits[id][i] = unitData.traits[i]
+      }
     }
     
     return id
@@ -293,6 +302,8 @@ export const UnitFactory = {
     const attackBuildUp = 600
     
     recruitmentCost = Math.floor(recruitmentCost *costMod)
+    
+    const traits = [0]
 
     //hp = 900
     //damage = 150
@@ -315,6 +326,7 @@ export const UnitFactory = {
       level,
       recruitmentCost,
       exp : 0,
+      traits,
       attackBuildUp,
       modelIndex:classValues[classType].modelIndex
     }

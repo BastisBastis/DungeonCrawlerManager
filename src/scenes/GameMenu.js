@@ -31,6 +31,9 @@ import { DungeonGenerator } from "../helpers/DungeonGenerator"
 import { DungeonSummaryPopup } from "../ui/DungeonSummaryPopup"
 import { getDungeonSummary } from "../systems/StatSystem"
 import { StatsMenu } from "../ui/Stats/StatsMenu" 
+import { TraitAwardPopup } from "../ui/Popups/TraitAwardPopup" 
+
+
 //Temp
 
 
@@ -56,13 +59,17 @@ export default class GameMenu extends Phaser.Scene {
       ? data.result
       : {
           winner: -1,
-          deadUnits: []
+          deadUnits: [],
+          traitsToAdd: []
         }
       
     resetMenuStore()
     
     
+    
     this.removeDeadUnits(result.deadUnits)
+    
+    
     
     if (Store.run.party.length == 0 && result.winner != -1) {
       
@@ -71,7 +78,7 @@ export default class GameMenu extends Phaser.Scene {
     this.add.image(960,540,"menuBg").setScrollFactor(0,0).setDisplaySize(1920,1080)
     
     if (result.winner == 0) {
-      
+      await this.handleNewTraits(result.traitsToAdd)
       Store.run.levelIndex++
       this.onDungeonCompleted()
       if (Store.run.levelIndex >= DungeonGenerator.getNumLevels()) {
@@ -126,6 +133,27 @@ export default class GameMenu extends Phaser.Scene {
     EventCenter.removeAllListeners()
     this.scene.stop("gameMenu")
     this.scene.start("gameOver", result)
+  }
+  
+  async handleNewTraits(traitsToAdd) {
+    
+    for (const traitToAdd of traitsToAdd) {
+      
+      if (!Store.run.units[traitToAdd.unitIndex].traits.includes(traitToAdd.traitIndex)) {
+        
+        await TraitAwardPopup.prompt(
+          this,
+          this.cameras.main.width/2,
+          this.cameras.main.height/2,
+          traitToAdd
+        )
+        
+        Store.run.units[traitToAdd.unitIndex].traits.push(traitToAdd.traitIndex)
+        
+      }
+      
+    }
+    
   }
 
   removeDeadUnits(deadUnits) {

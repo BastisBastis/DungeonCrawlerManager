@@ -57,10 +57,11 @@ export default class DungeonScene extends Phaser.Scene {
   }) {
     try { 
     //Background
-    
+    this.earnedTraits = {}
 
     EventCenter.on("allUnitsDead", this.allUnitsDead, this)
     EventCenter.on("goalReached", this.goalReached, this)
+    EventCenter.on("addTrait", this.addTrait, this)
     
     
 
@@ -102,6 +103,23 @@ export default class DungeonScene extends Phaser.Scene {
     }
   }
   
+  addTrait(data) {
+    const {
+      unitIndex,
+      traitIndex,
+      reason
+    } = data
+    
+    if (Store.run.units[unitIndex].traits.includes(traitIndex))
+      return console.log("Unit already has trait " + traitIndex)
+    
+    if (!this.earnedTraits[unitIndex])
+      this.earnedTraits[unitIndex]= []
+    
+    this.earnedTraits[unitIndex].push(data)
+    
+  }
+  
   goalReached() {
     this.exitDungeon({
       winner: 0
@@ -124,6 +142,16 @@ export default class DungeonScene extends Phaser.Scene {
 
     result.deadUnits = deadUnits
     
+    const traitsToAdd = []
+    
+    for (const [unitIndex, traitData] of Object.entries(this.earnedTraits)) {
+      console.log(traitData)
+      traitsToAdd.push(traitData[Utils.getRandomInt(0,traitData.length)])
+    }
+    
+    result.traitsToAdd = traitsToAdd
+    
+    console.log("traits to add", traitsToAdd)
 
     EventCenter.removeAllListeners()
     this.scene.stop("ui")

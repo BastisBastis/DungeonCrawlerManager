@@ -49,6 +49,8 @@ export class Button extends Window {
     this.downFontColor=downFontColor
     this.fontColor=fontColor
     this.onClick=onClick
+    this.height = height
+    this.width = width
       
     this.bg.on('pointerover', () => {
       if (this.down)

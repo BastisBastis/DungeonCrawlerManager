@@ -11,6 +11,7 @@ import { getDungeonSummary , getAllDungeonLogs, getTotalDungeonStatSummary} from
 //Data
 import { Palette } from "../../data/Palette" 
 import { UnitNames } from "../../data/UnitNames" 
+import { TraitList } from "../../data/Traits" 
 
 //UI
  
@@ -19,6 +20,7 @@ import { UnitDetails } from "../Tavern/UnitDetails"
 import { Popup } from "../Popup" 
 import { Window } from "../Window"
 import { DungeonSummaryPopup } from "../DungeonSummaryPopup"
+import { TraitDetails } from "../Popups/TraitDetails"
 
 
 
@@ -356,7 +358,7 @@ export class StatsMenu extends Window {
    const unit = this.allUnits[index]
    
    let y = this.y - this.height/2 + 200
-   const deltaY = 40
+   const deltaY = 34
    const config = {
     fontSize : 28,
     color: Palette.brown4,
@@ -419,6 +421,8 @@ export class StatsMenu extends Window {
    const leftX = this.x - 220
    const rightX = this.x + 120
    
+   var finalY = 0
+   
    for (const [i, string] of strings.entries()) {
     
     const labelL = this.scene.add.text(
@@ -435,13 +439,76 @@ export class StatsMenu extends Window {
      config
     ).setDepth(this.depth+10)
     
+    finalY = y + deltaY*(i+2),
     
     this.subSubViews.push(labelL, labelR)
     
    }
    
+   if (unit.traits.length > 0) {
+    this.subSubViews.push(
+     this.scene.add.text(
+     this.x,
+     finalY,
+     "TRAITS:",
+     config
+    ).setDepth(this.depth+10)
+    .setOrigin(.5,.5)
+    )
+    finalY += deltaY
+   }
    
+   for (let i = 0; i < unit.traits.length; i++) {
+    const label = this.scene.add.text(
+     this.x,
+     finalY,
+     TraitList[unit.traits[i]].name,
+     config
+    ).setDepth(this.depth+10)
+    .setOrigin(.5,.5)
+    
+    label.setInteractive(
+     new Phaser.Geom.Rectangle(
+      0,
+      0,
+      label.width,
+      label.height
+     ),
+     Phaser.Geom.Rectangle.Contains
+     )
+    .on("pointerover", ()=>(this.showTraitInfo(unit.traits[i])))
+    .on("pointerout", ()=>{this.closeTraitInfo()})
+    
+    this.subSubViews.push(label)
+    
+    finalY+= deltaY
+   }
    
+  }
+  
+  showTraitInfo(traitIndex) {
+   try { 
+   this.closeTraitInfo()
+   //console.log("show")
+   this.traitDetails = new TraitDetails(
+    this.scene,
+    this.x + this.width/2 - 220,
+    this.y,
+    traitIndex ,{
+     depth: this.depth+50
+    }
+   )
+   } catch (er) {console.log(er.message,er.stack); throw er} 
+  }
+  
+  closeTraitInfo() {
+   try { 
+   if (this.traitDetails) {
+    console.log("destroy")
+    this.traitDetails.destroy()
+    this.traitDetails = null
+   }
+   } catch (er) {console.log(er.message,er.stack); throw er}
   }
 
   showDungeonSummaryView() {
@@ -580,6 +647,12 @@ export class StatsMenu extends Window {
       if (object && object.destroy)
         object.destroy()
     })
+    
+    if (this.traitDetails && this.traitDetails.destroy)
+     this.traitDetails.destroy()
+     
+    this. traitDetails = null
+     
     this.gameObjects=[]
   }
   
