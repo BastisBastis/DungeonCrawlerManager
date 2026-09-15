@@ -27,6 +27,7 @@ import { MenuUnitCard } from "./MenuUnitCard"
 import { Button } from "./Button"
 import { UnitDetails } from "./Tavern/UnitDetails"
 import { Popup } from "../ui/Popup" 
+import { Window } from "./Window"
 
 //Temp
 import { UnitClass } from "../components/ClassType"
@@ -44,8 +45,24 @@ export class TavernUI {
     try { 
     //Background
     this.scene=scene
-    
     this.gameObjects = []
+    this.bg = new Window(
+      scene, 
+      scene.cameras.main.width/2,
+      scene.cameras.main.height/2,
+      {
+        width:1200,
+        height:1040,
+        depth:1,
+        borderColor:Palette.brown4.hex,
+        blockBackground:true,
+        backgroundColor : Palette.beige2.hex,
+      }
+    )
+    console.log(this.bg)
+    this.gameObjects.push(this.bg)
+    
+    
     this.partyOverviewCards = []
     
     this.unitDetails = null
@@ -63,8 +80,8 @@ export class TavernUI {
       fontSize: 40
     }
     
-    const backBtnX = this.scene.cameras.main.width - 300
-    const backBtnY = this.scene.cameras.main.height - 150
+    const backBtnX = this.scene.cameras.main.width/2
+    const backBtnY = this.scene.cameras.main.height/2 - this.bg.height/2+this.bg.height*0.9
 
     this.gameObjects.push(
       new Button(this.scene, backBtnX, backBtnY, "Back", {
@@ -78,12 +95,15 @@ export class TavernUI {
     )
     
     this.goldLabel = this.scene.add.text(
-      this.scene.cameras.main.width-40, 40, "GOLD: " + Store.run.gold, { 
-      fontSize: 80, 
-      color: Palette.beige1.string ,
+      scene.cameras.main.width/2,
+      scene.cameras.main.height/2 - 200,
+      "GOLD: " + Store.run.gold, { 
+      fontSize: 40, 
+      color: Palette.brown4.string ,
       fontFamily: GlobalStuff.FontFamily
     })
-    .setOrigin(1,0)
+    .setOrigin(.5,.5)
+    .setDepth(10)
     
     this.gameObjects.push(this.goldLabel)
     
@@ -149,8 +169,9 @@ export class TavernUI {
   layoutPartyOverviewCards() {
     const y = 200
     const numCols = 4
-    const startX = 140
-    const deltaX = 300
+    const deltaX = 220
+    const startX = this.scene.cameras.main.width/2 - deltaX*1.5
+    
     let i = 0
 
     this.partyOverviewCards.forEach(card=>{
@@ -162,12 +183,13 @@ export class TavernUI {
 
   async createRecruitmentOverview() {
     this.recruitmentOverviewCards = []
-    const startY = this.scene.cameras.main.height - 400
+    const startY = this.scene.cameras.main.height - 500
     const numCols = 4
     const numRows = 2
-    const startX = 140
-    const deltaX = 300
-    const deltaY = 240
+    const deltaX = 220
+    const startX = this.scene.cameras.main.width/2 - deltaX*1.5
+    
+    const deltaY = 220
     var i = 0
     
     Store.menu.recruitmentPool.forEach(unitData=>{

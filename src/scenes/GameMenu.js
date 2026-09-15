@@ -39,6 +39,7 @@ import { TraitAwardPopup } from "../ui/Popups/TraitAwardPopup"
 
 //Data
 import { TraitList } from "../data/Traits" 
+import { TacticsMenu } from "../ui/TacticsMenu"
 
 
 
@@ -242,6 +243,11 @@ export default class GameMenu extends Phaser.Scene {
       x: this.cameras.main.width - 670,
       y: 340
     }
+
+    const tacticsPos = {
+      x: 300,
+      y: 800
+    }
     
     const btnConfig = {
       width: 320,
@@ -269,10 +275,28 @@ export default class GameMenu extends Phaser.Scene {
         }
       ).setVisible(Store.run.levelIndex>0)
     this.gameObjects.push(statsButton)
+
+    const tacticsButton = new Button(this, tacticsPos.x, tacticsPos.y, "Tactics", {
+        ...btnConfig,
+        onClick : ()=>{this.showTactics() }
+        }
+      ).setVisible(Store.run.party.length>0)
+    this.gameObjects.push(tacticsButton)
     
     //this.addEventListeners
     
     } catch (er) {console.log(er.message,er.stack); throw er} 
+  }
+
+  showTactics() {
+    this.clearGameObjects()
+    this.gameObjects.push(
+      new TacticsMenu(
+        this,
+        this.cameras.main.width/2,
+        this.cameras.main.height/2
+      )
+    )
   }
   
   showStats() {
