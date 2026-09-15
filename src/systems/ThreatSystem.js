@@ -22,7 +22,8 @@ const unitQuery=defineQuery([BattleUnit])
 
 export const getAlliesInRange = (world, id) => {
   
-  const allyRange = world.scene.level.cellSize*3
+  
+  const allyRange = world.scene.level.cellSize*1
   const alliesInRange = []
   
   unitQuery(world).forEach((otherId)=>{
@@ -144,7 +145,7 @@ export const createThreatSystem=(world)=>{
   }
   
   EventCenter.on("damageRequest", onDamageRequest, this)
-  //EventCenter.on("damageTaken", onDamageTaken, this)
+  EventCenter.on("damageTaken", onDamageTaken, this)
   EventCenter.on("healRequest", onHealRequest, this)
   EventCenter.on("logThreat", logThreat, this)
   

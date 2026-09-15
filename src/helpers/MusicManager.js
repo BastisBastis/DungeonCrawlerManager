@@ -1,14 +1,23 @@
-//import Main1URL from "./assets/music/Main1.m4a"
+import Dungeon1 from "../assets/music/D1.wav"
+import Menu from "../assets/music/Menu.m4a"
+
 
 const trackData = [
-  /*
-  {
-    key:"main1",
+  
+   {
+    key:"menu",
     group:"main",
-    url:Main1URL,
-    volume:0.5
+    url:Menu,
+    volume:0.1
   },
-  */
+  {
+    key:"dungeon1",
+    group:"d1",
+    url:Dungeon1,
+    volume:0.1
+  },
+ 
+  
 ]
 
 export const MusicManager={
@@ -66,7 +75,7 @@ export const MusicManager={
    
    scene.tweens.add({
        targets:nextTrack,
-       volume:1,
+       volume:.5,
        duration:fadeDuration,
        onUpdate:()=>{
          nextTrack.ref.setVolume(nextTrack.volume)
@@ -77,7 +86,7 @@ export const MusicManager={
  
  
  MusicManager.setup=(scene)=>{
-   scene.sound.setVolume(0.7)
+   scene.sound.setVolume(0.8)
    if (MusicManager.tracks.length>0)
      return
    trackData.forEach(track=>{

@@ -11,6 +11,7 @@ import { Position } from "../components/Position"
 import { Dead } from "../components/Dead"
 import { Healer } from "../components/Healer"
 import { Mana } from "../components/Mana"
+import { Traits } from "../components/Traits" 
 
 
 import { ActionType } from "../components/Action" 
@@ -18,6 +19,9 @@ import { ActionType } from "../components/Action"
 import { EventCenter } from "../helpers/EventCenter" 
 import { Attackable } from "../components/Attackable"
 import { MeleeAttack } from "../components/MeleeAttack"
+
+
+import { TraitList } from "../data/Traits" 
 
 //Helpers
 
@@ -29,6 +33,17 @@ export const createActionPickingSystem=(world)=>{
   
   const aggroRange = world.scene.level.cellSize*2
   const healTargetFindingRange = world.scene.level.cellSize*2
+  
+  const leaderData = {
+    target : 0,
+    threatMod : 1
+  }
+  
+  EventCenter.on("setLeaderTarget", ({target, mod})=>{
+    //console.log("leader target set", target)
+    leaderData.target=target
+    leaderData.mod = mod
+  })
   
   return (world, dt)=>{
     
@@ -48,6 +63,25 @@ export const createActionPickingSystem=(world)=>{
             id,
             target: Action.target[id]
           })
+          
+          if (hasComponent(world, Traits, id)) {
+                  
+            for (let i = 0; i < Traits.count[id]; i++) {
+              const traitIndex = Traits.traits[id][i]
+              const trait = TraitList[traitIndex]
+              for (const effect of trait.effects) {
+                if (effect.type == "setTeamTarget") {
+                  if (Action.action[id] == ActionType.ATTACK) {
+                    EventCenter.emit("setLeaderTarget", {
+                      target: Action.target[id],
+                      mod: effect.mod
+                    })
+                  }
+                }
+              }
+              
+            }
+          }
           
         }
       }
@@ -92,11 +126,19 @@ export const createActionPickingSystem=(world)=>{
           var highestThreatValue = -1
           if (!world.scene.threatData[id])
             return
+          
+          //const test={}
           for (const [otherId, threatData] of Object.entries(world.scene.threatData[id].hostile)) {
+            const leaderMod = leaderData.target == otherId ? leaderData.threatMod : 1
+            
+            
+            
             var totalValue = 0
             for (const threatValue of Object.values(threatData)) {
-              totalValue += threatValue
+              totalValue += threatValue * leaderMod
+              
             }
+            //test[otherId] = totalValue
             if (totalValue > highestThreatValue) {
               highestThreatValue = totalValue
               highestThreatId = otherId
@@ -106,6 +148,7 @@ export const createActionPickingSystem=(world)=>{
             //console.log(highestThreatId, highestThreatValue)
           }
           if (highestThreatId > 0) {
+            //if (highestThreatId !==)
             if (BattleUnit.team[id] == 1 && !hadTarget) {
               EventCenter.emit("hostileUnitEngaged", { id })
             }

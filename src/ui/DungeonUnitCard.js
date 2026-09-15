@@ -132,7 +132,7 @@ export class DungeonUnitCard extends Window {
     this.hpValueLabel = this.scene.add.text(
       rightX,
       labelY + deltaY * 3,
-      hitpoints+"/"+hitpoints,
+      Math.round(hitpoints)+"/"+Math.round(hitpoints),
       {
         ...fontConfig,
         align: "right"
@@ -155,7 +155,7 @@ export class DungeonUnitCard extends Window {
       this.manaValueLabel = this.scene.add.text(
         rightX,
         labelY + deltaY * 4,
-        mana+"/"+mana,
+        Math.round(mana)+"/"+Math.round(mana),
         {
           ...fontConfig,
           align: "right"

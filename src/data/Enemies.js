@@ -18,7 +18,9 @@ Enemies[0] = {
   atkMax : 15,
   modelIndex : 3,
   attackBuildUp : 500,
-  materialColors : {}
+  materialColors : {},
+  attackAudio: 1,
+  soundDelay: 1
 }
 
 Enemies[6] = {
@@ -39,7 +41,9 @@ Enemies[6] = {
   attackBuildUp : 500,
   materialColors : {
     skin: "#77ddaa"
-  }
+  },
+  attackAudio: 1,
+  soundDelay: 1
 }
 
 Enemies[1] = {
@@ -60,7 +64,9 @@ Enemies[1] = {
   attackBuildUp : 400,
   materialColors : {
     skin: "#00ddbb"
-  }
+  },
+  attackAudio: 1,
+  soundDelay: 1
 }
 
 Enemies[2] = {
@@ -79,7 +85,9 @@ Enemies[2] = {
   atkMax : 15,
   modelIndex : 4,
   attackBuildUp : 550,
-  materialColors : {}
+  materialColors : {},
+  attackAudio: 1,
+  soundDelay: 100
 }
 
 Enemies[3] = {
@@ -98,7 +106,9 @@ Enemies[3] = {
   atkMax : 15,
   modelIndex : 5,
   attackBuildUp : 900,
-  materialColors : {}
+  materialColors : {},
+  attackAudio: 1,
+  soundDelay: 400
 }
 
 Enemies[4] = {
@@ -117,7 +127,9 @@ Enemies[4] = {
   atkMax : 15,
   modelIndex : 6,
   attackBuildUp : 500,
-  materialColors : {}
+  materialColors : {},
+  attackAudio: 1,
+  soundDelay: 100
 }
 
 Enemies[5] = {
@@ -138,7 +150,9 @@ Enemies[5] = {
   attackBuildUp : 550,
   materialColors : {
     bone : "#550000"
-  }
+  },
+  attackAudio: 1,
+  soundDelay: 100
 }
 
 Enemies[7] = {
@@ -159,7 +173,9 @@ Enemies[7] = {
   attackBuildUp : 550,
   materialColors : {
     bone : "#552222"
-  }
+  },
+  attackAudio: 1,
+  soundDelay: 100
 }
 
 Enemies[8] = {
@@ -178,7 +194,9 @@ Enemies[8] = {
   atkMax : 20,
   modelIndex : 7,
   attackBuildUp : 500,
-  materialColors : {}
+  materialColors : {},
+  attackAudio: 1,
+  soundDelay: 100
 }
 
 
@@ -200,7 +218,9 @@ Enemies[9] = {
   attackBuildUp : 500,
   materialColors : {
     sheet: "#880101"
-  }
+  },
+  attackAudio: 1,
+  soundDelay: 100
 }
 
 Enemies[10] = {
@@ -221,6 +241,8 @@ Enemies[10] = {
   attackBuildUp : 500,
   materialColors : {
     sheet: "#000099"
-  }
+  },
+  attackAudio: 1,
+  soundDelay: 100
 }
 

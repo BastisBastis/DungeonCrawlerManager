@@ -7,6 +7,9 @@ import {
 import { Attackable } from "../components/Attackable"
 import { BattleUnit } from "../components/BattleUnit" 
 import { UnitIndex } from "../components/UnitIndex" 
+import { ClassType, ClassIdFromName, ClassIds } from "../components/ClassType" 
+
+
 
 
 import { EventCenter } from "../helpers/EventCenter" 
@@ -14,14 +17,22 @@ import { EventCenter } from "../helpers/EventCenter"
 
 //Helpers
 import { NameHelper } from "../helpers/NameHelper" 
+import { Store } from "../helpers/Store" 
+import * as Utils from "../helpers/Utils" 
 
 
 //Data
 import { TRAIT } from "../data/Traits" 
 
+
+
 export const createTraitEarningSystem=(world)=>{
   
-  const playerUnitQuery=defineQuery(UnitIndex)
+  
+  
+  
+  
+  const playerUnitQuery=defineQuery([UnitIndex])
   
   const onHealReceived = (data) =>{
     if (data.target == data.source)
@@ -46,10 +57,12 @@ export const createTraitEarningSystem=(world)=>{
   }
 
   const onWillExitDungeon = (world) => {
+    //console.log(playerUnitQuery)
     playerUnitQuery(world).forEach(id=> {
       if (hasComponent(world, Attackable, id)) {
         const healthRatio = Attackable.currentHitpoints[id] / Attackable.maxHitpoints[id]
         if (healthRatio < .3) {
+          //console.log(id, NameHelper.GetName(world, id), hasComponent(world, UnitIndex, id))
           EventCenter.emit("addTrait", {
             unitIndex: UnitIndex.index[id],
             traitIndex: TRAIT.OH_NO_YOU_WONT,
@@ -64,11 +77,13 @@ export const createTraitEarningSystem=(world)=>{
   const onDamageTaken = ({target, damage, maxDamage, source}) => {
 
     if (Attackable.currentHitpoints[target] <= 0 && BattleUnit.team[source] == 0) {
-      console.log(damage/maxDamage)
-      if (damage/maxDamage >= .9) {
+      
+      if (damage/maxDamage >= .9 && Math.random()>.15) {
+        
+        
         EventCenter.emit("addTrait", {
             unitIndex: UnitIndex.index[source],
-            traitIndex: TRAIT.JUST_GO_DOWN_ALREADY,
+            traitIndex: TRAIT.SADIST,
             reason: NameHelper.GetName(world, source) + " destroyed " + NameHelper.GetName(world, target) + " with a high damage killing blow!"
           })
       }
@@ -84,5 +99,81 @@ export const createTraitEarningSystem=(world)=>{
     
     return world
   }
+  
 }
+
+export const addRandomTrait = (world, id) => {
+  
+  const unitIndex = UnitIndex.index[id]
+  
+  
+  
+  
+    var traitIds = [
+      TRAIT.PROUD,
+      TRAIT.BLOODTHIRSTY,
+      TRAIT.SPIKED_SKIN,
+      TRAIT.RECKLESS,
+      TRAIT.SPRAINED_ANKLE,
+      TRAIT.HARD_HITTER,
+      TRAIT.QUICK_HANDS,
+      TRAIT.GREEDY,
+      TRAIT.GOLD_DIGGER,
+      TRAIT.NERVOUS
+    ]
+    
+    const unitClass = Store.run.units[unitIndex].classType
+    
+    
+    
+    if (unitClass === ClassType.WARRIOR) {
+      
+      traitIds.push(
+        ...[
+          TRAIT.LEADER,
+          TRAIT.PROTECTIVE,
+          TRAIT.BULKY
+        ]
+      )
+    }
+    if (unitClass === ClassType.ROGUE) {
+      
+      traitIds.push(
+        ...[
+          TRAIT.LEROY_JENKINS
+        ]
+      )
+    }
+    if (unitClass === ClassType.CLERIC) {
+      
+      traitIds.push(
+        ...[
+          TRAIT.POSSESSIVE
+        ]
+      )
+    }
+    
+    traitIds = traitIds.filter(traitId=>{
+      return !Store.run.units[unitIndex].traits.includes(traitId)
+    })
+    
+    //console.log(traitIds, traitIds.length)
+    
+    if (traitIds.length <= 0)
+      return
+    
+    const traitIndex = traitIds[Utils.getRandomInt(0, traitIds.length)]
+    //console.log("trait index: "+traitIndex)
+    
+    console.log("trait index: " + traitIndex)
+    
+    EventCenter.emit("addTrait", {
+        unitIndex: unitIndex,
+        traitIndex,
+        reason: NameHelper.GetName(world, id) + " came back from the dungeon slightly altered!"
+    })
+    
+    
+  }
+
 

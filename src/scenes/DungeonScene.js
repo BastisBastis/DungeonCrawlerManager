@@ -31,6 +31,7 @@ import { MusicManager } from "../helpers/MusicManager"
 import { SFXManager } from "../helpers/sfxManager"
 import { DungeonGenerator } from "../helpers/DungeonGenerator" 
 import { Store, resetDungeonStore } from "../helpers/Store" 
+import { addRandomTrait } from "../systems/TraitEarningSystem" 
 
 import { getAllDungeonLogs , getDungeonSummary} from "../systems/StatSystem" 
 
@@ -58,6 +59,8 @@ export default class DungeonScene extends Phaser.Scene {
     try { 
     //Background
     this.earnedTraits = {}
+    MusicManager.play(1,this)
+    this.sfxManager = new SFXManager(this)
 
     EventCenter.on("allUnitsDead", this.allUnitsDead, this)
     EventCenter.on("goalReached", this.goalReached, this)
@@ -109,9 +112,10 @@ export default class DungeonScene extends Phaser.Scene {
       traitIndex,
       reason
     } = data
+    //console.log(data)
     
     if (Store.run.units[unitIndex].traits.includes(traitIndex))
-      return console.log("Unit already has trait " + traitIndex)
+      return //console.log("Unit already has trait " + traitIndex)
     
     if (!this.earnedTraits[unitIndex])
       this.earnedTraits[unitIndex]= []
@@ -129,6 +133,7 @@ export default class DungeonScene extends Phaser.Scene {
   exitDungeon(result) {
     EventCenter.emit("willExitDungeon", this.world)
     const deadUnitQuery = defineQuery([Dead, BattleUnit, UnitIndex])
+    const unitQuery= defineQuery([BattleUnit, UnitIndex])
 
     const deadUnits = []
     deadUnitQuery(this.world).forEach(id=>{
@@ -144,8 +149,20 @@ export default class DungeonScene extends Phaser.Scene {
     
     const traitsToAdd = []
     
+    unitQuery(this.world).forEach(id=>{
+      
+      if (BattleUnit.team[id] == 0 && Math.random() < .4) {
+        
+        if (!traitsToAdd[UnitIndex.index[id]]) {
+          addRandomTrait(this.world, id)
+        }
+        
+      }
+    })
+    
     for (const [unitIndex, traitData] of Object.entries(this.earnedTraits)) {
-      console.log(traitData)
+      //console.log(traitData)
+      
       traitsToAdd.push(traitData[Utils.getRandomInt(0,traitData.length)])
     }
     

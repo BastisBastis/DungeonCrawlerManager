@@ -28,7 +28,9 @@ export const createDeathSystem=(world)=>{
         addComponent(world, Dead, data.id)
         
         EventCenter.emit("unitDied", data.id)
-        
+        EventCenter.emit("playAudio", {
+          key: "die"
+        })
       }
     })
 

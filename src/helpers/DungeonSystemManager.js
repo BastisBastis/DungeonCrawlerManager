@@ -14,6 +14,7 @@ import { createParticleSystem } from "../systems/ParticleSystem"
 import { createStatSystem } from "../systems/StatSystem" 
 import { createTimedEventSystem } from "../systems/TimedEventSystem"
 import { createTraitEarningSystem } from "../systems/TraitEarningSystem" 
+import { createAttackEffectSystem } from "../systems/AttackEffectSystem" 
 
 export class DungeonSystemManager {
   constructor(world) {
@@ -22,7 +23,7 @@ export class DungeonSystemManager {
     createTakeDamageSystem(world)
     createReceiveHealSystem(world)
     createTraitEarningSystem(world)
-    
+    createAttackEffectSystem(world)
     
     this.systems=[
       

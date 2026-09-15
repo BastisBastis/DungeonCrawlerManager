@@ -1,5 +1,5 @@
 export const GlobalStuff = {
-  MusicVolume:6,
+  MusicVolume:3,
   SFXVolume:6,
   FontFamily:"Google Sans Flex",
   verboseLog: 0,

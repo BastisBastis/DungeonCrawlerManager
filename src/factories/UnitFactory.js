@@ -38,8 +38,10 @@ import { Model } from "../components/Model"
 import { Mana } from "../components/Mana"
 
 import { Traits } from "../components/Traits" 
+import { AttackAudio } from "../components/AttackAudio" 
 
 
+import { TraitList } from "../data/Traits" 
 
 
 export const UnitFactory = {
@@ -58,6 +60,7 @@ export const UnitFactory = {
     addComponent(world, ClassType, id)
     addComponent(world, Model, id)
     addComponent(world, Traits, id)
+    addComponent(world, AttackAudio, id)
    
     
     
@@ -91,6 +94,9 @@ export const UnitFactory = {
     MeleeAttack.coolDown[id] = 0
     MeleeAttack.atk[id] = unitData.atk
     MeleeAttack.buildUpTime[id] = unitData.attackBuildUp
+    
+    AttackAudio.soundDelay[id] = unitData.soundDelay ? unitData.soundDelay : 1
+    AttackAudio.audioKey[id] = unitData.audioKey !==undefined ? unitData.audioKey : 1
     
     if (unitData.nameIndex !== undefined) {
       addComponent(world, Name, id)
@@ -140,7 +146,32 @@ export const UnitFactory = {
       for (let i in unitData.traits) {
         Traits.traits[id][i] = unitData.traits[i]
       }
+      
+      for (const traitIndex of unitData.traits) {
+        for (const effect of TraitList[traitIndex].effects) {
+          if (effect.type =="attackStatMod") {
+            
+            MeleeAttack.damage[id] *= effect.damageMod
+            MeleeAttack.delay[id] *= effect.delayMod
+            MeleeAttack.atk[id] += effect.atkMod
+          }
+          if (effect.type =="defenseStatMod") {
+            
+            Attackable.maxHitpoints[id] *= effect.hpMod
+            Attackable.currentHitpoints[id] = Attackable.maxHitpoints[id]
+            Attackable.armorClass[id] *= effect.acMod
+            
+            
+          }
+        }
+        
+      }
+      
+      
     }
+    
+    
+    
     
     return id
   },
@@ -159,16 +190,16 @@ export const UnitFactory = {
     
     const classValues = {}
     classValues[UnitClass.WARRIOR] = {
-      hpMin : 100,
-      hpMax : 150,
+      hpMin : 80,
+      hpMax : 100,
       acMin : 12,
-      acMax : 20,
+      acMax : 15,
       dmgMin : 6,
       dmgMax : 10,
       delayMin : 20,
       delayMax : 25,
       atkMin : 6,
-      atkMax : 10,
+      atkMax : 9,
       threatMods: {
         attackMin: 2,
         attackMax: 4,
@@ -183,19 +214,19 @@ export const UnitFactory = {
       modelIndex:Models.warrior
     }
   classValues[UnitClass.CLERIC] = {
-      hpMin : 40,
-      hpMax : 70,
+      hpMin : 30,
+      hpMax : 50,
       acMin : 7,
       acMax : 10,
       dmgMin : 4,
       dmgMax : 8,
       delayMin : 11,
       delayMax : 16,
-      atkMin : 5,
-      atkMax : 9,
+      atkMin : 4,
+      atkMax : 7,
       healer: true,
-      healAmountMin: 30,
-      healAmounttMax: 50,
+      healAmountMin: 20,
+      healAmounttMax: 30,
       healDelayMin : 60,
       healDelayMax : 80,
       manaMax : 25,
@@ -213,16 +244,16 @@ export const UnitFactory = {
       modelIndex:Models.cleric
     }
     classValues[UnitClass.ROGUE] = {
-      hpMin : 70,
-      hpMax : 110,
+      hpMin : 50,
+      hpMax : 80,
       acMin : 7,
       acMax : 10,
       dmgMin : 10,
       dmgMax : 14,
       delayMin : 12,
       delayMax : 16,
-      atkMin : 10,
-      atkMax : 16,
+      atkMin : 9,
+      atkMax : 15,
       healer: false,
       threatMods: {
         attackMin: 1.0,
@@ -245,10 +276,10 @@ export const UnitFactory = {
     var atk = Utils.getRandomBellInt(classValues[classType].atkMin,classValues[classType].atkMax, 1)
     
     var threatMods = {
-      attack: Math.floor(Phaser.Math.FloatBetween(classValues[classType].threatMods.attackMin, classValues[classType].threatMods.attackMax)*10)/10,
-      proximity: Math.floor(Phaser.Math.FloatBetween(classValues[classType].threatMods.proximityMin, classValues[classType].threatMods.proximityMax)*10)/10,
-      heal: Math.floor(Phaser.Math.FloatBetween(classValues[classType].threatMods.healMin, classValues[classType].threatMods.healMax)*10)/10,
-      other: Math.floor(Phaser.Math.FloatBetween(classValues[classType].threatMods.otherMin, classValues[classType].threatMods.otherMax)*10)/10,
+      attack: Phaser.Math.FloatBetween(classValues[classType].threatMods.attackMin, classValues[classType].threatMods.attackMax),
+      proximity: Phaser.Math.FloatBetween(classValues[classType].threatMods.proximityMin, classValues[classType].threatMods.proximityMax),
+      heal: Phaser.Math.FloatBetween(classValues[classType].threatMods.healMin, classValues[classType].threatMods.healMax),
+      other: Phaser.Math.FloatBetween(classValues[classType].threatMods.otherMin, classValues[classType].threatMods.otherMax),
     }
     
     var nameIndex = NameHelper.getNextNameIndex()
@@ -300,10 +331,16 @@ export const UnitFactory = {
     }
     
     const attackBuildUp = 600
+    const soundDelay = 200
+    const audioKey = 0
     
     recruitmentCost = Math.floor(recruitmentCost *costMod)
     
-    const traits = []
+    const traits = [
+      
+    ]
+    if (classType == "Cleric")
+      traits.push()
 
     //hp = 900
     //damage = 150
@@ -328,6 +365,8 @@ export const UnitFactory = {
       exp : 0,
       traits,
       attackBuildUp,
+      soundDelay,
+      audioKey,
       modelIndex:classValues[classType].modelIndex
     }
     

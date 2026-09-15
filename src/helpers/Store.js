@@ -1,4 +1,4 @@
-export const Store = {}
+  export const Store = {}
 
 export const resetStore = ()=>{
   resetRunStore()

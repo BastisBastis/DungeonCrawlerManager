@@ -57,20 +57,26 @@ export const createHealingSystem=(world)=>{
           for (let i = 0; i < Traits.count[id]; i++) {
             const traitIndex = Traits.traits[id][i]
             const trait = TraitList[traitIndex]
-            if (trait.effect.type == "healModifier") {
+            for (const effect of trait.effects) {
+              
+              if (effect.type == "healModifier") {
               
               
-              if (trait.effect.condition && CheckTraitCondition({
-                world, 
-                target: Action.target[id],
-                trait
-              })) {
-                amount *= trait.effect.mod
-                console.log("CRITICAL HEAL FROM TRAIT!")
+                if (effect.condition && CheckTraitCondition({
+                  world, 
+                  target: Action.target[id],
+                  trait
+                })) {
+                  amount *= effect.mod
+                  console.log("CRITICAL HEAL FROM TRAIT!")
+                }
+                
+                
               }
               
-              
             }
+            
+            
           }
           
         }

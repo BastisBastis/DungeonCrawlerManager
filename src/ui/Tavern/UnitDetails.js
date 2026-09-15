@@ -92,39 +92,39 @@ export class UnitDetails extends Window {
       [name],
       [classType],
       ["Level", level],
-      ["Hitpoints", hitpoints],
-      ["Armor Class", armorClass],
+      ["Hitpoints", Math.round(hitpoints)],
+      ["Armor Class", Math.round(armorClass)],
       
     ]
 
     
 
     labels.push(
-      ["Attack Damage", damage],
-      ["Attack Cooldown", delay],
-      ["Attack Skill", atk]
+      ["Attack Damage", Math.round(damage)],
+      ["Attack Cooldown", Math.round(delay)],
+      ["Attack Skill", Math.round(atk)]
     )
     if (mana) {
       labels.push(
-        ["Mana", mana]
+        ["Mana", Math.round(mana)]
       )
     }
 
     if (healer) {
       labels.push([
           "Heal Amount",
-          healer.amount
+          Math.round(healer.amount)
         ],
         [
           "Heal Cooldown",
-          healer.delay
+          Math.round(healer.delay)
         ]
       )
     }
     if (threatMods.attack != 1) {
       labels.push([
           "Threat Mod",
-          threatMods.attack
+          Math.round(threatMods.attack*10)/10
         ]
       )
     }

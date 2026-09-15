@@ -6,7 +6,7 @@ import {
 
 
 export const Mana = defineComponent({
-  currentMana:Types.ui16,
-  maxMana:Types.ui16
+  currentMana:Types.f32,
+  maxMana:Types.f32
 })
 

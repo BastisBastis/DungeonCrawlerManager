@@ -6,8 +6,8 @@ import {
 
 
 export const Attackable = defineComponent({
-  maxHitpoints:Types.ui16,
-  currentHitpoints:Types.ui16,
+  maxHitpoints:Types.f32,
+  currentHitpoints:Types.f32,
   armorClass:Types.ui16
 })
 

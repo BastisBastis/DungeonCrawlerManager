@@ -10,6 +10,7 @@ import { Position } from "../components/Position"
 import { Dead } from "../components/Dead"
 
 import { ActionType } from "../components/Action"
+import { AttackAudio,  } from "../components/AttackAudio" 
 
 import { EventCenter } from "../helpers/EventCenter" 
 
@@ -25,6 +26,9 @@ export const createMeleeAttackSystem=(world)=>{
     if (hasComponent(world, Dead, source) || hasComponent(world, Dead, target))
       return
     
+    
+    
+    
     EventCenter.emit("damageRequest", {
       source:source,
       target: target,
@@ -33,6 +37,12 @@ export const createMeleeAttackSystem=(world)=>{
         atk: atk,
         damage: damage
       }
+    })
+  }
+  
+  const playMeleeSound =(id)=> {
+    EventCenter.emit("playAudio", {
+      index: AttackAudio.audioKey[id]
     })
   }
   
@@ -81,6 +91,12 @@ export const createMeleeAttackSystem=(world)=>{
               MeleeAttack.atk[id],
               MeleeAttack.damage[id]
             )
+          }
+        })
+         EventCenter.emit("addTimedEvent", {
+          time: AttackAudio.soundDelay[id],
+          callback: ()=>{
+            playMeleeSound(id)
           }
         })
         /*setTimeout(()=>{

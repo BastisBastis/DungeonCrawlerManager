@@ -39,29 +39,29 @@ export const ExperienceManager = {
       
       unitData.exp -= expPerLevel[unitData.level]
       unitData.level++
-      unitData.hitpoints = Math.round(unitData.hitpoints * 1.2*gainMods.hitpoints)
+      unitData.hitpoints = unitData.hitpoints * 1.2*gainMods.hitpoints
       result.hitpoints = 1.2*gainMods.hitpoints
-      unitData.armorClass = Math.round(unitData.armorClass * 1.2 * gainMods.armorClass)
+      unitData.armorClass = unitData.armorClass * 1.2 * gainMods.armorClass
       result.armorClass = 1.2*gainMods.armorClass
-      unitData.atk = Math.round(unitData.atk * 1.2 * gainMods.atk)
+      unitData.atk = unitData.atk * 1.2 * gainMods.atk
       result.atk = 1.2*gainMods.atk
       
-      unitData.damage = Math.round(unitData.damage * 1.2 * gainMods.damage)
+      unitData.damage = unitData.damage * 1.2 * gainMods.damage
       result.damage = 1.2*gainMods.damage
       
       if (unitData.classType == UnitClass.WARRIOR) {
-        unitData.threatMods.attack = Math.round(unitData.threatMods.attack*1.15 * gainMods.threatMod*10)/10
+        unitData.threatMods.attack = unitData.threatMods.attack*1.15 * gainMods.threatMod
         result.threatMod = 1.1*gainMods.threatMod
       }
       
       if (unitData.healer) {
         //unitData.healer.amount = Math.round(unitData.healer.amount * 1.2 * gainMods.healAmount)
         //result.healAmount = 1.2*gainMods.healAmount
-        unitData.healer.delay = Math.round(unitData.healer.delay * gainMods.healCooldown)
+        unitData.healer.delay = unitData.healer.delay * gainMods.healCooldown
       }
 
       if (unitData.mana) {
-        unitData.mana = Math.round(unitData.mana * 1.2 * gainMods.mana)
+        unitData.mana = unitData.mana * 1.2 * gainMods.mana
       }
 
       unitData.recruitmentCost = Math.round(unitData.recruitmentCost * 1.4)

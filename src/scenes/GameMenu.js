@@ -19,6 +19,9 @@ import { Store, resetMenuStore } from "../helpers/Store"
 
 import { EventCenter } from "../helpers/EventCenter" 
 import { ExperienceManager } from "../helpers/ExperienceManager" 
+import { SFXManager } from "../helpers/sfxManager" 
+import {MusicManager} from "../helpers/MusicManager" 
+
 
 //Data
 import { Palette } from "../data/Palette" 
@@ -34,7 +37,8 @@ import { StatsMenu } from "../ui/Stats/StatsMenu"
 import { TraitAwardPopup } from "../ui/Popups/TraitAwardPopup" 
 
 
-//Temp
+//Data
+import { TraitList } from "../data/Traits" 
 
 
 
@@ -53,7 +57,10 @@ export default class GameMenu extends Phaser.Scene {
   async create(data) {
     try { 
     //Background
+    MusicManager.play(0,this)
     this.addEventListers()
+    
+    this.sfxManager = new SFXManager(this)
     
     const result = data.result !== undefined
       ? data.result
@@ -119,7 +126,24 @@ export default class GameMenu extends Phaser.Scene {
   }
   
   onDungeonCompleted() {
-    Store.run.gold += Store.run.levelIndex*30
+    
+    var goldMod = 1
+    for (const unitIndex of Store.run.party) {
+      const unit = Store.run.units[unitIndex]
+      for (const traitIndex of unit.traits) {
+        
+        const trait= TraitList[traitIndex]
+          for (const effect of trait.effects) {
+            if (effect.type == "goldMod") {
+            goldMod*=effect.mod
+          }
+        }
+        
+        
+      }
+    }
+    
+    Store.run.gold += (Store.run.levelIndex+1) *10 * goldMod
     
   }
   

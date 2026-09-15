@@ -13,6 +13,10 @@ import { CheckpointFollower } from "../components/CheckpointFollower"
 import { Action } from "../components/Action"
 import { Dead } from "../components/Dead" 
 import { Rotation } from "../components/Rotation"
+import { Traits } from "../components/Traits" 
+import { TraitList } from "../data/Traits" 
+
+
 import { EventCenter } from "../helpers/EventCenter"
 
 export const createMovementSystem=(world)=>{
@@ -67,6 +71,22 @@ export const createMovementSystem=(world)=>{
 
       let separationX = 0
       let separationY = 0
+      
+      var movementSpeed = speed
+      
+      if (hasComponent(world, Traits, id)) {
+                  
+        for (let i = 0; i < Traits.count[id]; i++) {
+          const traitIndex = Traits.traits[id][i]
+          const trait = TraitList[traitIndex]
+          
+          for (const effect of trait.effects) {
+            if (effect.type == "runSpeedMod") {
+              movementSpeed *= effect.mod
+            }
+          }
+        }
+      }
 
       query(world).forEach(otherId=>{
         if (otherId === id) 
@@ -149,12 +169,12 @@ export const createMovementSystem=(world)=>{
             movementTarget.x,
             movementTarget.y
           )
-        if (distSquared < Math.pow(speed*dt/100,2)) {
+        if (distSquared < Math.pow(movementSpeed*dt/100,2)) {
           Position.x[id] = movementTarget.x
           Position.y[id] = movementTarget.y
         } else {
-          Position.x[id]  = Position.x[id]  + Math.cos(angle) * speed*dt/100;
-          Position.y[id]  = Position.y[id]  + Math.sin(angle) * speed*dt/100;
+          Position.x[id]  = Position.x[id]  + Math.cos(angle) * movementSpeed*dt/100;
+          Position.y[id]  = Position.y[id]  + Math.sin(angle) * movementSpeed*dt/100;
         }
 
 

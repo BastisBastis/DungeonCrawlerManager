@@ -14,7 +14,7 @@ import { Store } from "../helpers/Store"
 import { BattleUnit } from "../components/BattleUnit" 
 import { Attackable } from "../components/Attackable" 
 import { Action } from "../components/Action" 
-
+import { Mana } from "../components/Mana" 
 
 //Data
 import { Palette } from "../data/Palette" 
@@ -60,6 +60,10 @@ export default class UI extends Phaser.Scene {
       var i = 0
       for (const hero of heroData) {
         
+        var mana
+        if (hasComponent(world, Mana, hero.id))
+          mana = Mana.maxMana[hero.id]
+        
         const name = NameHelper.GetName(this.world, hero.id)
         var duc = new DungeonUnitCard(
           this,
@@ -67,6 +71,8 @@ export default class UI extends Phaser.Scene {
           120 + 240*Math.floor(i/2),
           {
             ...hero,
+            hitpoints: Attackable.maxHitpoints[hero.id],
+            mana,
             name
             },
           {
@@ -100,11 +106,12 @@ export default class UI extends Phaser.Scene {
       
       this.setupEventListeners()
     
-    
     } catch (er) {console.log(er.message,er.stack); throw er} 
   
   
   }
+  
+  
   
   changeGameSpeed() {
     if (Store.dungeon.gameSpeed== 1) {
@@ -161,7 +168,7 @@ export default class UI extends Phaser.Scene {
       ...this.hostileUnitCards
     }[data.id]
 
-    card.manaValueLabel.text = data.currentMana+"/"+data.maxMana
+    card.manaValueLabel.text = Math.round(data.currentMana)+"/"+Math.round(data.maxMana)
   }
   
   updateDungeonUnitCardHitpoints(data) {
@@ -174,7 +181,7 @@ export default class UI extends Phaser.Scene {
     if (card) {
       
       //card.levelValueLabel.text = data.level
-      card.hpValueLabel.text = data.currentHitpoints+"/"+data.maxHitpoints
+      card.hpValueLabel.text = Math.round(data.currentHitpoints)+"/"+Math.round(data.maxHitpoints)
       
       
     }

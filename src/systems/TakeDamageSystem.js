@@ -10,6 +10,7 @@ import { Traits } from "../components/Traits"
 
 import { EventCenter } from "../helpers/EventCenter" 
 import { NameHelper } from "../helpers/NameHelper"  
+import { UnitIndex } from "../components/UnitIndex" 
 
 import { TraitList, CheckTraitCondition } from "../data/Traits"
 
@@ -46,6 +47,8 @@ const randomDamage = (min, max, attackSkill, armorClass) => {
 
 export const createTakeDamageSystem=(world)=>{
   
+  const playerUnitQuery = defineQuery([UnitIndex])
+  
   EventCenter.on("damageRequest", (request)=>{
     const source = request.source
     const target = request.target
@@ -68,17 +71,20 @@ export const createTakeDamageSystem=(world)=>{
           for (let i = 0; i < Traits.count[target]; i++) {
             const traitIndex = Traits.traits[target][i]
             const trait = TraitList[traitIndex]
-            if (trait.effect.type == "damageMitigation") {
-              if (trait.effect.condition && CheckTraitCondition({
-                world, 
-                id: target,
-                trait
-              })) {
-                traitMod *= trait.effect.mod
-               
-                //console.log("DAMAGE REDUCTION FROM TRAIT", damageTaken, damageTaken*traitMod)
+            for (const effect of trait.effects) {
+              if (effect.type == "damageMitigation") {
+                if (effect.condition && CheckTraitCondition({
+                  world, 
+                  id: target,
+                  trait
+                })) {
+                  traitMod *= effect.mod
+                 
+                  //console.log("DAMAGE REDUCTION FROM TRAIT", damageTaken, damageTaken*traitMod)
+                }
               }
             }
+            
           }
         }
         if (hasComponent(world, Traits, source)) {
@@ -86,19 +92,71 @@ export const createTakeDamageSystem=(world)=>{
           for (let i = 0; i < Traits.count[source]; i++) {
             const traitIndex = Traits.traits[source][i]
             const trait = TraitList[traitIndex]
-            if (trait.effect.type == "damageModifier") {
-              if (trait.effect.condition && CheckTraitCondition({
-                world, 
-                target: target,
-                trait
-              })) {
-                traitMod *= trait.effect.mod
-               
-                console.log("DAMAGE BONUS FROM TRAIT", damageTaken, damageTaken*traitMod)
+            for (const effect of trait.effects) {
+              
+              if (effect.type == "damageModifier") {
+                if (effect.condition && CheckTraitCondition({
+                  world, 
+                  target: target,
+                  trait
+                })) {
+                  traitMod *= effect.mod
+                 
+                }
               }
+              
             }
+            
           }
         }
+        
+        if (hasComponent(world, UnitIndex, target)) {
+          
+          playerUnitQuery(world).forEach(id=>{
+            if (id == target)
+              return 
+              
+            if (hasComponent(world, Traits, id)) {
+                  
+              for (let i = 0; i < Traits.count[id]; i++) {
+                const traitIndex = Traits.traits[id][i]
+                const trait = TraitList[traitIndex]
+                
+                for (const effect of trait.effects) {
+                  
+                  if (effect.type == "protect") {
+                    const protectorDamage = damageTaken * traitMod * effect.mod
+                    traitMod *= (1-effect.mod)
+                    
+                    Attackable.currentHitpoints[id] = Math.floor(Math.max(0, Attackable.currentHitpoints[id] - protectorDamage))
+                    
+                    EventCenter.emit("damageTaken", {
+                      damage: protectorDamage,
+                      maxDamage: data.damage,
+                      id,
+                      source,
+                      damageType: "protection"
+                    })
+                    
+                    EventCenter.emit("updateHitpoints", {
+                      id: id,
+                      currentHitpoints: Attackable.currentHitpoints[id],
+                      maxHitpoints: Attackable.maxHitpoints[id]
+                    })
+                    
+                  }
+                  
+                }
+                
+                
+              }
+            }
+            
+          })
+          
+        }
+        
+        
         damageTaken *= traitMod
         damageTaken = Math.round(damageTaken)
         

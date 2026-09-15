@@ -373,23 +373,23 @@ export class StatsMenu extends Window {
    
    const strings = [
     [name, unit.classType],
-    ["Hitpoints:", unit.hitpoints],
-    ["Armor Class:", unit.armorClass],
-    ["Attack Damage:", unit.damage],
-    ["Attack Cooldown:", unit.delay],
-    ["Attack Skill:", unit.atk]
+    ["Hitpoints:", Math.round(unit.hitpoints)],
+    ["Armor Class:", Math.round(unit.armorClass)],
+    ["Attack Damage:", Math.round(unit.damage)],
+    ["Attack Cooldown:", Math.round(unit.delay)],
+    ["Attack Skill:", Math.round(unit.atk)]
    ]
 
    if (unit.mana) {
       strings.push(
-        ["Mana", unit.mana]
+        ["Mana", Math.round(unit.mana)]
       )
     }
 
    if (unit.healer) {
     strings.push(
-     ["Heal Amount:", unit.healer.amount],
-     ["Heal Cooldown:", unit.healer.delay],
+     ["Heal Amount:", Math.round(unit.healer.amount)],
+     ["Heal Cooldown:", Math.round(unit.healer.delay)],
     )
    }
    if (unit.threatMods.attack > 1.0) {

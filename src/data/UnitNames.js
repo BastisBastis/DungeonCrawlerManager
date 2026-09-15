@@ -86,7 +86,6 @@ export const UnitNames = [
   "Nigel",
   "Barnaby",
   "Monty",
-  "Reginald",
   "Horace",
   "Algernon",
   "Phineas",
