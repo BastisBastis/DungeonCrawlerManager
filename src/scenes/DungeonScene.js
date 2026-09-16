@@ -59,7 +59,7 @@ export default class DungeonScene extends Phaser.Scene {
     try { 
     //Background
     this.earnedTraits = {}
-    MusicManager.play(1,this)
+    MusicManager.play(1 + Store.run.levelIndex % 2,this)
     this.sfxManager = new SFXManager(this)
 
     EventCenter.on("allUnitsDead", this.allUnitsDead, this)

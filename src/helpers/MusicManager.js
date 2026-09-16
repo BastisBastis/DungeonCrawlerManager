@@ -1,6 +1,8 @@
 import Dungeon1 from "../assets/music/D1.wav"
+import Dungeon2 from "../assets/music/D2.m4a"
 import Menu from "../assets/music/Menu.m4a"
 
+import { GlobalStuff } from "../helpers/GlobalStuff"
 
 const trackData = [
   
@@ -15,6 +17,11 @@ const trackData = [
     group:"d1",
     url:Dungeon1,
     volume:0.1
+  },{
+    key:"dungeon2",
+    group:"d2",
+    url:Dungeon2,
+    volume:0.1
   },
  
   
@@ -26,6 +33,8 @@ export const MusicManager={
  
  
  MusicManager.play=(index,scene)=>{
+  if (GlobalStuff.MuteSounds)
+          return
    if (index>=MusicManager.tracks.length)
      return
    const currentTrackIndex= MusicManager.tracks.findIndex(track=>track.isPlaying)

@@ -75,7 +75,8 @@ export class SFXManager {
     
     
     EventCenter.on("playAudio",data=>{
-      
+      if (GlobalStuff.MuteSounds)
+        return
     try { 
       
       if (!data.key)

@@ -144,7 +144,7 @@ export default class GameMenu extends Phaser.Scene {
       }
     }
     
-    Store.run.gold += (Store.run.levelIndex+1) *10 * goldMod
+    Store.run.gold += Math.round((Store.run.levelIndex+1) *10 * goldMod)
     
   }
   
@@ -226,7 +226,7 @@ export default class GameMenu extends Phaser.Scene {
     this.messageLabel = this.add.text(300, this.cameras.main.height - 100, "", { fontSize: 100 })
     
     this.goldLabel = this.add.text(
-      this.cameras.main.width-40, 40, "GOLD: " + Store.run.gold, { 
+      this.cameras.main.width-40, 40, "GOLD: " + Math.floor(Store.run.gold), { 
       fontSize: 80, 
       color: Palette.beige1.string,
       fontFamily: GlobalStuff.FontFamily

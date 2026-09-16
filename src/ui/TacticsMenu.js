@@ -34,7 +34,7 @@ export class TacticsMenu extends Window {
   ) {
     
     const {
-      width=1200,
+      width=1400,
       height=1040,
       depth=100,
       fontFamily=GlobalStuff.FontFamily,
@@ -70,10 +70,6 @@ export class TacticsMenu extends Window {
     
     
     this.unitDetails = null
-    this.unitDetailsPosition = {
-      x: this.scene.cameras.main.width - 300,
-      y: this.scene.cameras.main.height / 2 - 200
-    }
     
     
     const btnConfig={
@@ -99,15 +95,16 @@ export class TacticsMenu extends Window {
       })
     )
     
-    const deltaX = 500
+    const deltaX = 660
     const startX = x-deltaX/2
     const deltaY = 400
     const startY = y - deltaY/2 - 140
     const unitDetailsPosition = {
-      x: this.scene.cameras.main.width - 300,
+      x: this.scene.cameras.main.width - 160,
       y: this.scene.cameras.main.height / 2 - 0
     }
 
+    this.unitButtons = []
     Store.run.party.forEach((unitIndex, i)=>{
       const unit = Store.run.units[unitIndex]
       const card = new UnitOverview(
@@ -138,13 +135,92 @@ export class TacticsMenu extends Window {
         }
       )
       this.gameObjects.push(card)
+
+      this.unitButtons.push(this.createUnitButtons(i, unitIndex, startX + deltaX * (i % 2), startY + deltaY * Math.floor(i/2) + 180))
+
     })
+
+    
     
     
     } catch (er) {console.log(er.message,er.stack); throw er} 
   }
   
+  createUnitButtons(index, unitIndex, x, y) {
+    const buttons = []
+    const selectedColor = Palette.blue1.string
+    const deselectedColor = Palette.grey5.string
+    const btnConfig={
+      fontSize:24,
+      width:160,
+      height:100,
+      depth:this.depth+2,
+      fontColor: deselectedColor,
+      backgroundColor: Palette.beige2.hex,
+      borderThickness: 0
+    }
+    
 
+    const deltaX = 200
+
+    const btnData = [
+      [
+        "Defensive\nless damage,\nmore defense",
+        ()=>{
+          this.setTactic(unitIndex, 0)
+        }
+      ],
+      [
+        " \nNeutral\n ",
+        ()=>{
+          this.setTactic(unitIndex, 1)
+        }
+      ],
+      
+      [
+        "Offensive\nmore damage,\nless defense",
+        ()=>{
+          this.setTactic(unitIndex, 2)
+        }
+      ]
+    ]
+
+    btnData.forEach((data, i)=>{
+      const string = data[0]
+      const callback = data[1]
+      const button = new Button(
+        this.scene,
+        x - deltaX + deltaX*i,
+        y,
+        string,
+        {
+          ...btnConfig,
+          onClick:()=> {
+           try { 
+           
+            this.setTactic(unitIndex, i)
+            } catch (er) {console.log(er.message,er.stack); throw er} 
+            buttons.forEach(btn=>{
+              btn.label.setColor(deselectedColor)
+              btn.fontColor = deselectedColor
+            })
+            button.label.setColor(selectedColor)
+            button.fontColor = selectedColor
+          }
+        }
+      )
+      if (i == Store.run.tactics[unitIndex]) {
+        button.label.setColor(selectedColor)
+        button.fontColor = selectedColor
+      }
+      buttons.push(button)
+    })
+    return buttons
+  }
+
+  setTactic(unitIndex, tacticIndex) {
+    Store.run.tactics[unitIndex] = tacticIndex
+  }
   
   destroy() {
    super.destroy()
@@ -155,6 +231,11 @@ export class TacticsMenu extends Window {
     if (this.unitDetails)
       this.unitDetails.destroy()
    
+    this.unitButtons.forEach(collection=>{
+      collection.forEach(button=>{
+        button.destroy()
+      })
+    })
      
     this.gameObjects=[]
   }

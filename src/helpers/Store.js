@@ -28,6 +28,7 @@ export const resetRunStore = ()=>{
   Store.run.party = []
   Store.run.deadUnits = []
   Store.run.levelIndex = 0
+  Store.run.tactics = {}
 }
 
 export const resetMetaStore = ()=>{

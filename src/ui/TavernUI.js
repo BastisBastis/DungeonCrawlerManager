@@ -97,7 +97,7 @@ export class TavernUI {
     this.goldLabel = this.scene.add.text(
       scene.cameras.main.width/2,
       scene.cameras.main.height/2 - 200,
-      "GOLD: " + Store.run.gold, { 
+      "GOLD: " + Math.floor(Store.run.gold), { 
       fontSize: 40, 
       color: Palette.brown4.string ,
       fontFamily: GlobalStuff.FontFamily
@@ -216,9 +216,10 @@ export class TavernUI {
             
             Store.run.units.push(card.unitData)
             
+            
             Store.run.party.push(Store.run.units.length-1)
             unitData.unitIndex = Store.run.units.length-1
-            
+            Store.run.tactics[unitData.unitIndex] = 1
             this.reloadPartyOverview()
             this.recruitmentOverviewCards.splice(index, 1)
             Store.menu.recruitmentPool.splice(index,1)
