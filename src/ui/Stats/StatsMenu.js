@@ -452,7 +452,7 @@ export class StatsMenu extends Window {
      this.scene.add.text(
      this.x,
      finalY,
-     "TRAITS:",
+     "TRAITS: (hover for details)",
      config
     ).setDepth(this.depth+10)
     .setOrigin(.5,.5)
