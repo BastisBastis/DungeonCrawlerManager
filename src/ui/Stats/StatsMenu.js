@@ -496,7 +496,7 @@ export class StatsMenu extends Window {
     this.x + this.width/2 - 220,
     this.y,
     traitIndex ,{
-     depth: this.depth+50
+     depth: this.depth+100
     }
    )
    } catch (er) {console.log(er.message,er.stack); throw er} 

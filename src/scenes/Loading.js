@@ -32,7 +32,7 @@ export default class Loading extends Phaser.Scene {
     });
     this.load.on('webfontactive', (fileObj, familyName) =>{
       const cam=this.cameras.main
-      const bg =this.add.rectangle(0,0,cam.width,cam.height,Palette.blue1.hex).setOrigin(0,0).setAlpha(0)
+      const bg =this.add.rectangle(0,0,cam.width,cam.height,Palette.purple2.hex).setOrigin(0,0).setAlpha(0)
       this.tweens.add({
         targets:bg,
         alpha:1,
@@ -69,7 +69,7 @@ export default class Loading extends Phaser.Scene {
     
     this.fadeOut(500)
     setTimeout(()=>{
-      this.scene.start("gameMenu")
+      this.scene.start("mainMenu")
     },500)
   }
   

@@ -19,8 +19,8 @@ export class Button extends Window {
       downFontColor=fontColor,
       cornerRadius=8,
       backgroundColor=Palette.beige1.hex,
-      hoverBackgroundColor=Palette.green2.hex,
-      downBackgroundColor=Palette.green3.hex,
+      hoverBackgroundColor=Palette.purple2.hex,
+      downBackgroundColor=Palette.purple4.hex,
       onClick=()=>false,
       requireDown=true
     }=config

@@ -165,7 +165,7 @@ export class TacticsMenu extends Window {
 
     const btnData = [
       [
-        "Defensive\nless damage,\nmore defense",
+        "Defensive\nless damage,\nmore defense\nless threat",
         ()=>{
           this.setTactic(unitIndex, 0)
         }
@@ -178,7 +178,7 @@ export class TacticsMenu extends Window {
       ],
       
       [
-        "Offensive\nmore damage,\nless defense",
+        "Offensive\nmore damage,\nless defense\nmore threat",
         ()=>{
           this.setTactic(unitIndex, 2)
         }

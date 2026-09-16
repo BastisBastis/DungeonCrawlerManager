@@ -2,7 +2,7 @@ import Phaser from 'phaser'
 import WebFontLoaderPlugin from 'phaser3-rex-plugins/plugins/webfontloader-plugin.js'
 
 
-import Game from "./scenes/Game"
+import MainMenu from "./scenes/MainMenu"
 import DungeonScene from "./scenes/DungeonScene"
 import UI from "./scenes/UI"
 import GameMenu from "./scenes/GameMenu"
@@ -29,7 +29,7 @@ const config = {
     }, 
     scene: [
       Loading,
-      Game,
+      MainMenu,
       GameMenu,
       DungeonScene,
       UI,

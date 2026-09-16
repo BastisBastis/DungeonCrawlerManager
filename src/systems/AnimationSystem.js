@@ -103,19 +103,32 @@ export const createAnimationSystem =(world)=>{
       if (!animationRules[AnimationState.current[id]].goToNext)
         return
         
-      
+      /* console.log(
+  "FINISHED",
+  id,
+  "finished:",
+  event.action.getClip().name,
+  "current:",
+  animationKeys[AnimationState.current[id]],
+  "requested:",
+  animationKeys[AnimationState.requested[id]]
+) */
+
       const object = world.scene.objects3d[id]
       const currentAnimationKey = animationKeys[AnimationState.current[id]]
       const requestedAnimationKey = animationKeys[AnimationState.requested[id]]
       
+      if (currentAnimationKey == requestAnimation)
+        return
+
       const clipName = event.action.getClip().name    
-      if (clipName === "Attack" && requestedAnimationKey != "Attack") {
+      if ((clipName === "Attack" || clipName === "Attack2") && requestedAnimationKey != "Attack") {
         event.action.fadeOut(.2)
       }
 
 
       object.scene.actions[requestedAnimationKey].reset().fadeIn(.2).play()
-      object.scene.actions[currentAnimationKey].fadeOut(.2)
+      event.action.fadeOut(.2)
       
       AnimationState.current[id] = AnimationState.requested[id]
       

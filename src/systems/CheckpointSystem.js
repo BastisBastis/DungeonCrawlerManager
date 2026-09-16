@@ -25,6 +25,20 @@ export const createCheckPointSystem=(world)=>{
         return
         
       const cellSize = world.scene.level.cellSize
+
+
+const cellCenterX = checkpoints[index].x * cellSize
+const cellCenterY = checkpoints[index].y * cellSize
+
+if (
+  Math.abs(Position.x[id] - cellCenterX) <= cellSize * 0.25 &&
+  Math.abs(Position.y[id] - cellCenterY) <= cellSize * 0.25
+) {
+  CheckpointFollower.index[id] += 1
+  return
+}
+return
+
       
       var col = Math.floor((Position.x[id] + cellSize/2) /cellSize)
       var row = Math.floor((Position.y[id] + cellSize/2) /cellSize)

@@ -43,7 +43,7 @@ export default class UI extends Phaser.Scene {
       this.timer = 1000
       this.world = world
       
-      
+     /*  
       this.logBox = new LogBox(
         this, 
         500, 
@@ -54,7 +54,7 @@ export default class UI extends Phaser.Scene {
           fontSize: 16
         }
       )
-      this.logBox.addLine("Welcome")
+      this.logBox.addLine("Welcome") */
       this.dungeonUnitCards = {}
       
       var i = 0
@@ -89,18 +89,20 @@ export default class UI extends Phaser.Scene {
       EventCenter.on("hostileUnitEngaged", this.addHostileUnitCard, this)
       EventCenter.on("unitDied", this.removeUnitCard, this)
       
-      const button = new Button(this, 220, 570, "PAUSE", {
-        fontSize:48,
-        width: 400,
+      const button = new Button(this, 220, 1000, "PAUSE", {
+        fontSize:32,
+        width: 200,
+        height: 100,
         onClick : ()=>{
           Store.dungeon.paused = !Store.dungeon.paused
           EventCenter.emit("logThreat")
         }
       })
       
-      this.speedBtn = new Button(this, 525, 570, "1x", {
-        fontSize:48,
-        width: 150,
+      this.speedBtn = new Button(this, 525, 1000, "1x", {
+         fontSize:32,
+        width: 200,
+        height: 100,
         onClick : ()=>{this.changeGameSpeed()} 
       })
       
@@ -254,7 +256,7 @@ export default class UI extends Phaser.Scene {
   }
   
   addLogMessage(string) {
-    this.logBox.addLine(string)
+    //this.logBox.addLine(string)
   }
   
   
