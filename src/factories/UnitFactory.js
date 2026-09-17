@@ -10,6 +10,7 @@ import {
 //helpers
 import { NameHelper } from "../helpers/NameHelper" 
 import { GlobalStuff } from "../helpers/GlobalStuff"
+import { Store } from "../helpers/Store" 
 import * as Utils from "../helpers/Utils"
 
 //Data
@@ -39,6 +40,7 @@ import { Mana } from "../components/Mana"
 
 import { Traits } from "../components/Traits" 
 import { AttackAudio } from "../components/AttackAudio" 
+  import { Tactics } from "../components/Tactics" 
 
 
 import { TraitList } from "../data/Traits" 
@@ -170,7 +172,10 @@ export const UnitFactory = {
       
     }
     
-    
+    if (unitData.unitIndex !== undefined && Store.run.tactics[unitData.unitIndex] !== undefined) {
+      addComponent(world, Tactics, id)
+      Tactics.index[id] = Store.run.tactics[unitData.unitIndex]
+    }
     
     
     return id

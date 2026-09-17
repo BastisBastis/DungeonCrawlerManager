@@ -54,13 +54,13 @@ export default class Loading extends Phaser.Scene {
       })
     })
       
-    
+    try { 
     
     MusicManager.preload(this)
     SFXManager.preload(this)
     preloadGraphics(this)
 
-
+    } catch (er) {console.log(er.message,er.stack); throw er} 
   }
   
   create() {
