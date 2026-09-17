@@ -58,7 +58,7 @@ export default class GameMenu extends Phaser.Scene {
   async create(data) {
     try { 
     //Background
-    MusicManager.play(0,this)
+    
     this.addEventListers()
     
     this.sfxManager = new SFXManager(this)
@@ -82,7 +82,11 @@ export default class GameMenu extends Phaser.Scene {
     if (Store.run.party.length == 0 && result.winner != -1) {
       
       this.gameOver(result)
+      return
     }
+
+    MusicManager.play(0,this)
+    
     this.add.image(960,540,"menuBg").setScrollFactor(0,0).setDisplaySize(1920,1080)
     
     if (result.winner == 0) {
@@ -164,8 +168,9 @@ export default class GameMenu extends Phaser.Scene {
     
     for (const traitToAdd of traitsToAdd) {
       
-      if (!Store.run.units[traitToAdd.unitIndex].traits.includes(traitToAdd.traitIndex)) {
+      if (Store.run.party.includes(traitToAdd.unitIndex) && !Store.run.units[traitToAdd.unitIndex].traits.includes(traitToAdd.traitIndex)) {
         
+
         await TraitAwardPopup.prompt(
           this,
           this.cameras.main.width/2,

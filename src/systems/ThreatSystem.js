@@ -26,7 +26,7 @@ const unitQuery=defineQuery([BattleUnit])
 
 const getTacticsThreatMod =(world, id) => {
   if (hasComponent(world, Tactics, id)) {
-    console.log("Tactics threat mod: " + TacticsMods[Tactics.index[id]].threat)
+    //console.log("Tactics threat mod: " + TacticsMods[Tactics.index[id]].threat)
     return TacticsMods[Tactics.index[id]].threat
   }
   return 1.0

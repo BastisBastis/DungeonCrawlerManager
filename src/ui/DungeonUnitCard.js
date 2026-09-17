@@ -196,7 +196,12 @@ export class DungeonUnitCard extends Window {
       this.targetNameLabel,
       this.targetValueLabel
     ]
-
+    if (mana) {
+      this.labels.push(
+        this.manaNameLabel,
+        this.manaValueLabel
+      )
+    }
   }
   
   layout() {

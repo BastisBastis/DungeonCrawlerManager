@@ -4,6 +4,8 @@ import Phaser from "phaser"
 
 import { GlobalStuff } from "../helpers/GlobalStuff"
 import * as Utils from "../helpers/Utils"
+import { SFXManager } from "../helpers/sfxManager"
+import { EventCenter } from "../helpers/EventCenter"
 
 //Data
 import { Palette } from "../data/Palette" 
@@ -27,7 +29,7 @@ export default class MainMenu extends Phaser.Scene {
   create() {
     try { 
     //Background
-    
+    this.sfxManager = new SFXManager(this)
    
     
       
@@ -50,7 +52,7 @@ export default class MainMenu extends Phaser.Scene {
   }
 
   newGame() {
-    
+    EventCenter.removeAllListeners()
     this.scene.stop()
     this.scene.start("gameMenu", {})
   }

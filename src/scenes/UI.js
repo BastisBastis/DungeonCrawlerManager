@@ -60,7 +60,7 @@ export default class UI extends Phaser.Scene {
       var i = 0
       for (const hero of heroData) {
         
-        var mana
+        var mana = null
         if (hasComponent(world, Mana, hero.id))
           mana = Mana.maxMana[hero.id]
         

@@ -7,7 +7,7 @@ import {
 import { Attackable } from "../components/Attackable"
 import { BattleUnit } from "../components/BattleUnit" 
 import { UnitIndex } from "../components/UnitIndex" 
-import { ClassType, ClassIdFromName, ClassIds } from "../components/ClassType" 
+import { ClassType, ClassIdFromName, UnitClass } from "../components/ClassType" 
 
 
 
@@ -124,9 +124,9 @@ export const addRandomTrait = (world, id) => {
     
     const unitClass = Store.run.units[unitIndex].classType
     
+    console.log(unitClass, UnitClass.WARRIOR, unitClass === UnitClass.WARRIOR)
     
-    
-    if (unitClass === ClassType.WARRIOR) {
+    if (unitClass === UnitClass.WARRIOR) {
       
       traitIds.push(
         ...[
@@ -136,7 +136,7 @@ export const addRandomTrait = (world, id) => {
         ]
       )
     }
-    if (unitClass === ClassType.ROGUE) {
+    if (unitClass === UnitClass.ROGUE) {
       
       traitIds.push(
         ...[
@@ -144,7 +144,7 @@ export const addRandomTrait = (world, id) => {
         ]
       )
     }
-    if (unitClass === ClassType.CLERIC) {
+    if (unitClass === UnitClass.CLERIC) {
       
       traitIds.push(
         ...[
@@ -152,6 +152,7 @@ export const addRandomTrait = (world, id) => {
         ]
       )
     }
+    console.log(traitIds)
     
     traitIds = traitIds.filter(traitId=>{
       return !Store.run.units[unitIndex].traits.includes(traitId)

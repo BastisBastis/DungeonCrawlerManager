@@ -69,12 +69,12 @@ export const createTakeDamageSystem=(world)=>{
         var atk = data.atk
         if (hasComponent(world, Tactics, target)) {
           armorClass *= TacticsMods[Tactics.index[target]].defense
-          console.log("using defense tactics")
+          //console.log("using defense tactics")
         }
         
         if (hasComponent(world, Tactics, source)) {
           atk *= TacticsMods[Tactics.index[source]].damage
-          console.log("usikg offensive tactics")
+          //console.log("usikg offensive tactics")
         }
         
         

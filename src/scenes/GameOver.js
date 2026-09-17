@@ -6,6 +6,8 @@ import { GlobalStuff } from "../helpers/GlobalStuff"
 import * as Utils from "../helpers/Utils"
 import { MusicManager } from "../helpers/MusicManager"
 
+import { SFXManager } from "../helpers/sfxManager"
+
 //Data
 import { Palette } from "../data/Palette" 
 import { UnitNames } from "../data/UnitNames" 
@@ -15,6 +17,7 @@ import { UnitNames } from "../data/UnitNames"
 import { Button } from "../ui/Button"
 
 import { resetStore } from "../helpers/Store" 
+import { EventCenter } from "../helpers/EventCenter"
 
 
 
@@ -33,7 +36,8 @@ export default class GameOver extends Phaser.Scene {
     try { 
     //Background
    
-      MusicManager.play(0, this)
+    MusicManager.play(0, this)
+    this.sfxManager = new SFXManager(this)
       
   this.add.image(960,540,"menuBg").setScrollFactor(0,0).setDisplaySize(1920,1080)
     
@@ -45,7 +49,7 @@ export default class GameOver extends Phaser.Scene {
 
     
 
-    const button = new Button(this, 380, 700, "Restart", {
+    const button = new Button(this, this.cameras.main.width/2, this.cameras.main.height/2, "Main Menu", {
       fontSize:48,
       width: 400,
       onClick : ()=>{this.restart()
@@ -59,6 +63,7 @@ export default class GameOver extends Phaser.Scene {
    restart() {
     try { 
     resetStore()
+    EventCenter.removeAllListeners()
     this.scene.stop()
     this.scene.start("mainMenu", {})
     } catch (er) {console.log(er.message,er.stack); throw er} 

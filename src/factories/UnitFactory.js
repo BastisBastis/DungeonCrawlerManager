@@ -76,6 +76,7 @@ export const UnitFactory = {
     }
     
      if (unitData.mana) {
+      console.log(unitData.mana)
       addComponent(world, Mana, id),
       Mana.maxMana[id] = unitData.mana
       Mana.currentMana[id] = unitData.mana
