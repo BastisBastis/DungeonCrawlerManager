@@ -9,6 +9,7 @@ import { Position } from "../components/Position"
 import { BattleUnit } from "../components/BattleUnit"
 import { Dead } from "../components/Dead"
 import { ThreatMod } from "../components/ThreatMod" 
+import { Tactics } from "../components/Tactics" 
 
 
 import { EventCenter } from "../helpers/EventCenter" 
@@ -18,7 +19,18 @@ import { EventCenter } from "../helpers/EventCenter"
 import { GlobalStuff } from "../helpers/GlobalStuff"
 import { NameHelper } from "../helpers/NameHelper" 
 
+//Data
+import { TacticsMods } from "../data/Tactics" 
+
 const unitQuery=defineQuery([BattleUnit])
+
+const getTacticsThreatMod =(world, id) => {
+  if (hasComponent(world, Tactics, id)) {
+    console.log("Tactics threat mod: " + TacticsMods[Tactics.index[id]].threat)
+    return TacticsMods[Tactics.index[id]].threat
+  }
+  return 1.0
+}
 
 export const getAlliesInRange = (world, id) => {
   
@@ -93,6 +105,8 @@ export const createThreatSystem=(world)=>{
       threatMod *= ThreatMod.attack[req.source]
     }
     
+    threatMod *= getTacticsThreatMod(world, req.source)
+    
     world.scene.threatData[req.target].hostile[req.source].attack += req.data.damage * damageRequestMod * threatMod
   }
   
@@ -111,6 +125,8 @@ export const createThreatSystem=(world)=>{
         threatMod *= ThreatMod.attack[event.source]
       }
       
+      threatMod *= getTacticsThreatMod(world, event.source)
+      
       world.scene.threatData[id].hostile[event.source].attack += event.damage * damageTakenMod * threatMod
     })
   }
@@ -125,9 +141,10 @@ export const createThreatSystem=(world)=>{
         if (hasComponent(world, ThreatMod,req.source)) {
           threatMod *= ThreatMod.heal[req.source]
         }
+        threatMod *= getTacticsThreatMod(world, req.source)
         
         
-        if (setupHostileThreatData(id, req.source))
+        setupHostileThreatData(id, req.source)
           
         world.scene.threatData[id].hostile[req.source].heal += req.data.amount * healThreatMod * threatMod
         

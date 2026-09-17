@@ -11,8 +11,10 @@ import { Traits } from "../components/Traits"
 import { EventCenter } from "../helpers/EventCenter" 
 import { NameHelper } from "../helpers/NameHelper"  
 import { UnitIndex } from "../components/UnitIndex" 
+import { Tactics } from "../components/Tactics" 
 
 import { TraitList, CheckTraitCondition } from "../data/Traits"
+import { TacticsMods } from "../data/Tactics" 
 
 const randomDamage = (min, max, attackSkill, armorClass) => {
     const difference = attackSkill - armorClass
@@ -62,7 +64,21 @@ export const createTakeDamageSystem=(world)=>{
     if (damageType == "melee") {
       if (hasComponent(world,Attackable, target) && !hasComponent(world, Dead, source)) {
         const minDamage = data.damage * 0.2
-        var damageTaken = randomDamage(minDamage, data.damage, data.atk, Attackable.armorClass[target])
+        
+        var armorClass = Attackable.armorClass[target]
+        var atk = data.atk
+        if (hasComponent(world, Tactics, target)) {
+          armorClass *= TacticsMods[Tactics.index[target]].defense
+          console.log("using defense tactics")
+        }
+        
+        if (hasComponent(world, Tactics, source)) {
+          atk *= TacticsMods[Tactics.index[source]].damage
+          console.log("usikg offensive tactics")
+        }
+        
+        
+        var damageTaken = randomDamage(minDamage, data.damage, atk, armorClass)
 
         var traitMod = 1.0
 

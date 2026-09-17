@@ -11,11 +11,15 @@ import { Dead } from "../components/Dead"
 
 import { ActionType } from "../components/Action"
 import { AttackAudio,  } from "../components/AttackAudio" 
+import { Tactics } from "../components/Tactics" 
+
 
 import { EventCenter } from "../helpers/EventCenter" 
 
 //helpers
 import { GlobalStuff } from "../helpers/GlobalStuff"
+
+//Data
 
 
 
