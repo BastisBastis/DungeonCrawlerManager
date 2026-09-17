@@ -24,6 +24,7 @@ export default class Loading extends Phaser.Scene {
   }
   
   preload() {
+    try { 
     this.load.rexWebFont({
       google: {
         families: [GlobalStuff.FontFamily]
@@ -53,6 +54,8 @@ export default class Loading extends Phaser.Scene {
         yoyo:true
       })
     })
+    
+    } catch (er) {console.log(er.message,er.stack); throw er} 
       
     try { 
     

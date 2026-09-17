@@ -90,6 +90,9 @@ export const createHealingSystem=(world)=>{
             amount
           }
         })
+        EventCenter.emit("playAudio",{
+          key: "spell"
+        })
         
         EventCenter.emit("unitIsCasting", id)
 

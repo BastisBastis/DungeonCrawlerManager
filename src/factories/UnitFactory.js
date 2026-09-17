@@ -206,8 +206,8 @@ export const UnitFactory = {
       atkMin : 6,
       atkMax : 9,
       threatMods: {
-        attackMin: 2,
-        attackMax: 4,
+        attackMin: 1.5,
+        attackMax: 3.0,
         proximityMin: 2.1,
         proximityMax: 2.1,
         healMin: 1.0,

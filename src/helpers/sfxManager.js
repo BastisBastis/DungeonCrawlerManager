@@ -19,11 +19,13 @@ import Hit5 from "../assets/sfx/hit5.mp3"
 import Die from "../assets/sfx/die.mp3"
 import Hover from "../assets/sfx/hover1.m4a"
 import Click from "../assets/sfx/click1.m4a"
+import Spell from "../assets/sfx/spell2.m4a"
 
 export const AudioKeys = {}
 AudioKeys[0] = "sword"
 AudioKeys[1] = "hit"
 AudioKeys[2] = "die"
+AudioKeys[3] = "spell"
 
 export class SFXManager {
   constructor(scene) {
@@ -42,7 +44,8 @@ export class SFXManager {
       hit5:0.4,
       die:0.4,
       hover:0.4,
-      click:0.4
+      click:0.4,
+      spell: 0.4
     }
     this.playbackRates = {
       sword1: [.9,1.1],
@@ -58,6 +61,7 @@ export class SFXManager {
       die: [.9,1.1],
       hover: [.9,1.1],
       click: [.9,1.1],
+      spell: [.9,1.1]
     }
 
 
@@ -72,6 +76,7 @@ export class SFXManager {
     this.sounds["die"]=scene.sound.add("die")
     this.sounds["hover"]=scene.sound.add("hover")
     this.sounds["click"]=scene.sound.add("click")
+    this.sounds["spell"]=scene.sound.add("spell")
     
     
     EventCenter.on("playAudio",data=>{
@@ -154,6 +159,7 @@ export class SFXManager {
     scene.load.audio("die",Die)
     scene.load.audio("hover",Hover)
     scene.load.audio("click",Click)
+    scene.load.audio("spell",Spell)
     
   }
 }
