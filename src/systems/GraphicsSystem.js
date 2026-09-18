@@ -118,6 +118,11 @@ export const createGraphicsSystem =(world)=>{
         300,
         Position.y[followedUnit]+200
       )
+      world.scene.camera.position.set(
+        Position.x[followedUnit]-80,
+        120,
+        Position.y[followedUnit]+80
+      )
 
       world.scene.graphicsScene.dirLight.position.set(
         Position.x[followedUnit]-100,

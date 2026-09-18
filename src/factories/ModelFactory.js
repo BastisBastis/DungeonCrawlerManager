@@ -15,9 +15,10 @@ import Skeleton1URL from "../assets/models/Skeleton1.3.glb"
 import Zombie1URL from "../assets/models/Zombie1.4.glb" 
 import Lizard1URL from "../assets/models/Lizardman1.glb" 
 import Ghost1URL from "../assets/models/Ghost1.glb"
-import WarriorURL from "../assets/models/Warrior.glb"
-import RogueURL from "../assets/models/Rogue1.1.glb"
-import ClericURL from "../assets/models/Cleric.glb"
+import WarriorURL from "../assets/models/Warrior1.2.glb"
+import RogueURL from "../assets/models/Rogue1.2.glb"
+import ClericURL from "../assets/models/Cleric1.1.glb"
+import SwordURL from "../assets/models/sword.glb"
 
 
 const urls={}
@@ -94,6 +95,7 @@ const loadModel=(
       gltf.scene.children[0].geometry=geometries[modelId]
       
       */
+     //fixes(gltf,modelId)
       
       if (GlobalStuff.ToonShader) {
         gltf.scene.traverse(child=>{
@@ -155,7 +157,19 @@ const loadModel=(
 
 const fixes=(gltf,modelId)=>{
   
-    
+    if (modelId == Models.warrior) {
+      console.log(gltf.scale, gltf.scene.scale)
+      gltf.scene.traverse(child=>{
+          if (child.isMesh) {
+            if (child.name == "ArmR_1") {
+              createModel(
+                null, 
+                {})
+            }
+              
+          }
+        })
+    }
     
 }
 

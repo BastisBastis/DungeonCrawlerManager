@@ -117,7 +117,6 @@ export const createTakeDamageSystem=(world)=>{
                   effect
                 })) {
                   traitMod *= effect.mod
-                  console.log("Damage increased from trait. TraitMod: " + traitMod)
                  
                 }
               }
