@@ -306,6 +306,7 @@ const conditionChecks = {
     const currentHps = Attackable.currentHitpoints[target]
     const maxHps = Attackable.maxHitpoints[target]
     
+
     return (currentHps/maxHps) <= condition.value
   },
 
@@ -328,14 +329,12 @@ const conditionChecks = {
 
 
 export const CheckTraitCondition = (data) => {
-  const trait = data.trait//TraitList[data.traitIndex]
-  
-  if (!trait || !trait.effect || !trait.effect.condition) {
+  const effect = data.effect
+  if (!effect || !effect.condition) {
     return true
   }
-    
   
-  const condition = trait.effect.condition
+  const condition = effect.condition
   
   return conditionChecks[condition.type]({...data, condition})
 }

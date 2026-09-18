@@ -92,7 +92,7 @@ export const createTakeDamageSystem=(world)=>{
                 if (effect.condition && CheckTraitCondition({
                   world, 
                   id: target,
-                  trait
+                  effect
                 })) {
                   traitMod *= effect.mod
                  
@@ -114,9 +114,10 @@ export const createTakeDamageSystem=(world)=>{
                 if (effect.condition && CheckTraitCondition({
                   world, 
                   target: target,
-                  trait
+                  effect
                 })) {
                   traitMod *= effect.mod
+                  console.log("Damage increased from trait. TraitMod: " + traitMod)
                  
                 }
               }

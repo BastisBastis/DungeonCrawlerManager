@@ -76,7 +76,7 @@ export const UnitFactory = {
     }
     
      if (unitData.mana) {
-      console.log(unitData.mana)
+      //console.log(unitData.mana)
       addComponent(world, Mana, id),
       Mana.maxMana[id] = unitData.mana
       Mana.currentMana[id] = unitData.mana
@@ -343,7 +343,7 @@ export const UnitFactory = {
     recruitmentCost = Math.floor(recruitmentCost *costMod)
     
     const traits = [
-      
+      2
     ]
     if (classType == "Cleric")
       traits.push()

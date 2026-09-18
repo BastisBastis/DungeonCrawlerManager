@@ -152,7 +152,7 @@ export const addRandomTrait = (world, id) => {
         ]
       )
     }
-    console.log(traitIds)
+    //console.log(traitIds)
     
     traitIds = traitIds.filter(traitId=>{
       return !Store.run.units[unitIndex].traits.includes(traitId)
