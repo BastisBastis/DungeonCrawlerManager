@@ -343,7 +343,7 @@ export const UnitFactory = {
     recruitmentCost = Math.floor(recruitmentCost *costMod)
     
     const traits = [
-      2
+      
     ]
     if (classType == "Cleric")
       traits.push()
