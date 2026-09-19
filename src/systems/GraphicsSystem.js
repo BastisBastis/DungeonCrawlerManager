@@ -49,6 +49,7 @@ export const createGraphicsSystem =(world)=>{
             10,
             Color.hex[id]
           ).setDepth(60)
+          .setVisible(false)
       
       
       gameObjects[id]=object
@@ -93,8 +94,8 @@ export const createGraphicsSystem =(world)=>{
       
       if (followedUnit == 0) {
         followedUnit = id
-        world.scene.cameras.main.startFollow(gameObjects[id], true, 0.8, 0.8)
-        world.scene.cameras.main.setFollowOffset(400,0)
+        //world.scene.cameras.main.startFollow(gameObjects[id], true, 0.8, 0.8)
+        //world.scene.cameras.main.setFollowOffset(400,0)
         
       }
       gameObjects[id].setPosition(
@@ -117,6 +118,11 @@ export const createGraphicsSystem =(world)=>{
         Position.x[followedUnit]-200,
         300,
         Position.y[followedUnit]+200
+      )
+      world.scene.camera.lookAt(
+        Position.x[followedUnit],
+        0,
+        Position.y[followedUnit]
       )
       /* world.scene.camera.position.set(
         Position.x[followedUnit]-100,

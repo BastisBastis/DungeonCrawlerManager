@@ -15,6 +15,7 @@ import { createStatSystem } from "../systems/StatSystem"
 import { createTimedEventSystem } from "../systems/TimedEventSystem"
 import { createTraitEarningSystem } from "../systems/TraitEarningSystem" 
 import { createAttackEffectSystem } from "../systems/AttackEffectSystem" 
+import { createNameTagSystem } from "../systems/NameTagSystem"
 
 export class DungeonSystemManager {
   constructor(world) {
@@ -39,6 +40,7 @@ export class DungeonSystemManager {
       createParticleSystem(world),
       createGraphicsSystem(world),
       createAnimationSystem(world),
+      createNameTagSystem(world),
       createStatSystem(world)
     ]
   }

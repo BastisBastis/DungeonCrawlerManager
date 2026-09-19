@@ -37,6 +37,7 @@ import { EnemyIndex } from "../components/EnemyIndex"
 import { Rotation } from "../components/Rotation"
 import { Model } from "../components/Model"
 import { Mana } from "../components/Mana"
+import { NameTag } from "../components/NameTag"
 
 import { Traits } from "../components/Traits" 
 import { AttackAudio } from "../components/AttackAudio" 
@@ -182,11 +183,11 @@ export const getCostMod = (classType, value, valueKey) => {
     averages.healAmount = (classValues[classType].healAmountMin+ classValues[classType].healAmountMax) /2
       averages.healDelay = (classValues[classType].healDelayMin+ classValues[classType].healDelayMax) /2
   }
-  console.log(classType, averages)
+  //console.log(classType, averages)
   
   //console.log(classType, classValues)
   
-  return getWeightedStatValue(value, averages[valueKey], classValues[classType].costWeights[valueKey])
+  return Math.pow(getWeightedStatValue(value, averages[valueKey], classValues[classType].costWeights[valueKey]),.5)
   
 }
 
@@ -279,6 +280,7 @@ export const UnitFactory = {
     if (unitData.unitIndex !== undefined) {
       addComponent(world, UnitIndex, id)
       UnitIndex.index[id] = unitData.unitIndex
+      addComponent(world, NameTag, id)
     }
 
     if (unitData.enemyIndex !== undefined) {

@@ -32,10 +32,10 @@ export const ExperienceManager = {
         "healAmount",
         "mana"
       ]) {
-        gainMods[key] = Math.random()*.2+.9
+        gainMods[key] = Math.random()*.16+.92
       }
 
-      gainMods.healCooldown = Math.random() * .1 + .9
+      gainMods.healCooldown = Math.random() * .1 + .88
       
       unitData.exp -= expPerLevel[unitData.level]
       unitData.level++
@@ -85,7 +85,7 @@ export const ExperienceManager = {
         
       }
       
-      unitData.recruitmentCost = Math.round(unitData.recruitmentCost*Math.pow(costMod,.5))
+      unitData.recruitmentCost = Math.round(unitData.recruitmentCost * costMod)
       
       return result
     }
