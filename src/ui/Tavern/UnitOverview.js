@@ -12,7 +12,7 @@ export class UnitOverview extends Window {
     unitData = {},
     config={}) {
     const {
-      name = "UnitName",
+      name,
       level = 1,
       id = 0,
       classType = "Warrior",
@@ -86,66 +86,41 @@ export class UnitOverview extends Window {
 
         } 
       }
-      
-    var rowIndex = 0
     
-    this.children.push(this.scene.add.text(
-      centerX,
-      labelY + deltaY * rowIndex,
-      name,
-      {
-        ...fontConfig,
-        align: "center"
-      }
-    ).setOrigin(.5,.5)
-      .setDepth(this.depth))
+    if (name) {
       
-    rowIndex++
+      var rowIndex = 0
       
-    this.children.push(this.scene.add.text(
-      centerX,
-      labelY + deltaY * rowIndex,
-      classType,
-      {
-        ...fontConfig,
-        align: "center"
-      }
-    ).setOrigin(.5,.5)
-      .setDepth(this.depth))
-      
+      this.children.push(this.scene.add.text(
+        centerX,
+        labelY + deltaY * rowIndex,
+        name,
+        {
+          ...fontConfig,
+          align: "center"
+        }
+      ).setOrigin(.5,.5)
+        .setDepth(this.depth))
+        
       rowIndex++
-      
-    this.children.push(this.scene.add.text(
-      leftX,
-      labelY + deltaY * rowIndex,
-      "Level:",
-      {
-        ...fontConfig,
-        align: "left"
-      }
-    ).setOrigin(0,.5)
-      .setDepth(this.depth))
-    
-    
-    this.children.push(this.scene.add.text(
-      rightX,
-      labelY + deltaY * rowIndex,
-      level,
-      {
-        ...fontConfig,
-        align: "right"
-      }
-    ).setOrigin(1,.5)
-      .setDepth(this.depth))
-    
-    rowIndex++
-    
-    if (showCost) {
-    
+        
+      this.children.push(this.scene.add.text(
+        centerX,
+        labelY + deltaY * rowIndex,
+        classType,
+        {
+          ...fontConfig,
+          align: "center"
+        }
+      ).setOrigin(.5,.5)
+        .setDepth(this.depth))
+        
+        rowIndex++
+        
       this.children.push(this.scene.add.text(
         leftX,
         labelY + deltaY * rowIndex,
-        "Cost:",
+        "Level:",
         {
           ...fontConfig,
           align: "left"
@@ -157,7 +132,7 @@ export class UnitOverview extends Window {
       this.children.push(this.scene.add.text(
         rightX,
         labelY + deltaY * rowIndex,
-        recruitmentCost,
+        level,
         {
           ...fontConfig,
           align: "right"
@@ -165,31 +140,77 @@ export class UnitOverview extends Window {
       ).setOrigin(1,.5)
         .setDepth(this.depth))
       
+      rowIndex++
+      
+      if (showCost) {
+      
+        this.children.push(this.scene.add.text(
+          leftX,
+          labelY + deltaY * rowIndex,
+          "Cost:",
+          {
+            ...fontConfig,
+            align: "left"
+          }
+        ).setOrigin(0,.5)
+          .setDepth(this.depth))
+        
+        
+        this.children.push(this.scene.add.text(
+          rightX,
+          labelY + deltaY * rowIndex,
+          recruitmentCost,
+          {
+            ...fontConfig,
+            align: "right"
+          }
+        ).setOrigin(1,.5)
+          .setDepth(this.depth))
+        
+      }
+      
+      rowIndex++
+  
+      this.bg.on('pointerover', () => {
+        onHover()
+      })
+      .on('pointerout', () => {
+        onStopHover()
+      })
+      
+      this.children.push(new Button(
+        this.scene,
+        centerX,
+        y + height/2 - 40,
+        buttonText,
+        {
+          cornerRadius: 4,
+          borderThickness: 1,
+          height: 40,
+          width: width*.8,
+          onClick: buttonCallback,
+          fontSize: 28
+        }
+      ))
+    
     }
     
-    rowIndex++
-
-    this.bg.on('pointerover', () => {
-      onHover()
-    })
-    .on('pointerout', () => {
-      onStopHover()
-    })
-    
-    this.children.push(new Button(
-      this.scene,
-      centerX,
-      y + height/2 - 40,
-      buttonText,
-      {
-        cornerRadius: 4,
-        borderThickness: 1,
-        height: 40,
-        width: width*.8,
-        onClick: buttonCallback,
-        fontSize: 28
-      }
-    ))
+    else {
+      
+      
+      
+      this.children.push(this.scene.add.text(
+        centerX,
+        y,
+        "OPEN",
+        {
+          ...fontConfig,
+          align: "center"
+        }
+      ).setOrigin(.5,.5)
+        .setDepth(this.depth))
+      
+    }
   }
   
   

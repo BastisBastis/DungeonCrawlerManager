@@ -59,7 +59,7 @@ export class TavernUI {
         backgroundColor : Palette.beige2.hex,
       }
     )
-    console.log(this.bg)
+    //console.log(this.bg)
     this.gameObjects.push(this.bg)
     
     
@@ -161,6 +161,19 @@ export class TavernUI {
       this.gameObjects.push(card)
       i++
     })
+    
+    while (i < 4) {
+      const card = new UnitOverview(
+        this.scene, 0, 0, 
+        undefined,
+        
+      )
+      this.partyOverviewCards.push(card)
+      this.gameObjects.push(card)
+      
+      i++
+    }
+    
 
     this.layoutPartyOverviewCards()
 

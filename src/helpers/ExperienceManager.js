@@ -3,7 +3,7 @@ import * as Utils from "../helpers/Utils"
 import { EventCenter } from "../helpers/EventCenter" 
 
 import { UnitClass } from "../components/ClassType" 
-
+import { getCostMod } from "../factories/UnitFactory" 
 
 const expPerLevel = [
   0,
@@ -55,16 +55,37 @@ export const ExperienceManager = {
       }
       
       if (unitData.healer) {
-        //unitData.healer.amount = Math.round(unitData.healer.amount * 1.2 * gainMods.healAmount)
-        //result.healAmount = 1.2*gainMods.healAmount
-        unitData.healer.delay = unitData.healer.delay * gainMods.healCooldown
+        unitData.healer.amount = unitData.healer.amount * 1.1 * gainMods.healAmount
+        result.healAmount = 1.1*gainMods.healAmount
+        
+        unitData.healer.delay = unitData.healer.delay * gainMods.healCooldown *.95
+        result.healDelay = unitData.healer.delay * gainMods.healCooldown *.95
       }
 
       if (unitData.mana) {
         unitData.mana = unitData.mana * 1.2 * gainMods.mana
       }
 
-      unitData.recruitmentCost = Math.round(unitData.recruitmentCost * 1.4)
+      unitData.recruitmentCost = 10
+      var costMod = getCostMod(unitData.classType, unitData.hitpoints, "hp")
+      costMod *= getCostMod(unitData.classType, unitData.armorClass, "ac")
+      costMod *= getCostMod(unitData.classType, unitData.damage, "dmg")
+      costMod *= getCostMod(unitData.classType, unitData.delay, "delay")
+      costMod *= getCostMod(unitData.classType, unitData.atk, "atk")
+      costMod *= getCostMod(unitData.classType, unitData.threatMods.attack, "threat")
+      
+      if (unitData.mana) {
+        costMod *= getCostMod(unitData.classType, unitData.mana, "mana")
+      }
+        
+      if ( unitData.healer ) {
+        costMod *= getCostMod(unitData.classType, unitData.healer.amount, "healAmount")
+        costMod *= getCostMod(unitData.classType, unitData.healer.delay, "healDelay")
+        
+        
+      }
+      
+      unitData.recruitmentCost = Math.round(unitData.recruitmentCost*Math.pow(costMod,.5))
       
       return result
     }

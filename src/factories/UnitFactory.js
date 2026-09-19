@@ -46,6 +46,150 @@ import { AttackAudio } from "../components/AttackAudio"
 import { TraitList } from "../data/Traits" 
 
 
+const getWeightedStatValue = (value, average, weight) => {
+      if (weight >= 0) {
+        return Math.pow(value / average, weight)
+      }
+    
+      return Math.pow(average / value, -weight)
+    }
+
+
+export const classValues = {}
+    classValues[UnitClass.WARRIOR] = {
+      hpMin : 80,
+      hpMax : 100,
+      acMin : 12,
+      acMax : 15,
+      dmgMin : 10,
+      dmgMax : 14,
+      delayMin : 20,
+      delayMax : 25,
+      atkMin : 6,
+      atkMax : 9,
+      threatMods: {
+        attackMin: 1.5,
+        attackMax: 3.0,
+        proximityMin: 2.1,
+        proximityMax: 2.1,
+        healMin: 1.0,
+        healMax: 1.0,
+        otherMin: 1.0,
+        otherMax: 1.0
+      },
+      healer: false,
+      modelIndex:Models.warrior,
+      costWeights: {
+        hp: 1,
+        ac: 1,
+        dmg: 1,
+        delay: -1,
+        atk: 1,
+        threat: 1
+      }
+    }
+  classValues[UnitClass.CLERIC] = {
+      hpMin : 30,
+      hpMax : 50,
+      acMin : 7,
+      acMax : 10,
+      dmgMin : 4,
+      dmgMax : 8,
+      delayMin : 11,
+      delayMax : 16,
+      atkMin : 4,
+      atkMax : 7,
+      healer: true,
+      healAmountMin: 20,
+      healAmountMax: 30,
+      healDelayMin : 60,
+      healDelayMax : 80,
+      manaMax : 25,
+      manaMin : 15,
+      threatMods: {
+        attackMin: 1.0,
+        attackMax: 1.0,
+        proximityMin: 1.0,
+        proximityMax: 1.0,
+        healMin: 1.0,
+        healMax: 1.0,
+        otherMin: 1.0,
+        otherMax: 1.0
+      },
+      modelIndex:Models.cleric,
+      costWeights: {
+        hp: 1,
+        ac: 1,
+        dmg: 1,
+        delay: -1,
+        atk: 1,
+        threat: 1,
+        healAmount: 1.5,
+        healDelay: -2,
+        mana: 2
+      }
+    }
+    classValues[UnitClass.ROGUE] = {
+      hpMin : 50,
+      hpMax : 80,
+      acMin : 7,
+      acMax : 10,
+      dmgMin : 10,
+      dmgMax : 14,
+      delayMin : 12,
+      delayMax : 16,
+      atkMin : 9,
+      atkMax : 15,
+      healer: false,
+      threatMods: {
+        attackMin: 1.0,
+        attackMax: 1.0,
+        proximityMin: 1.0,
+        proximityMax: 1.0,
+        healMin: 1.0,
+        healMax: 1.0,
+        otherMin: 1.0,
+        otherMax: 1.0
+      },
+      modelIndex:Models.rogue,
+      costWeights: {
+        hp: 1,
+        ac: 1,
+        dmg: 2.2,
+        delay: -2.2,
+        atk: 2.2,
+        threat: 1
+      }
+    }
+    
+
+export const getCostMod = (classType, value, valueKey) => {
+  
+  
+  const averages = {}
+  
+  averages.hp = (classValues[classType].hpMin+ classValues[classType].hpMax) /2
+    averages.ac = (classValues[classType].acMin+ classValues[classType].acMax) /2
+    averages.dmg = (classValues[classType].dmgMin+ classValues[classType].dmgMax) /2
+    averages.delay = (classValues[classType].delayMin+ classValues[classType].delayMax) /2
+    averages.atk = (classValues[classType].atkMin+ classValues[classType].atkMax) /2
+    averages.threat = (
+      classValues[classType].threatMods.attackMin + classValues[classType].threatMods.attackMax) / 2
+      
+  
+  if (classValues[classType].healer) {
+    averages.mana = (classValues[classType].manaMin + classValues[classType].manaMax) /2
+    averages.healAmount = (classValues[classType].healAmountMin+ classValues[classType].healAmountMax) /2
+      averages.healDelay = (classValues[classType].healDelayMin+ classValues[classType].healDelayMax) /2
+  }
+  console.log(classType, averages)
+  
+  //console.log(classType, classValues)
+  
+  return getWeightedStatValue(value, averages[valueKey], classValues[classType].costWeights[valueKey])
+  
+}
+
 export const UnitFactory = {
   
   getUnitEntityFromData : (world, unitData) => {
@@ -194,85 +338,7 @@ export const UnitFactory = {
       UnitClass.ROGUE
     ][classIndex]
     
-    const classValues = {}
-    classValues[UnitClass.WARRIOR] = {
-      hpMin : 80,
-      hpMax : 100,
-      acMin : 12,
-      acMax : 15,
-      dmgMin : 10,
-      dmgMax : 14,
-      delayMin : 20,
-      delayMax : 25,
-      atkMin : 6,
-      atkMax : 9,
-      threatMods: {
-        attackMin: 1.5,
-        attackMax: 3.0,
-        proximityMin: 2.1,
-        proximityMax: 2.1,
-        healMin: 1.0,
-        healMax: 1.0,
-        otherMin: 1.0,
-        otherMax: 1.0
-      },
-      healer: false,
-      modelIndex:Models.warrior
-    }
-  classValues[UnitClass.CLERIC] = {
-      hpMin : 30,
-      hpMax : 50,
-      acMin : 7,
-      acMax : 10,
-      dmgMin : 4,
-      dmgMax : 8,
-      delayMin : 11,
-      delayMax : 16,
-      atkMin : 4,
-      atkMax : 7,
-      healer: true,
-      healAmountMin: 20,
-      healAmounttMax: 30,
-      healDelayMin : 60,
-      healDelayMax : 80,
-      manaMax : 25,
-      manaMin : 15,
-      threatMods: {
-        attackMin: 1.0,
-        attackMax: 1.0,
-        proximityMin: 1.0,
-        proximityMax: 1.0,
-        healMin: 1.0,
-        healMax: 1.0,
-        otherMin: 1.0,
-        otherMax: 1.0
-      },
-      modelIndex:Models.cleric
-    }
-    classValues[UnitClass.ROGUE] = {
-      hpMin : 50,
-      hpMax : 80,
-      acMin : 7,
-      acMax : 10,
-      dmgMin : 10,
-      dmgMax : 14,
-      delayMin : 12,
-      delayMax : 16,
-      atkMin : 9,
-      atkMax : 15,
-      healer: false,
-      threatMods: {
-        attackMin: 1.0,
-        attackMax: 1.0,
-        proximityMin: 1.0,
-        proximityMax: 1.0,
-        healMin: 1.0,
-        healMax: 1.0,
-        otherMin: 1.0,
-        otherMax: 1.0
-      },
-      modelIndex:Models.rogue
-    }
+    
     
 
     var hp = Utils.getRandomBellInt(classValues[classType].hpMin, classValues[classType].hpMax, 1)
@@ -294,7 +360,7 @@ export const UnitFactory = {
     let healer =false
     if (classValues[classType].healer) {
       healer = {
-        amount:Utils.getRandomBellInt(classValues[classType].healAmountMin,classValues[classType].healAmounttMax, 1),
+        amount:Utils.getRandomBellInt(classValues[classType].healAmountMin,classValues[classType].healAmountMax, 1),
         delay: Utils.getRandomInt(classValues[classType].healDelayMin,classValues[classType].healDelayMax)
       }
     }
@@ -305,42 +371,33 @@ export const UnitFactory = {
     }
 
     var recruitmentCost = 10
-    const avgHp = (classValues[classType].hpMin+ classValues[classType].hpMax) /2
-    const avgAc = (classValues[classType].acMin+ classValues[classType].acMax) /2
-    const avgDmg = (classValues[classType].dmgMin+ classValues[classType].dmgMax) /2
-    const avgDelay = (classValues[classType].delayMin+ classValues[classType].delayMax) /2
-    const avgAtk = (classValues[classType].atkMin+ classValues[classType].atkMax) /2
+    
+    var costMod = getCostMod(classType, hp, "hp")
+    costMod *= getCostMod(classType, ac, "ac")
+    costMod *= getCostMod(classType, damage, "dmg")
+    costMod *= getCostMod(classType, delay, "delay")
+    costMod *= getCostMod(classType, atk, "atk")
+    costMod *= getCostMod(classType, threatMods.attack, "threat")
     
     
     
-    
-    
-    var costMod = 1 *
-      ( hp / avgHp ) *
-      ( ac / avgAc ) *
-      ( damage / avgDmg ) *
-      ( avgDelay / delay ) *
-      ( atk / avgAtk )
      
     if (mana) {
-      const avgMana = (classValues[classType].manaMin + classValues[classType].manaMax) /2
-      costMod *= (mana / avgMana)
+      costMod *= getCostMod(classType, mana, "mana")
     }
       
     if ( healer ) {
-      const avgHealAmount = (classValues[classType].healAmountMin+ classValues[classType].healAmounttMax) /2
-      const avgHealDelay = (classValues[classType].healDelayMin+ classValues[classType].healAmounttMax) /2
+      costMod *= getCostMod(classType, healer.amount, "healAmount")
+      costMod *= getCostMod(classType, healer.delay, "healDelay")
       
-      costMod *= 
-        ( healer.amount / avgHealAmount ) * 
-        ( avgHealDelay / healer.delay )
+      
     }
     
     const attackBuildUp = 600
     const soundDelay = 200
     const audioKey = 0
     
-    recruitmentCost = Math.floor(recruitmentCost *costMod)
+    recruitmentCost = Math.round(recruitmentCost *costMod)
     
     const traits = [
       
