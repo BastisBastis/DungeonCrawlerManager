@@ -133,7 +133,7 @@ export default class GameMenu extends Phaser.Scene {
   async awardGems() {
     const numGems = Store.run.levelIndex
     Store.meta.gems += numGems
-    await Popup.prompt(this,this.cameras.main.width/2,this.cameras.main.height/2,unitData.name + "Your party found " + numGems +" gems in the dungeon!", {depth:100})
+    await Popup.prompt(this,this.cameras.main.width/2,this.cameras.main.height/2, "Your party found " + numGems +" gems in the dungeon!", {depth:100})
   }
   
   async onDungeonCompleted() {
@@ -245,7 +245,7 @@ export default class GameMenu extends Phaser.Scene {
     .setOrigin(1,0)
     
     this.gemLabel = this.add.text(
-      this.cameras.main.width-40, 110, "GEMS: " + Math.floor(Store.run.gold), { 
+      this.cameras.main.width-40, 110, "GEMS: " + Math.floor(Store.meta.gems), { 
       fontSize: 64, 
       color: Palette.beige1.string,
       fontFamily: GlobalStuff.FontFamily

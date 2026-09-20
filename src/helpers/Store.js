@@ -32,6 +32,7 @@ export const resetRunStore = ()=>{
 }
 
 export const resetMetaStore = ()=>{
+  Store.meta = {}
   Store.meta.gems = 0
 }
 
