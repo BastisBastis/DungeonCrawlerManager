@@ -29,6 +29,8 @@ export class DungeonUnitCard extends Window {
       cornerRadius=0,
       backgroundColor=Palette.beige2.hex,
       onClick=()=>false,
+      onHover=()=>false,
+      onStopHover=()=>false,
       margin = 10,
     }=config
     super(scene,x,y,{
@@ -202,6 +204,18 @@ export class DungeonUnitCard extends Window {
         this.manaValueLabel
       )
     }
+    
+    this.bg.setInteractive(true)
+    
+    this.bg.on('pointerover', () => {
+      //console.log(onHover)
+        onHover()
+      })
+      .on('pointerout', () => {
+        onStopHover()
+      })
+    
+    
   }
   
   layout() {

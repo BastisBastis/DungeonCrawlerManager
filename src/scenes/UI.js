@@ -24,6 +24,8 @@ import { Palette } from "../data/Palette"
 import { LogBox } from "../ui/LogBox" 
 import { DungeonUnitCard } from "../ui/DungeonUnitCard" 
 import { Button } from "../ui/Button" 
+import { UnitOverview } from "../ui/Tavern/UnitOverview"
+import { UnitDetails } from "../ui/Tavern/UnitDetails" 
 
 export default class UI extends Phaser.Scene {
   
@@ -56,6 +58,11 @@ export default class UI extends Phaser.Scene {
       )
       this.logBox.addLine("Welcome") */
       this.dungeonUnitCards = {}
+      this.unitDetails = null
+    this.unitDetailsPosition = {
+      x: this.cameras.main.width - 300,
+      y: this.cameras.main.height / 2 +140
+    }
       
       var i = 0
       for (const hero of heroData) {
@@ -77,7 +84,24 @@ export default class UI extends Phaser.Scene {
             },
           {
             depth: 10,
-            
+            onHover: ()=>{
+              try { 
+              this.unitDetails = new UnitDetails(
+              this,
+              this.unitDetailsPosition.x,
+              this.unitDetailsPosition.y,
+              hero
+            )
+              EventCenter.emit("selectUnit", hero.id)
+              } catch (er) {console.log(er.message,er.stack); throw er} 
+            },
+            onStopHover: ()=>{
+              if (this.unitDetails) {
+              this.unitDetails.destroy()
+              this.unitDetails = null
+            }
+              EventCenter.emit("deselectUnit", hero.id)
+            }
           }
         )
         this.dungeonUnitCards[hero.id] = duc

@@ -92,7 +92,7 @@ export default class GameMenu extends Phaser.Scene {
     if (result.winner == 0) {
       await this.handleNewTraits(result.traitsToAdd)
       Store.run.levelIndex++
-      this.onDungeonCompleted()
+      await this.onDungeonCompleted()
       if (Store.run.levelIndex >= DungeonGenerator.getNumLevels()) {
         this.gameOver(result)
         return
@@ -130,7 +130,13 @@ export default class GameMenu extends Phaser.Scene {
     } catch (er) {console.log(er.message,er.stack); throw er} 
   }
   
-  onDungeonCompleted() {
+  async awardGems() {
+    const numGems = Store.run.levelIndex
+    Store.meta.gems += numGems
+    await Popup.prompt(this,this.cameras.main.width/2,this.cameras.main.height/2,unitData.name + "Your party found " + numGems +" gems in the dungeon!", {depth:100})
+  }
+  
+  async onDungeonCompleted() {
     
     var goldMod = 1
     for (const unitIndex of Store.run.party) {
@@ -147,7 +153,7 @@ export default class GameMenu extends Phaser.Scene {
         
       }
     }
-    
+    await this.awardGems()
     Store.run.gold += Math.round((Store.run.levelIndex+1) *10 * goldMod)
     
   }
@@ -232,13 +238,21 @@ export default class GameMenu extends Phaser.Scene {
     
     this.goldLabel = this.add.text(
       this.cameras.main.width-40, 40, "GOLD: " + Math.floor(Store.run.gold), { 
-      fontSize: 80, 
+      fontSize: 64, 
       color: Palette.beige1.string,
       fontFamily: GlobalStuff.FontFamily
     })
     .setOrigin(1,0)
     
-    this.gameObjects.push(this.messageLabel, this.goldLabel)
+    this.gemLabel = this.add.text(
+      this.cameras.main.width-40, 110, "GEMS: " + Math.floor(Store.run.gold), { 
+      fontSize: 64, 
+      color: Palette.beige1.string,
+      fontFamily: GlobalStuff.FontFamily
+    })
+    .setOrigin(1,0)
+    
+    this.gameObjects.push(this.messageLabel, this.goldLabel, this.gemLabel)
     
     
     const dungeonX = this.cameras.main.width - 300

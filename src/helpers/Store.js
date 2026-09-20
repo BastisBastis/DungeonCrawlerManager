@@ -1,4 +1,4 @@
-  export const Store = {}
+export const Store = {}
 
 export const resetStore = ()=>{
   resetRunStore()
@@ -32,7 +32,7 @@ export const resetRunStore = ()=>{
 }
 
 export const resetMetaStore = ()=>{
-  
+  Store.meta.gems = 0
 }
 
 resetStore()
