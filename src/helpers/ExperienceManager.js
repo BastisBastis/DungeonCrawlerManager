@@ -4,6 +4,7 @@ import { EventCenter } from "../helpers/EventCenter"
 
 import { UnitClass } from "../components/ClassType" 
 import { getCostMod } from "../factories/UnitFactory" 
+import { Store } from "../helpers/Store" 
 
 const expPerLevel = [
   0,
@@ -17,6 +18,8 @@ const expPerLevel = [
 export const ExperienceManager = {
   giveExperience : (unitData) => {
     var exp = 10
+    
+    const metaMod = [1,1.1,1.2,4][Store.meta.progression.training]
     
     unitData.exp+=exp
     if (unitData.exp >= expPerLevel[unitData.level]) {
@@ -32,10 +35,10 @@ export const ExperienceManager = {
         "healAmount",
         "mana"
       ]) {
-        gainMods[key] = Math.random()*.16+.92
+        gainMods[key] = Math.random()*.16+.92 * metaMod
       }
 
-      gainMods.healCooldown = Math.random() * .1 + .88
+      gainMods.healCooldown = Math.random() * .1 + .88 * (2-metaMod)
       
       unitData.exp -= expPerLevel[unitData.level]
       unitData.level++

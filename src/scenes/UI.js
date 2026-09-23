@@ -26,6 +26,7 @@ import { DungeonUnitCard } from "../ui/DungeonUnitCard"
 import { Button } from "../ui/Button" 
 import { UnitOverview } from "../ui/Tavern/UnitOverview"
 import { UnitDetails } from "../ui/Tavern/UnitDetails" 
+import { TacticsMenu } from "../ui/TacticsMenu" 
 
 export default class UI extends Phaser.Scene {
   
@@ -110,18 +111,43 @@ export default class UI extends Phaser.Scene {
       
       this.hostileUnitCards = {}
       
+      this.tacticsMenu = null
+      
       EventCenter.on("hostileUnitEngaged", this.addHostileUnitCard, this)
       EventCenter.on("unitDied", this.removeUnitCard, this)
       
-      const button = new Button(this, 220, 1000, "PAUSE", {
+      const button = new Button(this, 220, 1000, "TIME OUT", {
         fontSize:32,
         width: 200,
         height: 100,
         onClick : ()=>{
           Store.dungeon.paused = !Store.dungeon.paused
-          EventCenter.emit("logThreat")
+          EventCenter.emit("timeOutHeal")
+          Store.dungeon.timeOutsLeft--
+          if (Store.dungeon.timeOutsLeft == 0)
+            button.destroy()
+          
+          this.tacticsMenu = new TacticsMenu(
+            this,
+            this.cameras.main.width/2,
+            this.cameras.main.height/2,
+            {
+              world: this.world,
+              depth:500,
+              backButtonString: "Resume",
+              onBack: ()=>{
+                Store.dungeon.paused = false
+                this.tacticsMenu.destroy()
+                
+              }
+            }
+          )
+          
         }
       })
+      
+      if (Store.meta.progression.timeOut == 0)
+        button.destroy()
       
       this.speedBtn = new Button(this, 525, 1000, "1x", {
          fontSize:32,

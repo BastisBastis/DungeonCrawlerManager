@@ -6,6 +6,7 @@ import {
 //components
 import { Attackable } from "../components/Attackable"
 import { Dead } from "../components/Dead"
+import { UnitIndex } from "../components/UnitIndex" 
 
 import { EventCenter } from "../helpers/EventCenter" 
 
@@ -44,6 +45,27 @@ export const createReceiveHealSystem=(world)=>{
     
   })
   
+  const heroQuery = defineQuery([UnitIndex])
+  
+  EventCenter.on("timeOutHeal",()=>{
+    //console.log(1)
+    heroQuery(world).forEach(id=>{
+      if (!hasComponent(world, Dead, id)) {
+        
+        Attackable.currentHitpoints[id] = Math.min(
+          Attackable.currentHitpoints[id] + Attackable.maxHitpoints[id] /2,
+          Attackable.maxHitpoints[id]
+        )
+        
+        EventCenter.emit("updateHitpoints", {
+        id,
+        currentHitpoints: Attackable.currentHitpoints[id],
+        maxHitpoints: Attackable.maxHitpoints[id]
+      })
+        
+      }
+    })
+  })
   
   
   return (world, dt)=>{

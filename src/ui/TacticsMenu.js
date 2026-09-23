@@ -13,6 +13,9 @@ import { Palette } from "../data/Palette"
 import { UnitNames } from "../data/UnitNames" 
 import { TraitList } from "../data/Traits" 
 
+//Components 
+import { Tactics } from "../components/Tactics" 
+
 //UI
  
 import { Button } from "./Button"
@@ -45,6 +48,9 @@ export class TacticsMenu extends Window {
       onConfirm=()=>false,
       blockBackground=true,
       backgroundColor = Palette.beige2.hex,
+      world,
+      onBack = ()=>{return},
+      backButtonString = "Back"
     }=config
     
 
@@ -71,6 +77,8 @@ export class TacticsMenu extends Window {
     
     this.unitDetails = null
     
+    this.world = world
+    
     
     const btnConfig={
       fontSize:32,
@@ -84,11 +92,13 @@ export class TacticsMenu extends Window {
        this.scene, 
        x,
        y-height/2+height*0.9,
-       "Back", 
+       backButtonString, 
        {
         ...btnConfig,
+        width: 140,
         onClick : ()=>{
           try { 
+          onBack()
           EventCenter.emit("toGameMenu")
           } catch (er) {console.log(er.message,er.stack); throw er} 
         }
@@ -199,6 +209,9 @@ export class TacticsMenu extends Window {
            try { 
            
             this.setTactic(unitIndex, i)
+            
+            
+            
             } catch (er) {console.log(er.message,er.stack); throw er} 
             buttons.forEach(btn=>{
               btn.label.setColor(deselectedColor)
@@ -219,6 +232,12 @@ export class TacticsMenu extends Window {
   }
 
   setTactic(unitIndex, tacticIndex) {
+   
+   if (this.world) {
+    
+    Tactics.index[Store.run.units[unitIndex].id] = tacticIndex
+   }
+   
     Store.run.tactics[unitIndex] = tacticIndex
   }
   

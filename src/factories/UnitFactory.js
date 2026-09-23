@@ -405,7 +405,7 @@ export const UnitFactory = {
       
     ]
     if (classType == "Cleric")
-      traits.push()
+      traits.push(18)
 
     //hp = 900
     //damage = 150

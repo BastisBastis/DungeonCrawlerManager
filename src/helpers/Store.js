@@ -10,18 +10,20 @@ export const resetStore = ()=>{
 export const resetDungeonStore = () => {
   Store.dungeon = {
     paused : false,
-    gameSpeed : 1
+    gameSpeed : 1,
+    timeOutsLeft: 1
   }
 }
 
 export const resetMenuStore = () => {
   Store.menu = {
-    currentView : "main",
     recruitmentPool : []
   }
 }
 
 export const resetRunStore = ()=>{
+  resetMenuStore()
+  resetDungeonStore()
   Store.run = {}
   Store.run.gold = 40
   Store.run.units = []
@@ -34,6 +36,14 @@ export const resetRunStore = ()=>{
 export const resetMetaStore = ()=>{
   Store.meta = {}
   Store.meta.gems = 0
+  Store.meta.totalDungeons = 0
+  Store.meta.progression = {
+    gold: 0,
+    training: 0,
+    traitPool: 0,
+    basicTactics: 0,
+    timeOut: 0
+  }
 }
 
 resetStore()

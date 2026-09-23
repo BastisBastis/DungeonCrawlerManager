@@ -2,6 +2,7 @@ import { hasComponent } from "bitecs"
 
 //components
 import { Attackable } from "../components/Attackable" 
+import { Mana } from "../components/Mana" 
 
 export const TRAIT = {
   NEVER_GONNA_GIVE_YOU_UP : 0,
@@ -21,7 +22,9 @@ export const TRAIT = {
   GOLD_DIGGER : 14,
   BULKY : 15,
   NERVOUS : 16,
-  LEROY_JENKINS: 17
+  LEROY_JENKINS: 17,
+  CHEAPSKATE: 18,
+  DESPERATE: 19
 }
 
 
@@ -118,7 +121,7 @@ TraitList[TRAIT.POSSESSIVE] = {
 TraitList[TRAIT.SPIKED_SKIN] = {
   id: TRAIT.SPIKED_SKIN,
   name: "Spiked Skin",
-  description: "Attacker takes a small amount of damage everytime they hit the hero.",
+  description: "Attacker takes a small amount of damage every time they hit the hero.",
   effects: [
     {
       type: "damageShield",
@@ -157,7 +160,7 @@ TraitList[TRAIT.LEADER] = {
 TraitList[TRAIT.SPRAINED_ANKLE] = {
   id: TRAIT.SPRAINED_ANKLE,
   name: "Sprained Ankle",
-  description: "Runs slightly slower due to a sprainee ankle.",
+  description: "Runs slightly slower due to a sprained ankle.",
   effects: [
     {
       type: "runSpeedMod",
@@ -295,6 +298,34 @@ TraitList[TRAIT.LEROY_JENKINS] = {
   ]
 }
 
+TraitList[TRAIT.CHEAPSKATE] = {
+  id: TRAIT.CHEAPSKATE,
+  name: "Cheapskate",
+  description: "Lets the hero cast spells at a lower mana cost.",
+  effects: [
+    {
+      type: "manaCostMod",
+      mod: .8
+    }
+  ]
+}
+
+TraitList[TRAIT.DESPERATE] = {
+  id: TRAIT.DESPERATE,
+  name: "Desperate",
+  description: "Heals cost less mana when the hero is low on mana.",
+  effects: [
+    {
+      type: "manaCostMod",
+      mod: .5,
+      condition: {
+        type: "selfManaUnderPercent",
+        value: .25
+      }
+    }
+  ]
+}
+
 
 
 
@@ -320,6 +351,17 @@ const conditionChecks = {
   
   targetHealthOverPercent : ({world, target, condition}) =>{
     return !conditionChecks.targetHealthBelowPercent({world, target, condition})
+  },
+  
+  selfManaBelowPercent : ({world, id, condition}) =>{
+    if (!hasComponent(world, Mana, id)) 
+      return false
+    
+    const currentMana = Mana.currentMana[id]
+    const maxMana = Mana.maxMana[id]
+    
+
+    return (currentMana/maxMana) <= condition.value
   },
 
 }

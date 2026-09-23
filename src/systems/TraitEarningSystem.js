@@ -152,7 +152,23 @@ export const addRandomTrait = (world, id) => {
         ]
       )
     }
-    //console.log(traitIds)
+    
+    
+    if (Store.meta.progression.traitPools) {
+      
+      traitIds.push(
+        
+      )
+      
+      if (unitClass === UnitClass.CLERIC) {
+      
+        traitIds.push(
+          TRAIT.CHEAPSKATE,
+          TRAIT.DESPERATE
+        )
+      } 
+    }
+    
     
     traitIds = traitIds.filter(traitId=>{
       return !Store.run.units[unitIndex].traits.includes(traitId)
@@ -166,7 +182,7 @@ export const addRandomTrait = (world, id) => {
     const traitIndex = traitIds[Utils.getRandomInt(0, traitIds.length)]
     //console.log("trait index: "+traitIndex)
     
-    console.log("trait index: " + traitIndex)
+    //console.log("trait index: " + traitIndex)
     
     EventCenter.emit("addTrait", {
         unitIndex: unitIndex,

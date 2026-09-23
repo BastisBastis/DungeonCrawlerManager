@@ -35,6 +35,7 @@ import { DungeonSummaryPopup } from "../ui/DungeonSummaryPopup"
 import { getDungeonSummary } from "../systems/StatSystem"
 import { StatsMenu } from "../ui/Stats/StatsMenu" 
 import { TraitAwardPopup } from "../ui/Popups/TraitAwardPopup" 
+import { TreasuryMenu } from "../ui/TreasuryMenu" 
 
 
 //Data
@@ -92,6 +93,7 @@ export default class GameMenu extends Phaser.Scene {
     if (result.winner == 0) {
       await this.handleNewTraits(result.traitsToAdd)
       Store.run.levelIndex++
+      Store.meta.totalDungeons++
       await this.onDungeonCompleted()
       if (Store.run.levelIndex >= DungeonGenerator.getNumLevels()) {
         this.gameOver(result)
@@ -153,6 +155,10 @@ export default class GameMenu extends Phaser.Scene {
         
       }
     }
+    
+    var metaGoldMod = [1,1.2,1.5,1.8][Store.meta.progression.gold]
+    
+    
     await this.awardGems()
     Store.run.gold += Math.round((Store.run.levelIndex+1) *10 * goldMod)
     
@@ -268,6 +274,11 @@ export default class GameMenu extends Phaser.Scene {
       y: 800
     }
     
+    const treasuryPos = {
+      x: 830,
+      y: 130
+    }
+    
     const btnConfig = {
       width: 320,
       height: 80,
@@ -302,8 +313,28 @@ export default class GameMenu extends Phaser.Scene {
       ).setVisible(Store.run.party.length>0)
     this.gameObjects.push(tacticsButton)
     
+    const treasuryButton = new Button(this, treasuryPos.x, treasuryPos.y, "Treasury", {
+        ...btnConfig,
+        onClick : ()=>{this.showTreasury() }
+        }
+      ).setVisible(Store.meta.totalDungeons>0)
+    this.gameObjects.push(treasuryButton)
+    
     //this.addEventListeners
     
+    } catch (er) {console.log(er.message,er.stack); throw er} 
+  }
+  
+  showTreasury() {
+    try { 
+    this.clearGameObjects()
+    this.gameObjects.push(
+      new TreasuryMenu(
+        this,
+        this.cameras.main.width/2,
+        this.cameras.main.height/2
+      )
+    )
     } catch (er) {console.log(er.message,er.stack); throw er} 
   }
 
@@ -352,7 +383,8 @@ export default class GameMenu extends Phaser.Scene {
     
     const heroData = []
     for (const index of Store.run.party)
-      heroData.push({...Store.run.units[index]})
+      //heroData.push({...Store.run.units[index]})
+      heroData.push(Store.run.units[index])
     
     
     //var heroData = this.tempHeroData()

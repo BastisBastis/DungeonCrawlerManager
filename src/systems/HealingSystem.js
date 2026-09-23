@@ -38,16 +38,8 @@ export const createHealingSystem=(world)=>{
         if (hasComponent(world, Mana, id)) {
           
           
-         
-          Mana.currentMana[id] = Math.max(0, Mana.currentMana[id] - Math.floor(Healer.amount[id]/10))
+         var manaMod = 1
           
-          
-          EventCenter.emit("manaUpdated", {
-            id,
-            currentMana: Mana.currentMana[id],
-            maxMana: Mana.maxMana[id]
-          })
-        }
         
         
         var amount = Healer.amount[id]
@@ -61,13 +53,28 @@ export const createHealingSystem=(world)=>{
               if (effect.type == "healModifier") {
               
               
-                if (effect.condition && CheckTraitCondition({
+                if (!effect.condition || CheckTraitCondition({
                   world, 
                   target: Action.target[id],
                   effect
                 })) {
                   amount *= effect.mod
-                  console.log("CRITICAL HEAL FROM TRAIT!")
+                  //console.log("CRITICAL HEAL FROM TRAIT!")
+                }
+                
+                
+              }
+              else if (effect.type == "manaCostMod") {
+              
+              
+                if (!effect.condition || CheckTraitCondition({
+                  world, 
+                  target: Action.target[id],
+                  id,
+                  effect
+                })) {
+                  manaMod *= effect.mod
+                  //console.log("mana mod used")
                 }
                 
                 
@@ -80,7 +87,17 @@ export const createHealingSystem=(world)=>{
           
         }
         
+        var manaCost = (Healer.amount[id]/10) * manaMod
         
+        Mana.currentMana[id] = Math.max(0, Mana.currentMana[id] - manaCost)
+          
+          
+          EventCenter.emit("manaUpdated", {
+            id,
+            currentMana: Math.floor(Mana.currentMana[id]),
+            maxMana: Mana.maxMana[id]
+          })
+        }
         
         EventCenter.emit("healRequest", {
           source:id,

@@ -151,7 +151,7 @@ export default class DungeonScene extends Phaser.Scene {
     
     unitQuery(this.world).forEach(id=>{
       
-      if (BattleUnit.team[id] == 0 && Math.random() < .4) {
+      if (BattleUnit.team[id] == 0 && Math.random() < .6) {
         
         if (!traitsToAdd[UnitIndex.index[id]]) {
           addRandomTrait(this.world, id)
@@ -205,7 +205,7 @@ export default class DungeonScene extends Phaser.Scene {
       //console.log(heroData)
 
       
-      var id = UnitFactory.getUnitEntityFromData(this.world, hero)
+        var id = UnitFactory.getUnitEntityFromData(this.world, hero)
       
       i++
     }

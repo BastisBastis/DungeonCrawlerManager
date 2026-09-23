@@ -16,7 +16,7 @@ import { UnitNames } from "../data/UnitNames"
 
 import { Button } from "../ui/Button"
 
-import { resetStore } from "../helpers/Store" 
+import { resetRunStore } from "../helpers/Store" 
 import { EventCenter } from "../helpers/EventCenter"
 
 
@@ -62,7 +62,7 @@ export default class GameOver extends Phaser.Scene {
 
    restart() {
     try { 
-    resetStore()
+    resetRunStore()
     EventCenter.removeAllListeners()
     this.scene.stop()
     this.scene.start("mainMenu", {})

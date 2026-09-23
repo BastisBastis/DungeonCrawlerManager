@@ -12,7 +12,7 @@ import { Dead } from "../components/Dead"
 import { Healer } from "../components/Healer"
 import { Mana } from "../components/Mana"
 import { Traits } from "../components/Traits" 
-
+import { UnitIndex } from "../components/UnitIndex" 
 
 import { ActionType } from "../components/Action" 
 
@@ -24,6 +24,7 @@ import { MeleeAttack } from "../components/MeleeAttack"
 import { TraitList } from "../data/Traits" 
 
 //Helpers
+import { Store } from "../helpers/Store" 
 
 
 
@@ -122,13 +123,23 @@ export const createActionPickingSystem=(world)=>{
         
         if (hasComponent(world, MeleeAttack, id)) 
           {
+          
+          var leastHitpoints = 1000
+          var leastHpId = 0
           var highestThreatId = 0
           var highestThreatValue = -1
           if (!world.scene.threatData[id])
             return
           
-          //const test={}
+          
           for (const [otherId, threatData] of Object.entries(world.scene.threatData[id].hostile)) {
+            
+            
+            if ((Attackable.currentHitpoints[otherId] / Attackable.maxHitpoints[otherId]) < leastHitpoints ) {
+              leastHitpoints = Attackable.currentHitpoints[otherId] / Attackable.maxHitpoints[otherId]
+              leastHpId = otherId
+            }
+            
             const leaderMod = leaderData.target == otherId ? leaderData.threatMod : 1
             
             
@@ -144,9 +155,17 @@ export const createActionPickingSystem=(world)=>{
               highestThreatId = otherId
             }
           }
-          if (highestThreatValue > 0) {
-            //console.log(highestThreatId, highestThreatValue)
+          
+          
+          if (hasComponent(world, UnitIndex, id && Store.meta.progression.basicTactics)) {
+            
+
+            
+            highestThreatId = leastHpId
+            
           }
+          
+          
           if (highestThreatId > 0) {
             //if (highestThreatId !==)
             if (BattleUnit.team[id] == 1 && !hadTarget) {
