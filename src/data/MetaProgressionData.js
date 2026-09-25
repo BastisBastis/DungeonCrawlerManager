@@ -39,7 +39,7 @@ export const MetaProgressionData = {
       8
     ]
   },
-  startingTraits: {
+  startingTrait: {
     name: "Starting Trait",
     description: "All new recruits start with one trait.",
     levelCosts:[

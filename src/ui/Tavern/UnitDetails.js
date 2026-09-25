@@ -178,6 +178,24 @@ export class UnitDetails extends Window {
         
       rowIndex++
     }
+
+    if (traits.length == 1) {
+      this.children.push(this.scene.add.text(
+          centerX,
+          labelY + deltaY * labels.length,
+          TraitList[traits[0]].description,
+          {
+            ...fontConfig,
+            fontSize: 20,
+            align: "center",
+            wordWrap: {
+              width: width*.95,
+              useAdvancedWrap: true
+            }
+          }
+        ).setOrigin(0.5,0)
+          .setDepth(this.depth))
+    }
     
     this.bg.on('pointerover', () => {
       onHover()

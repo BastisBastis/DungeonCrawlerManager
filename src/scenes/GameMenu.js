@@ -230,7 +230,7 @@ export default class GameMenu extends Phaser.Scene {
       
       Store.menu.recruitmentPool.push(unitData)
       
-      if (Store.meta.progression.startingTraits) {
+      if (Store.meta.progression.startingTrait) {
         const traitIndex = addRandomTrait(-1,-1,unitData.classType)
         unitData.traits.push(traitIndex)
       }

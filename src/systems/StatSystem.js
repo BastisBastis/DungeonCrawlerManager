@@ -268,7 +268,7 @@ export const getDungeonSummary = (index) =>{
         if (entry.targetUnitIndex!== undefined) {
           heroes[entry.targetUnitIndex].damageTaken += entry.damage
           enemies[entry.source].damageDealt += entry.damage
-        } else {
+        } else if (entry.sourceUnitIndex !== undefined) {
           enemies[entry.target].damageTaken += entry.damage
           heroes[entry.sourceUnitIndex].damageDealt += entry.damage
         }
