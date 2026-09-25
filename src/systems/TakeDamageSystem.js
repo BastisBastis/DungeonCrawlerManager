@@ -12,6 +12,7 @@ import { EventCenter } from "../helpers/EventCenter"
 import { NameHelper } from "../helpers/NameHelper"  
 import { UnitIndex } from "../components/UnitIndex" 
 import { Tactics } from "../components/Tactics" 
+import { MeleeAttack } from "../components/MeleeAttack" 
 
 import { TraitList, CheckTraitCondition } from "../data/Traits"
 import { TacticsMods } from "../data/Tactics" 
@@ -56,6 +57,8 @@ export const createTakeDamageSystem=(world)=>{
     const target = request.target
     const damageType = request.damageType
     const data = request.data
+    
+    //console.log(request.comment)
 
     if (hasComponent(world, Dead, target))
       return
@@ -68,12 +71,58 @@ export const createTakeDamageSystem=(world)=>{
         var armorClass = Attackable.armorClass[target]
         var atk = data.atk
         if (hasComponent(world, Tactics, target)) {
-          armorClass *= TacticsMods[Tactics.index[target]].defense
+          
+          var tacticsMod = TacticsMods[Tactics.index[target]].defense
+          
+          if (hasComponent(world, Traits, target)) {
+                  
+            for (let i = 0; i < Traits.count[target]; i++) {
+              const traitIndex = Traits.traits[target][i]
+              const trait = TraitList[traitIndex]
+              for (const effect of trait.effects) {
+                
+                if (effect.type == "tacticsModifier") {
+                  
+                  tacticsMod = Math.pow(tacticsMod, effect.mod)
+                    
+                  
+                }
+                
+              }
+              
+            }
+          }
+          //console.log("defensive tactics mod: "+tacticsMod)
+          armorClass *= tacticsMod
           //console.log("using defense tactics")
         }
         
         if (hasComponent(world, Tactics, source)) {
-          atk *= TacticsMods[Tactics.index[source]].damage
+          var tacticsMod = TacticsMods[Tactics.index[source]].damage
+          
+          if (hasComponent(world, Traits, source)) {
+                  
+            for (let i = 0; i < Traits.count[source]; i++) {
+              const traitIndex = Traits.traits[source][i]
+              const trait = TraitList[traitIndex]
+              for (const effect of trait.effects) {
+                
+                if (effect.type == "tacticsModifier") {
+                  
+                  tacticsMod = Math.pow(tacticsMod, effect.mod)
+                    
+                  
+                }
+                
+              }
+              
+            }
+          }
+          
+          atk *= tacticsMod
+          
+          
+          
           //console.log("tactics atk mod: " + TacticsMods[Tactics.index[source]].damage)
         }
         
@@ -88,6 +137,23 @@ export const createTakeDamageSystem=(world)=>{
             const traitIndex = Traits.traits[target][i]
             const trait = TraitList[traitIndex]
             for (const effect of trait.effects) {
+              
+              
+              if (effect.type == "riposte" && Math.random() < effect.chance) {
+                EventCenter.emit("damageRequest", {
+                  source: target,
+                  target: source,
+                  damageType: "melee",
+                  comment: "riposte",
+                  data: {
+                    damage: MeleeAttack.damage[target],
+                    atk: MeleeAttack.atk[target]
+                  }
+                  
+                })
+                
+              }
+              
               if (effect.type == "damageMitigation") {
                 if (effect.condition && CheckTraitCondition({
                   world, 
@@ -110,6 +176,13 @@ export const createTakeDamageSystem=(world)=>{
             const trait = TraitList[traitIndex]
             for (const effect of trait.effects) {
               
+              if (effect.type == "critHit") {
+                if (Math.random() < effect.chance) {
+                  traitMod*=effect.mod
+                  
+                }
+              }
+              
               if (effect.type == "damageModifier") {
                 if (effect.condition && CheckTraitCondition({
                   world, 
@@ -117,7 +190,7 @@ export const createTakeDamageSystem=(world)=>{
                   effect
                 })) {
                   traitMod *= effect.mod
-                 
+                  //console.log("damage modified by trait: " + traitMod, trait)
                 }
               }
               

@@ -36,6 +36,7 @@ import { getDungeonSummary } from "../systems/StatSystem"
 import { StatsMenu } from "../ui/Stats/StatsMenu" 
 import { TraitAwardPopup } from "../ui/Popups/TraitAwardPopup" 
 import { TreasuryMenu } from "../ui/TreasuryMenu" 
+import { addRandomTrait } from "../systems/TraitEarningSystem" 
 
 
 //Data
@@ -228,6 +229,13 @@ export default class GameMenu extends Phaser.Scene {
       }
       
       Store.menu.recruitmentPool.push(unitData)
+      
+      if (Store.meta.progression.startingTraits) {
+        const traitIndex = addRandomTrait(-1,-1,unitData.classType)
+        unitData.traits.push(traitIndex)
+      }
+      
+      
       for (let j = 0; j < expHits; j++) {
         ExperienceManager.giveExperience(unitData)
       }

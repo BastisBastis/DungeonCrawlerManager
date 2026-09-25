@@ -3,7 +3,11 @@ import {
   hasComponent
 } from "bitecs"
 
+import Phaser from "phaser"
+
 //components
+import { Attackable } from "../components/Attackable" 
+import { BattleUnit } from "../components/BattleUnit" 
 import { Action } from "../components/Action" 
 import { MeleeAttack } from "../components/MeleeAttack" 
 import { Position } from "../components/Position"
@@ -12,7 +16,7 @@ import { Dead } from "../components/Dead"
 import { ActionType } from "../components/Action"
 import { AttackAudio,  } from "../components/AttackAudio" 
 import { Tactics } from "../components/Tactics" 
-
+import { Traits } from "../components/Traits" 
 
 import { EventCenter } from "../helpers/EventCenter" 
 
@@ -20,29 +24,74 @@ import { EventCenter } from "../helpers/EventCenter"
 import { GlobalStuff } from "../helpers/GlobalStuff"
 
 //Data
-
+import { TraitList } from "../data/Traits" 
 
 
 export const createMeleeAttackSystem=(world)=>{
+  
+  const attackableQuery = defineQuery([Attackable])
   
   const performAttack = (source, target, atk, damage) => {
     
     if (hasComponent(world, Dead, source) || hasComponent(world, Dead, target))
       return
     
+    const targets = [target]
+    let damageMod = 1
     
-    
-    
-    EventCenter.emit("damageRequest", {
-      source:source,
-      target: target,
-      damageType: "melee",
-      data: {
-        atk: atk,
-        damage: damage
+    if (hasComponent(world, Traits, source)) {
+      for (let i = 0; i < Traits.count[source]; i++) {
+        for (const effect of TraitList[Traits.traits[source][i]].effects) {
+          if (effect.type == "aoeAttack") {
+            damageMod *= effect.mod
+            attackableQuery(world).forEach(id=>{
+              
+              //console.log(effect, damageMod, effect.mod)
+              
+              const targetPos = {
+                x: Position.x[id],
+                y: Position.y[id]
+              }
+      
+              const distSquared = Phaser.Math.Distance.Squared(
+                Position.x[source],
+                Position.y[source],
+                targetPos.x,
+                targetPos.y
+              )
+      
+              if (
+                id !== source &&
+                id !== target &&
+                BattleUnit.team[id] !== BattleUnit.team[source] &&
+                distSquared < Math.pow(effect.range, 2)
+                ) {
+                  targets.push(id)
+                  
+                }
+                
+              
+            })
+          }
+        }
       }
-    })
+    }
+    
+    //console.log(targets.length)
+    
+    for (const tar of targets) {
+      EventCenter.emit("damageRequest", {
+        source:source,
+        target: tar,
+        damageType: "melee",
+        data: {
+          atk: atk,
+          damage: damage * damageMod
+        }
+      })
+    }
   }
+    
   
   const playMeleeSound =(id)=> {
     EventCenter.emit("playAudio", {

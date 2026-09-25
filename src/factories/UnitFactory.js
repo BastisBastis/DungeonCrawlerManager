@@ -42,7 +42,7 @@ import { NameTag } from "../components/NameTag"
 import { Traits } from "../components/Traits" 
 import { AttackAudio } from "../components/AttackAudio" 
   import { Tactics } from "../components/Tactics" 
-
+import { BodyType } from "../components/BodyType" 
 
 import { TraitList } from "../data/Traits" 
 
@@ -209,7 +209,10 @@ export const UnitFactory = {
     addComponent(world, Traits, id)
     addComponent(world, AttackAudio, id)
    
-    
+    if (unitData.bodyType !== undefined) {
+      addComponent(world, BodyType, id)
+      BodyType.type[id] = unitData.bodyType
+    }
     
 
     if (unitData.healer) {
@@ -402,10 +405,12 @@ export const UnitFactory = {
     recruitmentCost = Math.round(recruitmentCost *costMod)
     
     const traits = [
-      
+      27
     ]
     if (classType == "Cleric")
-      traits.push(18)
+      traits.push()
+    if (classType == "Warrior")
+      traits.push()
 
     //hp = 900
     //damage = 150

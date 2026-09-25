@@ -10,6 +10,7 @@ import { BattleUnit } from "../components/BattleUnit"
 import { Dead } from "../components/Dead"
 import { ThreatMod } from "../components/ThreatMod" 
 import { Tactics } from "../components/Tactics" 
+import { Traits } from "../components/Traits" 
 
 
 import { EventCenter } from "../helpers/EventCenter" 
@@ -21,13 +22,38 @@ import { NameHelper } from "../helpers/NameHelper"
 
 //Data
 import { TacticsMods } from "../data/Tactics" 
+import { TraitList } from "../data/Traits" 
 
 const unitQuery=defineQuery([BattleUnit])
 
 const getTacticsThreatMod =(world, id) => {
   if (hasComponent(world, Tactics, id)) {
     //console.log("Tactics threat mod: " + TacticsMods[Tactics.index[id]].threat)
-    return TacticsMods[Tactics.index[id]].threat
+    
+    var tacticsMod = TacticsMods[Tactics.index[id]].threat
+    
+    
+    if (hasComponent(world, Traits, id)) {
+            
+      for (let i = 0; i < Traits.count[id]; i++) {
+        const traitIndex = Traits.traits[id][i]
+        const trait = TraitList[traitIndex]
+        for (const effect of trait.effects) {
+          
+          if (effect.type == "tacticsModifier") {
+            
+            tacticsMod = Math.pow(tacticsMod, effect.mod)
+              
+            
+          }
+          
+        }
+        
+      }
+    }
+    
+    
+    return tacticsMod
   }
   return 1.0
 }

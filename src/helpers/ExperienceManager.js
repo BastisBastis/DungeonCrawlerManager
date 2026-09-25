@@ -19,7 +19,7 @@ export const ExperienceManager = {
   giveExperience : (unitData) => {
     var exp = 10
     
-    const metaMod = [1,1.1,1.2,4][Store.meta.progression.training]
+    const metaMod = [1,1.1,1.2,1.4][Store.meta.progression.training]
     
     unitData.exp+=exp
     if (unitData.exp >= expPerLevel[unitData.level]) {

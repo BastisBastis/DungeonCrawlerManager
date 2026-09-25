@@ -1,5 +1,10 @@
 import { UnitClass } from "../components/ClassType" 
 
+export const EnemyType = {
+  HUMANOID: 0,
+  UNDEAD: 1
+}
+
 export const Enemies = []
 
 Enemies[0] = {
@@ -20,7 +25,8 @@ Enemies[0] = {
   attackBuildUp : 500,
   materialColors : {},
   attackAudio: 1,
-  soundDelay: 1
+  soundDelay: 1,
+  type: EnemyType.HUMANOID
 }
 
 Enemies[6] = {
@@ -43,7 +49,8 @@ Enemies[6] = {
     skin: "#77ddaa"
   },
   attackAudio: 1,
-  soundDelay: 1
+  soundDelay: 1,
+  type: EnemyType.HUMANOID
 }
 
 Enemies[1] = {
@@ -66,7 +73,8 @@ Enemies[1] = {
     skin: "#00ddbb"
   },
   attackAudio: 1,
-  soundDelay: 1
+  soundDelay: 1,
+  type: EnemyType.HUMANOID
 }
 
 Enemies[2] = {
@@ -87,7 +95,8 @@ Enemies[2] = {
   attackBuildUp : 550,
   materialColors : {},
   attackAudio: 1,
-  soundDelay: 100
+  soundDelay: 100,
+  type: EnemyType.UNDEAD
 }
 
 Enemies[3] = {
@@ -108,7 +117,8 @@ Enemies[3] = {
   attackBuildUp : 900,
   materialColors : {},
   attackAudio: 1,
-  soundDelay: 400
+  soundDelay: 400,
+  type: EnemyType.UNDEAD
 }
 
 Enemies[4] = {
@@ -129,7 +139,8 @@ Enemies[4] = {
   attackBuildUp : 500,
   materialColors : {},
   attackAudio: 1,
-  soundDelay: 100
+  soundDelay: 100,
+  type: EnemyType.HUMANOID
 }
 
 Enemies[5] = {
@@ -152,7 +163,8 @@ Enemies[5] = {
     bone : "#550000"
   },
   attackAudio: 1,
-  soundDelay: 100
+  soundDelay: 100,
+  type: EnemyType.UNDEAD
 }
 
 Enemies[7] = {
@@ -175,7 +187,8 @@ Enemies[7] = {
     bone : "#552222"
   },
   attackAudio: 1,
-  soundDelay: 100
+  soundDelay: 100,
+  type: EnemyType.UNDEAD
 }
 
 Enemies[8] = {
@@ -196,7 +209,8 @@ Enemies[8] = {
   attackBuildUp : 500,
   materialColors : {},
   attackAudio: 1,
-  soundDelay: 100
+  soundDelay: 100,
+  type: EnemyType.UNDEAD
 }
 
 
@@ -220,7 +234,8 @@ Enemies[9] = {
     sheet: "#880101"
   },
   attackAudio: 1,
-  soundDelay: 100
+  soundDelay: 100,
+  type: EnemyType.UNDEAD
 }
 
 Enemies[10] = {
@@ -243,6 +258,7 @@ Enemies[10] = {
     sheet: "#000099"
   },
   attackAudio: 1,
-  soundDelay: 100
+  soundDelay: 100,
+  type: EnemyType.UNDEAD
 }
 

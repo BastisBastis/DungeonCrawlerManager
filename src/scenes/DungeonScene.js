@@ -243,6 +243,7 @@ export default class DungeonScene extends Phaser.Scene {
         unitData.enemyIndex = spawnPoint[3]
         unitData.modelIndex = enemyData.modelIndex
         unitData.attackBuildUp = enemyData.attackBuildUp
+        unitData.bodyType = enemyData.type
         
         
         var x = spawnPoint[0] * this.level.cellSize

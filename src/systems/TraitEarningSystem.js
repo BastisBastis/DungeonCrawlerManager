@@ -8,7 +8,8 @@ import { Attackable } from "../components/Attackable"
 import { BattleUnit } from "../components/BattleUnit" 
 import { UnitIndex } from "../components/UnitIndex" 
 import { ClassType, ClassIdFromName, UnitClass } from "../components/ClassType" 
-
+import { Mana } from "../components/Mana" 
+import { Healer } from "../components/Healer" 
 
 
 
@@ -59,6 +60,17 @@ export const createTraitEarningSystem=(world)=>{
   const onWillExitDungeon = (world) => {
     //console.log(playerUnitQuery)
     playerUnitQuery(world).forEach(id=> {
+      
+      if (hasComponent(world, Mana, id)) {
+        if (Mana.currentMana[id] < Healer.amount[id]/10) {
+          EventCenter.emit("addTrait", {
+            unitIndex: UnitIndex.index[id],
+            traitIndex: TRAIT.CHEAPSKATE,
+            reason: NameHelper.GetName(world, id) + " ran out of mana and will focus on being more efficient next time."
+          })
+        }
+      }
+      
       if (hasComponent(world, Attackable, id)) {
         const healthRatio = Attackable.currentHitpoints[id] / Attackable.maxHitpoints[id]
         if (healthRatio < .3) {
@@ -102,11 +114,16 @@ export const createTraitEarningSystem=(world)=>{
   
 }
 
-export const addRandomTrait = (world, id) => {
+export const addRandomTrait = (world, id, unitClass = -1) => {
   
-  const unitIndex = UnitIndex.index[id]
+  var unitIndex = -1
+  if (unitClass<0) {
+    unitIndex = UnitIndex.index[id]
+    unitClass = Store.run.units[unitIndex].classType
+  }
+    
   
-  
+   
   
   
     var traitIds = [
@@ -122,9 +139,9 @@ export const addRandomTrait = (world, id) => {
       TRAIT.NERVOUS
     ]
     
-    const unitClass = Store.run.units[unitIndex].classType
     
-    console.log(unitClass, UnitClass.WARRIOR, unitClass === UnitClass.WARRIOR)
+    
+    //console.log(unitClass, UnitClass.WARRIOR, unitClass === UnitClass.WARRIOR)
     
     if (unitClass === UnitClass.WARRIOR) {
       
@@ -157,6 +174,13 @@ export const addRandomTrait = (world, id) => {
     if (Store.meta.progression.traitPools) {
       
       traitIds.push(
+        TRAIT.RIGHT_BACK_AT_YA,
+        TRAIT.CRIT_HIT,
+        TRAIT.PEOPLE_PERSON,
+        TRAIT.MORBID,
+        TRAIT.INTROVERT,
+        TRAIT.BIG_TACTICS,
+        TRAIT.AOE,
         
       )
       
@@ -164,15 +188,17 @@ export const addRandomTrait = (world, id) => {
       
         traitIds.push(
           TRAIT.CHEAPSKATE,
-          TRAIT.DESPERATE
+          TRAIT.DESPERATE,
+          TRAIT.CRIT_HEAL
         )
       } 
     }
     
     
-    traitIds = traitIds.filter(traitId=>{
-      return !Store.run.units[unitIndex].traits.includes(traitId)
-    })
+    if (unitIndex>= 0)
+      traitIds = traitIds.filter(traitId=>{
+        return !Store.run.units[unitIndex].traits.includes(traitId)
+      })
     
     //console.log(traitIds, traitIds.length)
     
@@ -184,12 +210,14 @@ export const addRandomTrait = (world, id) => {
     
     //console.log("trait index: " + traitIndex)
     
-    EventCenter.emit("addTrait", {
-        unitIndex: unitIndex,
-        traitIndex,
-        reason: NameHelper.GetName(world, id) + " came back from the dungeon slightly altered!"
-    })
+    if (unitIndex>= 0)
+      EventCenter.emit("addTrait", {
+          unitIndex: unitIndex,
+          traitIndex,
+          reason: NameHelper.GetName(world, id) + " came back from the dungeon slightly altered!"
+      })
     
+    return traitIndex
     
   }
 

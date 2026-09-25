@@ -59,7 +59,11 @@ export const createHealingSystem=(world)=>{
                   effect
                 })) {
                   amount *= effect.mod
+                  manaMod*= effect.mod
                   //console.log("CRITICAL HEAL FROM TRAIT!")
+                }
+                else {
+                  //console.log("crot heal failed")
                 }
                 
                 
@@ -88,6 +92,7 @@ export const createHealingSystem=(world)=>{
         }
         
         var manaCost = (Healer.amount[id]/10) * manaMod
+        
         
         Mana.currentMana[id] = Math.max(0, Mana.currentMana[id] - manaCost)
           

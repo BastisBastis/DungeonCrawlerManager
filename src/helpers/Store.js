@@ -41,8 +41,9 @@ export const resetMetaStore = ()=>{
     gold: 0,
     training: 0,
     traitPool: 0,
-    basicTactics: 0,
-    timeOut: 0
+    basicTactics: 1,
+    timeOut: 0,
+    startingTrait: 1
   }
 }
 

@@ -1,8 +1,15 @@
-import { hasComponent } from "bitecs"
+import { hasComponent, defineQuery} from "bitecs"
 
 //components
 import { Attackable } from "../components/Attackable" 
 import { Mana } from "../components/Mana" 
+import { BodyType } from "../components/BodyType" 
+import { UnitIndex } from "../components/UnitIndex" 
+import { Dead } from "../components/Dead" 
+
+
+//data
+import { EnemyType } from "../data/Enemies" 
 
 export const TRAIT = {
   NEVER_GONNA_GIVE_YOU_UP : 0,
@@ -24,7 +31,15 @@ export const TRAIT = {
   NERVOUS : 16,
   LEROY_JENKINS: 17,
   CHEAPSKATE: 18,
-  DESPERATE: 19
+  DESPERATE: 19,
+  RIGHT_BACK_AT_YA: 20,
+  CRIT_HIT: 21,
+  CRIT_HEAL: 22,
+  PEOPLE_PERSON: 23,
+  MORBID: 24,
+  INTROVERT: 25,
+  BIG_TACTICS: 26,
+  AOE: 27
 }
 
 
@@ -319,7 +334,7 @@ TraitList[TRAIT.DESPERATE] = {
       type: "manaCostMod",
       mod: .5,
       condition: {
-        type: "selfManaUnderPercent",
+        type: "selfManaBelowPercent",
         value: .25
       }
     }
@@ -328,8 +343,162 @@ TraitList[TRAIT.DESPERATE] = {
 
 
 
+TraitList[TRAIT.RIGHT_BACK_AT_YA] = {
+  id: TRAIT.RIGHT_BACK_AT_YA,
+  name: "Right Back at Ya",
+  description: "Has a chance to strike back when attacked.",
+  effects: [
+    {
+      type: "riposte",
+      chance: .5
+    }
+  ]
+}
+
+TraitList[TRAIT.CRIT_HIT] = {
+  id: TRAIT.CRIT_HIT,
+  name: "Accurate",
+  description: "Has a chance to perform a critical hit doing double damage.",
+  effects: [
+    {
+      type: "critHit",
+      chance: .2,
+      mod: 2
+    }
+  ]
+}
+
+TraitList[TRAIT.CRIT_HEAL] = {
+  id: TRAIT.CRIT_HEAL,
+  name: "Devout",
+  description: "Has a chance to perform a critical heal, healing twice the amount.",
+  effects: [
+    {
+      type: "healModifier",
+      mod: 2,
+      condition: {
+        type: "random",
+        chance: .5
+      }
+    }
+  ]
+}
+
+TraitList[TRAIT.PEOPLE_PERSON] = {
+  id: TRAIT.PEOPLE_PERSON,
+  name: "People Person",
+  description: "Does increased damage to humanoid enemies.",
+  effects: [
+    {
+      type: "damageModifier",
+      mod: 1.25,
+      condition: {
+        type: "targetType",
+        value: EnemyType.HUMANOID
+      }
+    }
+  ]
+}
+
+TraitList[TRAIT.MORBID] = {
+  id: TRAIT.MORBID,
+  name: "Morbid",
+  description: "Does increased damage to undead enemies.",
+  effects: [
+    {
+      type: "damageModifier",
+      mod: 1.25,
+      condition: {
+        type: "targetType",
+        value: EnemyType.UNDEAD
+      }
+    }
+  ]
+}
+
+TraitList[TRAIT.INTROVERT] = {
+  id: TRAIT.INTROVERT,
+  name: "Introvert",
+  description: "Damage increases with each lost party member.",
+  effects: [
+    {
+      type: "damageModifier",
+      mod: 1.1,
+      condition: {
+        type: "maxPartyMembers",
+        value: 3
+      }
+    },
+    {
+      type: "damageModifier",
+      mod: 1.3,
+      condition: {
+        type: "maxPartyMembers",
+        value: 2
+      }
+    },
+    {
+      type: "damageModifier",
+      mod: 1.6,
+      condition: {
+        type: "maxPartyMembers",
+        value: 1
+      }
+    }
+  ]
+}
+
+TraitList[TRAIT.BIG_TACTICS] = {
+  id: TRAIT.BIG_TACTICS,
+  name: "Tryhard",
+  description: "Different tactics have a bigger impact on defense, offense and threat generation.",
+  effects: [
+    {
+      type: "tacticsModifier",
+      mod: 1.5
+    }
+  ]
+}
+
+TraitList[TRAIT.AOE] = {
+  id: TRAIT.AOE,
+  name: "Big Swing Radius",
+  description: "Does less damage but hits all enemies nearby.",
+  effects: [
+    {
+      type: "aoeAttack",
+      chance: 1,
+      mod: .5,
+      range: 128
+    }
+  ]
+}
+
+const unitIndexQuery = defineQuery([UnitIndex])
+
 
 const conditionChecks = {
+  
+  maxPartyMembers: ({world, condition}) => {
+    
+    var numUnits = 0
+    
+    unitIndexQuery(world).forEach(id=>{
+      if (!hasComponent(world, Dead, id))
+        numUnits++
+    })
+    
+    return numUnits <= condition.value
+  },
+  
+  targetType: ({world, condition, target}) => {
+    return hasComponent(world, BodyType, target) && BodyType.type[target] == condition.value
+  },
+  
+  random: ({condition}) => {
+    return Math.random()<condition.chance
+  },
+  
   targetHealthBelowPercent : ({world, target, condition}) =>{
     if (!hasComponent(world, Attackable, target)) 
       return false
