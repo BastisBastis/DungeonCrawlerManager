@@ -100,6 +100,35 @@ export class TreasuryMenu extends Window {
         }
       })
     )
+
+    this.gameObjects.push(
+      new Button(
+       this.scene, 
+       x + width/4,
+       y-height/2+height*0.9,
+       "Reset Treasury", 
+       {
+        ...btnConfig,
+        width: 160,
+        onClick : async ()=>{
+          try { 
+          await Popup.prompt(
+            scene,
+            x,
+            y,
+            "Are you sure you want to reset the treasury items to 0?",
+            {
+              depth: depth+100,
+              
+              onConfirm:()=>{
+                this.resetMeta()
+              }
+            }
+          )
+          } catch (er) {console.log(er.message,er.stack); throw er} 
+        }
+      })
+    )
     
     
     const startX = x-width/2
@@ -181,6 +210,10 @@ export class TreasuryMenu extends Window {
     
     } catch (er) {console.log(er.message,er.stack); throw er} 
   }
+
+  resetMeta() {
+    console.log("Boom")
+  }
   
   showDetails(item) {
    try { 
@@ -198,7 +231,7 @@ export class TreasuryMenu extends Window {
   }
   
   hideDetails() {
-   console.log(this.metaDetails)
+   //console.log(this.metaDetails)
    if (this.metaDetails && this.metaDetails.destroy) {
     try { 
     this.metaDetails.destroy()

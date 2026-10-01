@@ -19,7 +19,7 @@ export const ExperienceManager = {
   giveExperience : (unitData) => {
     var exp = 10
     
-    const metaMod = [1,1.1,1.2,1.4][Store.meta.progression.training]
+    const metaMod = [1,1.05,1.1,1.2][Store.meta.progression.training]
     
     unitData.exp+=exp
     if (unitData.exp >= expPerLevel[unitData.level]) {
@@ -35,10 +35,10 @@ export const ExperienceManager = {
         "healAmount",
         "mana"
       ]) {
-        gainMods[key] = Math.random()*.16+.92 * metaMod
+        gainMods[key] = (Math.random()*.16+.92) * metaMod
       }
 
-      gainMods.healCooldown = Math.random() * .1 + .88 * (2-metaMod)
+      gainMods.healCooldown = (Math.random() * .1 + .88) * (2-metaMod)
       
       unitData.exp -= expPerLevel[unitData.level]
       unitData.level++
