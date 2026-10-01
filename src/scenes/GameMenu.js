@@ -15,7 +15,7 @@ import { UnitFactory } from "../factories/UnitFactory"
 
 import { GlobalStuff } from "../helpers/GlobalStuff"
 import * as Utils from "../helpers/Utils"
-import { Store, resetMenuStore } from "../helpers/Store" 
+import { Store, resetMenuStore , save} from "../helpers/Store" 
 
 import { EventCenter } from "../helpers/EventCenter" 
 import { ExperienceManager } from "../helpers/ExperienceManager" 
@@ -95,6 +95,7 @@ export default class GameMenu extends Phaser.Scene {
       await this.handleNewTraits(result.traitsToAdd)
       Store.run.levelIndex++
       Store.meta.totalDungeons++
+      save() 
       await this.onDungeonCompleted()
       if (Store.run.levelIndex >= DungeonGenerator.getNumLevels()) {
         this.gameOver(result)
@@ -137,6 +138,7 @@ export default class GameMenu extends Phaser.Scene {
     const numGems = Store.run.levelIndex
     Store.meta.gems += numGems
     await Popup.prompt(this,this.cameras.main.width/2,this.cameras.main.height/2, "Your party found " + numGems +" gems in the dungeon!", {depth:100})
+    save()
   }
   
   async onDungeonCompleted() {

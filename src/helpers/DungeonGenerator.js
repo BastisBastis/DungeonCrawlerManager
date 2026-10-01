@@ -67,10 +67,10 @@ const levels = [
         length: 6
       },
       {
-        col: 5,
+        col: 3,
         row: 10,
         dir: "e",
-        length: 3
+        length: 6
       },
       {
         col: 5,
@@ -80,6 +80,12 @@ const levels = [
       },
       {
         col: 9,
+        row: 11,
+        dir: "s",
+        length: 10
+      },
+      {
+        col: 10,
         row: 11,
         dir: "s",
         length: 10
@@ -147,10 +153,10 @@ const levels = [
         length: 4
       },
       {
-        col: 4,
+        col: 3,
         row: 2,
-        dir: "s",
-        length: 3
+        dir: "e",
+        length: 5
       },
       {
         col: 5,
@@ -160,6 +166,12 @@ const levels = [
       },
       {
         col: 7,
+        row: 3,
+        dir: "s",
+        length: 11
+      },
+      {
+        col: 6,
         row: 3,
         dir: "s",
         length: 11
@@ -202,7 +214,7 @@ const levels = [
       },
     ]
   },
-  {
+  { //2
     width:32,
     height:32,
     cellSize: 128,
@@ -216,9 +228,9 @@ const levels = [
     },
     spawnPoints: [ //make this an array of dictionaries instead
       [4,7, 2, 3], //col, row, number of enemies
-      [7,7, 3, 3],
+      [7,7, 3, 4],
       [6,10,2, 3],
-      [1,12,2, 3],
+      [1,12,2, 4],
       [3,12,1, 3],
     ],
     checkPoints: [
@@ -263,6 +275,12 @@ const levels = [
       },
       {
         col: 3,
+        row: 6,
+        dir: "e",
+        length: 5
+      },
+      {
+        col: 3,
         row: 7,
         dir: "e",
         length: 5
@@ -281,6 +299,12 @@ const levels = [
       },
       {
         col: 2,
+        row: 10,
+        dir: "s",
+        length: 5
+      },
+      {
+        col: 1,
         row: 10,
         dir: "s",
         length: 5
@@ -306,7 +330,7 @@ const levels = [
       
     ]
   },
-  {
+  { //3 
     width:32,
     height:32,
     cellSize: 128,
@@ -386,6 +410,12 @@ const levels = [
       },
       {
         col: 21,
+        row: 8,
+        dir: "e",
+        length: 3
+      },
+      {
+        col: 21,
         row: 9,
         dir: "e",
         length: 3
@@ -415,6 +445,12 @@ const levels = [
         length: 5
       },
       {
+        col: 30,
+        row: 12,
+        dir: "s",
+        length: 3
+      },
+      {
         col: 27,
         row: 9,
         dir: "e",
@@ -442,7 +478,7 @@ const levels = [
     ]
   },
   
-  {
+  { //4 
     width:32,
     height:32,
     cellSize: 128,
@@ -552,7 +588,7 @@ const levels = [
     ]
   },
   
-  {
+  { //5
     width:32,
     height:32,
     cellSize: 128,
@@ -655,6 +691,505 @@ const levels = [
     ]
   },
   
+  { //6
+    width:32,
+    height:32,
+    cellSize: 128,
+    playerSpawn: {
+      x: 15,
+      y: 15
+    },
+    goal: {
+      x: 7,
+      y: 15
+    },
+    spawnPoints: [ //make this an array of dictionaries instead
+      [19,15, 2, 11], //col, row, number of enemies
+      [19,14, 1, 12],
+      [19,19, 3, 11],
+      [20,19, 1, 12],
+      [11,19, 2, 11],
+      [11,20, 4, 12],
+      [11,15, 3, 11],
+      [10,15, 2, 12],
+    ],
+    checkPoints: [
+      {
+        x:19,
+        y: 15
+      },
+      {
+        x:19,
+        y:19
+      },
+      {
+        x: 11,
+        y: 19
+      },
+      {
+        x: 11,
+        y: 15
+      },
+      {
+        x: 7,
+        y: 15
+      },
+      
+      
+    ],
+    carvings:[
+      {
+        col: 15,
+        row: 15,
+        dir: "e",
+        length: 5
+      },
+      {
+        col: 17,
+        row: 14,
+        dir: "e",
+        length: 3
+      },
+      {
+        col: 17,
+        row: 16,
+        dir: "e",
+        length: 3
+      },
+      {
+        col: 19,
+        row: 15,
+        dir: "s",
+        length: 5
+      },
+      {
+        col: 18,
+        row: 17,
+        dir: "s",
+        length: 3
+      },
+       {
+        col: 20,
+        row: 17,
+        dir: "s",
+        length: 3
+      },
+      {
+        col: 19,
+        row: 19,
+        dir: "w",
+        length: 9
+      },
+      {
+        col: 13,
+        row: 18,
+        dir: "w",
+        length: 3
+      },
+      {
+        col: 13,
+        row: 20,
+        dir: "w",
+        length: 3
+      },
+      {
+        col: 11,
+        row: 19,
+        dir: "n",
+        length: 5
+      },
+      {
+        col: 10,
+        row: 17,
+        dir: "n",
+        length: 3
+      },
+      {
+        col: 12,
+        row: 17,
+        dir: "n",
+        length: 3
+      },
+      {
+        col: 11,
+        row: 15,
+        dir: "w",
+        length: 5
+      },
+      
+    ]
+  },
+  
+  { //7
+    width:32,
+    height:32,
+    cellSize: 128,
+    playerSpawn: {
+      x: 3,
+      y: 3
+    },
+    goal: {
+      x: 13,
+      y: 14
+    },
+    spawnPoints: [ //make this an array of dictionaries instead
+      [5,2, 2, 13], //col, row, number of enemies
+      [5,4, 2, 14],
+      [6,7,2, 14],
+      [8,7,2, 13],
+      [6,14,1, 13],
+      [7,15,2, 14]
+    ],
+    checkPoints: [
+      {
+        x:7,
+        y: 3
+      },
+      {
+        x:7,
+        y:14
+      },
+      {
+        x: 13,
+        y: 14
+      },
+      
+    ],
+    carvings:[
+      {
+        col: 3,
+        row: 3,
+        dir: "e",
+        length: 4
+      },
+      {
+        col: 3,
+        row: 2,
+        dir: "e",
+        length: 5
+      },
+      {
+        col: 5,
+        row: 2,
+        dir: "s",
+        length: 3
+      },
+      {
+        col: 7,
+        row: 3,
+        dir: "s",
+        length: 11
+      },
+      {
+        col: 6,
+        row: 3,
+        dir: "s",
+        length: 11
+      },
+      {
+        col: 6,
+        row: 5,
+        dir: "s",
+        length: 3
+      },
+      {
+        col: 8,
+        row: 5,
+        dir: "s",
+        length: 3
+      },
+      {
+        col: 7,
+        row: 14,
+        dir: "e",
+        length: 7
+      },
+      {
+        col: 8,
+        row: 13,
+        dir: "s",
+        length: 1
+      },
+      {
+        col: 6,
+        row: 13,
+        dir: "s",
+        length: 3
+      },
+      {
+        col: 7,
+        row: 15,
+        dir: "e",
+        length: 2
+      },
+    ]
+  },
+  { //8
+    width:32,
+    height:32,
+    cellSize: 128,
+    playerSpawn: {
+      x: 3,
+      y: 3
+    },
+    goal: {
+      x: 5,
+      y: 14
+    },
+    spawnPoints: [ //make this an array of dictionaries instead
+      [4,7, 2, 15], //col, row, number of enemies
+      [7,7, 3, 16],
+      [6,10,2, 15],
+      [1,12,2, 16],
+      [3,12,1, 15],
+    ],
+    checkPoints: [
+      {
+        x:3,
+        y: 7
+      },
+      {
+        x:6,
+        y:7
+      },
+      {
+        x: 6,
+        y: 10
+      },
+      {
+        x: 2,
+        y: 10
+      },
+      {
+        x: 2,
+        y: 14
+      },
+      {
+        x: 5,
+        y: 14
+      },
+      
+    ],
+    carvings:[
+      {
+        col: 3,
+        row: 3,
+        dir: "s",
+        length: 5
+      },
+      {
+        col: 4,
+        row: 6,
+        dir: "s",
+        length: 1
+      },
+      {
+        col: 3,
+        row: 6,
+        dir: "e",
+        length: 5
+      },
+      {
+        col: 3,
+        row: 7,
+        dir: "e",
+        length: 5
+      },
+      {
+        col: 6,
+        row: 7,
+        dir: "s",
+        length: 4
+      },
+      {
+        col: 6,
+        row: 10,
+        dir: "w",
+        length: 5
+      },
+      {
+        col: 2,
+        row: 10,
+        dir: "s",
+        length: 5
+      },
+      {
+        col: 1,
+        row: 10,
+        dir: "s",
+        length: 5
+      },
+      {
+        col: 1,
+        row: 11,
+        dir: "e",
+        length: 3
+      },
+      {
+        col: 1,
+        row: 12,
+        dir: "e",
+        length: 3
+      },
+      {
+        col: 2,
+        row: 14,
+        dir: "e",
+        length: 4
+      },
+      
+    ]
+  },
+  { //9
+    width:32,
+    height:32,
+    cellSize: 128,
+    playerSpawn: {
+      x: 29,
+      y: 3
+    },
+    goal: {
+      x: 27,
+      y: 16
+    },
+    spawnPoints: [ //make this an array of dictionaries instead
+      [22,3, 2, 17], //col, row, number of enemies
+      [22,4, 1, 18],
+      [22,10, 3, 19],
+      [29,10,4, 20],
+      [29,14,3, 21],
+      [28,14,2, 22],
+    ],
+    checkPoints: [
+      {
+        x:22,
+        y: 3
+      },
+      {
+        x:22,
+        y:10
+      },
+      {
+        x: 29,
+        y: 10
+      },
+      {
+        x: 29,
+        y: 14
+      },
+      {
+        x: 27,
+        y: 14
+      },
+      {
+        x: 27,
+        y: 16
+      },
+      
+    ],
+    carvings:[
+      {
+        col: 29,
+        row: 3,
+        dir: "w",
+        length: 5
+      },
+      {
+        col: 24,
+        row: 3,
+        dir: "s",
+        length: 3
+      },
+      {
+        col: 23,
+        row: 3,
+        dir: "s",
+        length: 3
+      },
+       {
+        col: 22,
+        row: 3,
+        dir: "s",
+        length: 8
+      },
+      {
+        col: 22,
+        row: 10,
+        dir: "e",
+        length: 7
+      },
+      {
+        col: 21,
+        row: 8,
+        dir: "e",
+        length: 3
+      },
+      {
+        col: 21,
+        row: 9,
+        dir: "e",
+        length: 3
+      },
+      {
+        col: 21,
+        row: 10,
+        dir: "e",
+        length: 1
+      },
+      {
+        col: 21,
+        row: 12,
+        dir: "e",
+        length: 3
+      },
+      {
+        col: 29,
+        row: 10,
+        dir: "s",
+        length: 5
+      },
+      {
+        col: 28,
+        row: 10,
+        dir: "s",
+        length: 5
+      },
+      {
+        col: 30,
+        row: 12,
+        dir: "s",
+        length: 3
+      },
+      {
+        col: 27,
+        row: 9,
+        dir: "e",
+        length: 3
+      },
+      {
+        col: 28,
+        row: 11,
+        dir: "e",
+        length: 2
+      },
+      {
+        col: 29,
+        row: 14,
+        dir: "w",
+        length: 3
+      },
+      {
+        col: 27,
+        row: 14,
+        dir: "s",
+        length: 3
+      },
+      
+    ]
+  },
+  
+  
+  
 ]
 
 
@@ -664,7 +1199,7 @@ export const DungeonGenerator = {
     return levels.length
   },
   getLevel: (index) =>{
-   
+   //index = 8
 
     if (index >= levels.length) {
       console.log("Level index out of range")

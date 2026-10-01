@@ -413,7 +413,8 @@ export const UnitFactory = {
       traits.push()
 
     //hp = 900
-    //damage = 150
+    //damage = 50
+    //atk = 200
     
     
     const unitData = {

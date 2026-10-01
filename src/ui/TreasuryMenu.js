@@ -5,7 +5,7 @@ import Phaser from "phaser"
 import { EventCenter } from "../helpers/EventCenter" 
 import { GlobalStuff } from "../helpers/GlobalStuff"
 import * as Utils from "../helpers/Utils"
-import { Store } from "../helpers/Store"
+import { Store, save } from "../helpers/Store"
 
 
 //Data
@@ -310,6 +310,7 @@ export class TreasuryMenu extends Window {
            }
            Store.meta.progression[key]++
            Store.meta.gems-=cost
+           save()
            this.gemsLabel.text = "Gems: "+Store.meta.gems
            this.reloadItems()
           }

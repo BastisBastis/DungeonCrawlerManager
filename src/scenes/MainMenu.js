@@ -11,6 +11,7 @@ import { EventCenter } from "../helpers/EventCenter"
 import { Palette } from "../data/Palette" 
 
 import { Button } from "../ui/Button"
+import { Store , loadFromStorage} from "../helpers/Store"
 
 //Temp
 
@@ -31,8 +32,8 @@ export default class MainMenu extends Phaser.Scene {
     //Background
     this.sfxManager = new SFXManager(this)
    
-    
-      
+    loadFromStorage()
+
       
     this.add.rectangle(960,540,1920,1080,Palette.purple2.hex).setScrollFactor(0,0)
     

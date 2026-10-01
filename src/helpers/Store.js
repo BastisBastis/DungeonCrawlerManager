@@ -49,3 +49,20 @@ export const resetMetaStore = ()=>{
 
 resetStore()
 
+export const loadFromStorage =() => {
+  const savedStore = JSON.parse(localStorage.getItem("store"))
+  resetStore()
+  if (!savedStore){
+    
+    return
+  }
+  
+  Store.meta = savedStore
+  
+}
+
+export const save = () => {
+  localStorage.setItem("store", JSON.stringify(Store.meta))
+}
+
+
